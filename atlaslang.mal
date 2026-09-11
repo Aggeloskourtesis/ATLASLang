@@ -1,0 +1,145 @@
+include "enterpriselang.mal"
+
+#id: "atlaslang"
+#version: "1.0.0"
+
+
+
+
+category AI {
+    
+    // AML.CS0000
+    asset AIResearchMaterial {
+        
+        | prePrintRepositories
+        user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
+        -> trainingData.datasets
+        
+        | searchOpenTechnicalDatabases
+        user info: "AML.T0000 - Search Open Technical Databases"
+        -> publicArtifacts.acquirePublicAIArtifacts
+    }
+    
+    
+    asset TrainingData {
+        
+        | datasets
+        user info: "AML.T0002.000 - Acquire Public AI Artifacts: Datasets"
+        -> proxyModel.createProxyAIModel
+    }
+    
+    
+    asset ProxyAIModel {
+        
+        | createProxyAIModel
+        user info: "AML.T0005 - Create Proxy AI Model"
+        -> adversarialSample.manualModification
+    }
+    
+    asset PublicAIArtifacts {
+        
+        | acquirePublicAIArtifacts
+        user info: "AML.T0002 - Acquire Public AI Artifacts"
+        -> capability.adversarialAIAttacks
+    }
+    
+    
+    asset AdversarialCapability {
+        
+        | adversarialAIAttacks
+        user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
+        -> generatedSample.blackBoxOptimization
+    }
+    
+    asset AdversarialSample {
+        
+        | manualModification
+        user info: "AML.T0043.003 - Craft Adversarial Data: Manual Modification"
+        -> targetModel.verifyAttack
+        
+        | blackBoxOptimization
+        user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
+        -> targetModel.verifyAttack
+    }
+    
+    
+    asset AIMalwareDetector {
+        
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> evadeAIModel
+        
+        | evadeAIModel
+        user info: "AML.T0015 - Evade AI Model"
+    }
+    
+    // AML.CS0062
+
+    asset LLMPrompt {
+
+        | llmPromptCrafting
+            user info: "AML.T0065 - LLM Prompt Crafting"
+            -> aiAgent.aiEnabledProductOrService
+    }
+
+
+    asset AIAgent {
+
+        | aiEnabledProductOrService
+            user info: "AML.T0047 - AI-Enabled Product or Service"
+            -> directPromptInjection
+
+        | directPromptInjection
+            user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
+            -> tool.aiAgentToolInvocation
+    }
+
+
+    asset AITool {
+
+        | aiAgentToolInvocation
+            user info: "AML.T0053 - AI Agent Tool Invocation"
+            -> vectorStore.vulnerableFilterEvaluation
+    }
+
+
+    asset VectorStore {
+
+        | vulnerableFilterEvaluation
+            user info: "Attacker-controlled filter reaches unsafe eval() execution"
+            -> os.commandAndScriptingInterpreter
+
+        # safeFilterEvaluation
+            user info: "Avoid dynamic evaluation of attacker-controlled filter expressions"
+            -> vulnerableFilterEvaluation
+    }
+}
+
+associations {
+    
+    // AML.CS0000
+    
+    AIResearchMaterial [researchMaterial] * <--Identifies--> * [trainingData] TrainingData
+    
+    TrainingData [trainingData] * <--UsedToCreate--> 1 [proxyModel] ProxyAIModel
+    
+    ProxyAIModel [proxyModel] * <--SupportsCrafting--> * [adversarialSample] AdversarialSample
+    
+    AIResearchMaterial [researchSource] * <--Finds--> * [publicArtifacts] PublicAIArtifacts
+    
+    PublicAIArtifacts [publicArtifacts] * <--SupportsDevelopment--> * [capability] AdversarialCapability
+    
+    AdversarialCapability [capability] * <--Develops--> * [generatedSample] AdversarialSample
+    
+    AdversarialSample [adversarialSample] * <--TestedAgainst--> 1 [targetModel] AIMalwareDetector
+    
+    // AML.CS0062
+
+    LLMPrompt [prompt] * <--Targets--> 1 [aiAgent] AIAgent
+
+    AIAgent [aiAgent] 1 <--Invokes--> * [tool] AITool
+
+    AITool [tool] * <--Uses--> 1 [vectorStore] VectorStore
+
+    VectorStore [vectorStore] * <--RunsOn--> 1 [os] OS
+}
