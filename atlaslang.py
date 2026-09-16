@@ -176,6 +176,55 @@ CASE_STUDIES = {
         "goal":
           "CylanceMalwareDetector:evadeAIModel",
     },
+    # ========================================================
+    # AML.CS0004
+    # Camera Hijack Attack on Facial Recognition System
+    # ========================================================
+
+    "AML.CS0004": {
+
+        "attacker_name":
+            "AML_CS0004_Attacker",
+
+        # AML.T0087
+        "entry_point":
+            "BlackMarketVictimIdentity:"
+            "gatherVictimIdentityInformation",
+
+        "path": [
+
+            # AML.T0008.001
+            "CustomizedAndroidPhone:"
+            "consumerHardware",
+
+            # AML.T0016.000
+            "CameraHijackImplementation:"
+            "obtainAdversarialAIAttackImplementation",
+
+            # AML.T0016.001
+            "VirtualCameraToolset:"
+            "softwareTools",
+
+            # AML.T0021
+            "VictimImpersonationAccount:"
+            "establishAccounts",
+
+            # AML.T0047
+            "TaxFacialRecognitionSystem:"
+            "aiEnabledProductOrService",
+
+            # AML.T0015
+            "TaxFacialRecognitionSystem:"
+            "evadeAIModel",
+
+            # AML.T0048.000
+            "TaxFraudImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "TaxFraudImpact:financialHarm",
+    },
 
 }
 
@@ -485,6 +534,87 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     cylance_adversarial_malware.add_associated_assets(
         "evasionTarget",
         {cylance_detector}
+    )
+    
+    # ========================================================
+    # AML.CS0004
+    # Camera Hijack Attack on Facial Recognition System
+    #========================================================
+
+    victim_identity = model.add_asset(
+        "VictimIdentityInformation",
+        "BlackMarketVictimIdentity"
+    )
+
+    consumer_phone = model.add_asset(
+        "AIConsumerHardware",
+        "CustomizedAndroidPhone"
+    )
+
+    camera_hijack_implementation = model.add_asset(
+        "AdversarialAttackImplementation",
+        "CameraHijackImplementation"
+    )
+
+    virtual_camera_tools = model.add_asset(
+        "AIAttackSoftwareTool",
+        "VirtualCameraToolset"
+    )
+
+    fraudulent_account = model.add_asset(
+        "FraudulentAccount",
+        "VictimImpersonationAccount"
+    )
+
+    facial_recognition_system = model.add_asset(
+        "FacialRecognitionSystem",
+        "TaxFacialRecognitionSystem"
+    )
+
+    financial_impact = model.add_asset(
+        "ExternalHarm",
+        "TaxFraudImpact"
+    )
+
+
+    # --------------------------------------------------------
+    # AML.CS0004 associations
+    # --------------------------------------------------------
+
+    # AML.T0087 -> AML.T0008.001
+    victim_identity.add_associated_assets(
+        "hardware",
+        {consumer_phone}
+    )
+
+    # AML.T0008.001 -> AML.T0016.000
+    consumer_phone.add_associated_assets(
+        "attackImplementation",
+        {camera_hijack_implementation}
+    )
+
+    # AML.T0016.000 -> AML.T0016.001
+    camera_hijack_implementation.add_associated_assets(
+        "softwareTool",
+        {virtual_camera_tools}
+    )
+
+    # AML.T0016.001 -> AML.T0021
+    virtual_camera_tools.add_associated_assets(
+        "account",
+        {fraudulent_account}
+    )
+
+    # AML.T0021 -> AML.T0047
+    fraudulent_account.add_associated_assets(
+        "targetSystem",
+        {facial_recognition_system}
+    )
+
+    # AML.T0015 -> AML.T0048.000
+    facial_recognition_system.add_associated_assets(
+       "impact",
+       {financial_impact}
     )
 
 

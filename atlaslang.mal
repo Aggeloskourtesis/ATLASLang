@@ -8,7 +8,57 @@ include "enterpriselang.mal"
 
 category AI {
     
-    // AML.CS0000
+    asset VictimIdentityInformation {
+        
+        | gatherVictimIdentityInformation
+        user info: "AML.T0087 - Gather Victim Identity Information"
+        -> hardware.consumerHardware
+    }
+    
+    
+    asset AIConsumerHardware {
+        
+        | consumerHardware
+        user info: "AML.T0008.001 - Acquire Infrastructure: Consumer Hardware"
+        -> attackImplementation.obtainAdversarialAIAttackImplementation
+    }
+    
+    
+    asset AIAttackSoftwareTool {
+        
+        | softwareTools
+        user info: "AML.T0016.001 - Obtain Capabilities: Software Tools"
+        -> account.establishAccounts
+    }
+    
+    
+    asset FraudulentAccount {
+        
+        | establishAccounts
+        user info: "AML.T0021 - Establish Accounts"
+        -> targetSystem.aiEnabledProductOrService
+    }
+    
+    
+    asset FacialRecognitionSystem {
+        
+        | aiEnabledProductOrService
+        user info: "AML.T0047 - AI-Enabled Product or Service"
+        -> evadeAIModel
+        
+        | evadeAIModel
+        user info: "AML.T0015 - Evade AI Model"
+        -> impact.financialHarm
+    }
+    
+    
+    asset ExternalHarm {
+        
+        | financialHarm
+        user info: "AML.T0048.000 - External Harms: Financial Harm"
+    }
+    
+    
     asset AIResearchMaterial {
         
         | prePrintRepositories
@@ -61,7 +111,8 @@ category AI {
         
         | obtainAdversarialAIAttackImplementation
             user info: "AML.T0016.000 - Obtain Capabilities: Adversarial AI Attack Implementations"
-            -> adversarialSample.craftAdversarialData
+            -> adversarialSample.craftAdversarialData,
+            softwareTool.softwareTools
     }
     
     
@@ -100,7 +151,6 @@ category AI {
             user info: "AML.T0015 - Evade AI Model"
     }
     
-    // AML.CS0062
 
     asset LLMPrompt {
 
@@ -206,4 +256,19 @@ associations {
     
     // Manually crafted sample -> directly evade target model
     AdversarialSample [evasionSample] * <--TargetsForEvasion--> * [evasionTarget] AIMalwareDetector
+    
+    
+    // AML.CS0004 associations
+    
+    VictimIdentityInformation [victimIdentity] * <--Supports--> * [hardware] AIConsumerHardware
+    
+    AIConsumerHardware [hardware] * <--Enables--> * [attackImplementation] AdversarialAttackImplementation
+    
+    AdversarialAttackImplementation [cameraAttackImplementation] * <--Uses--> * [softwareTool] AIAttackSoftwareTool
+    
+    AIAttackSoftwareTool [softwareTool] * <--Supports--> * [account] FraudulentAccount
+    
+    FraudulentAccount [account] * <--Accesses--> * [targetSystem] FacialRecognitionSystem
+    
+    FacialRecognitionSystem [targetSystem] * <--Causes--> * [impact] ExternalHarm
 }
