@@ -136,6 +136,46 @@ CASE_STUDIES = {
         "goal":
             "VirusTotalTrainingData:poisonTrainingData",
     },
+    # ========================================================
+    # AML.CS0003
+    # Bypassing Cylance's AI Malware Detection
+    # ========================================================
+
+    "AML.CS0003": {
+
+      "attacker_name":
+          "AML_CS0003_Attacker",
+
+     # S00 - AML.T0000
+     "entry_point":
+         "CylanceResearch:searchOpenTechnicalDatabases",
+
+     "path": [
+
+            # S01 - AML.T0047
+            "CylanceMalwareDetector:"
+            "aiEnabledProductOrService",
+
+            # S02 - AML.T0063
+            "CylanceMalwareDetector:"
+            "discoverAIModelOutputs",
+
+             # S03 - AML.T0017.000
+            "CylanceBypassCapability:"
+            "adversarialAIAttacks",
+
+            # S04 - AML.T0043.003
+            "CylanceBypassMalware:"
+            "manualModification",
+
+            # S05 - AML.T0015
+            "CylanceMalwareDetector:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+          "CylanceMalwareDetector:evadeAIModel",
+    },
 
 }
 
@@ -391,6 +431,60 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     virustotal_supply_chain.add_associated_assets(
         "trainingData",
         {virustotal_training_data}
+    )
+    
+    # ========================================================
+    # AML.CS0003
+    # Bypassing Cylance's AI Malware Detection
+    # ========================================================
+
+    cylance_research = model.add_asset(
+        "AIResearchMaterial",
+        "CylanceResearch"
+    )
+
+    cylance_detector = model.add_asset(
+        "AIMalwareDetector",
+        "CylanceMalwareDetector"
+    )
+
+    cylance_capability = model.add_asset(
+        "AdversarialCapability",
+        "CylanceBypassCapability"
+    )
+
+    cylance_adversarial_malware = model.add_asset(
+        "AdversarialSample",
+        "CylanceBypassMalware"
+    )
+
+
+    # --------------------------------------------------------
+    # AML.CS0003 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0047
+    cylance_research.add_associated_assets(
+        "targetProduct",
+        {cylance_detector}
+    )
+
+    # AML.T0063 -> AML.T0017.000
+    cylance_detector.add_associated_assets(
+        "capability",
+        {cylance_capability}
+    )
+
+    # AML.T0017.000 -> AML.T0043.003
+    cylance_capability.add_associated_assets(
+        "manualSample",
+        {cylance_adversarial_malware}
+    )
+
+    # AML.T0043.003 -> AML.T0015
+    cylance_adversarial_malware.add_associated_assets(
+        "evasionTarget",
+        {cylance_detector}
     )
 
 

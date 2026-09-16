@@ -17,7 +17,8 @@ category AI {
         
         | searchOpenTechnicalDatabases
             user info: "AML.T0000 - Search Open Technical Databases"
-            -> publicArtifacts.acquirePublicAIArtifacts
+            -> publicArtifacts.acquirePublicAIArtifacts,
+            targetProduct.aiEnabledProductOrService
     }
     
     
@@ -51,7 +52,8 @@ category AI {
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
-            -> generatedSample.blackBoxOptimization
+            -> generatedSample.blackBoxOptimization,
+            manualSample.manualModification
     }
     
     
@@ -67,7 +69,8 @@ category AI {
         
         | manualModification
             user info: "AML.T0043.003 - Craft Adversarial Data: Manual Modification"
-            -> targetModel.verifyAttack
+            -> targetModel.verifyAttack,
+            evasionTarget.evadeAIModel
         
         | blackBoxOptimization
             user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
@@ -80,6 +83,14 @@ category AI {
     
     
     asset AIMalwareDetector {
+        
+        | aiEnabledProductOrService
+            user info: "AML.T0047 - AI-Enabled Product or Service"
+            -> discoverAIModelOutputs
+        
+        | discoverAIModelOutputs
+            user info: "AML.T0063 - Discover AI Model Outputs"
+            -> capability.adversarialAIAttacks
         
         | verifyAttack
             user info: "AML.T0042 - Verify Attack"
@@ -141,6 +152,7 @@ category AI {
 
 associations {
     
+    
     // AML.CS0000
     
     AIResearchMaterial [researchMaterial] * <--Identifies--> * [trainingData] TrainingData
@@ -157,6 +169,7 @@ associations {
     
     AdversarialSample [adversarialSample] * <--TestedAgainst--> 1 [targetModel] AIMalwareDetector
     
+    
     // AML.CS0062
 
     LLMPrompt [prompt] * <--Targets--> 1 [aiAgent] AIAgent
@@ -167,6 +180,7 @@ associations {
 
     VectorStore [vectorStore] * <--RunsOn--> 1 [os] OS
     
+    
     // AML.CS0002 associations
     
     AdversarialAttackImplementation [attackImplementation] * <--Produces--> * [adversarialSample] AdversarialSample
@@ -174,4 +188,22 @@ associations {
     AdversarialSample [poisoningSamples] * <--SubmittedTo--> * [dataSupplyChain] AISupplyChainData
     
     AISupplyChainData [dataSupplyChain] * <--Poisons--> * [trainingData] TrainingData
+    
+    
+    // AML.CS0003 associations
+    
+    // Research information -> Cylance AI product
+    AIResearchMaterial [researchForProduct] * <--IdentifiesProduct--> * [targetProduct] AIMalwareDetector
+    
+    
+    // Model outputs -> development of attack capability
+    AIMalwareDetector [sourceDetector] * <--InformsDevelopment--> * [capability] AdversarialCapability
+    
+    
+    // Developed capability -> manually crafted adversarial sample
+    AdversarialCapability [manualCapability] * <--DevelopsManualSample--> * [manualSample] AdversarialSample
+    
+    
+    // Manually crafted sample -> directly evade target model
+    AdversarialSample [evasionSample] * <--TargetsForEvasion--> * [evasionTarget] AIMalwareDetector
 }
