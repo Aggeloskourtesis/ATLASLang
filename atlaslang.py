@@ -104,6 +104,39 @@ CASE_STUDIES = {
         "goal":
             "ProductionDGADetector:evadeAIModel",
     },
+    # ========================================================
+    # AML.CS0002
+    # VirusTotal Poisoning
+    # ========================================================
+
+    "AML.CS0002": {
+
+        "attacker_name":
+            "AML_CS0002_Attacker",
+
+        # AML.T0016.000
+        "entry_point":
+            "MetameTool:obtainAdversarialAIAttackImplementation",
+
+        "path": [
+
+            # AML.T0043
+            "MetamorphicRansomwareVariants:"
+            "craftAdversarialData",
+
+            # AML.T0010.002
+            "VirusTotalDataSupplyChain:"
+            "aiSupplyChainCompromiseData",
+
+            # AML.T0020
+            "VirusTotalTrainingData:"
+            "poisonTrainingData",
+        ],
+
+        "goal":
+            "VirusTotalTrainingData:poisonTrainingData",
+    },
+
 }
 
 
@@ -308,6 +341,56 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     mutated_dga_domains.add_associated_assets(
         "targetModel",
         {production_dga_detector}
+    )
+    
+    # ========================================================
+    # AML.CS0002
+    # VirusTotal Poisoning
+    # ========================================================
+
+    metame_tool = model.add_asset(
+        "AdversarialAttackImplementation",
+        "MetameTool"
+    )
+
+    ransomware_variants = model.add_asset(
+       "AdversarialSample",
+       "MetamorphicRansomwareVariants"
+    )
+
+    virustotal_supply_chain = model.add_asset(
+       "AISupplyChainData",
+       "VirusTotalDataSupplyChain"
+    )
+
+    # IMPORTANT:
+    # Reuse the existing TrainingData MAL asset
+    virustotal_training_data = model.add_asset(
+      "TrainingData",
+     "VirusTotalTrainingData"
+    )
+
+
+    # --------------------------------------------------------
+    # AML.CS0002 associations
+    # --------------------------------------------------------
+
+    # AML.T0016.000 -> AML.T0043
+    metame_tool.add_associated_assets(
+        "adversarialSample",
+        {ransomware_variants}
+    )
+
+    # AML.T0043 -> AML.T0010.002
+    ransomware_variants.add_associated_assets(
+        "dataSupplyChain",
+        {virustotal_supply_chain}
+    )
+
+    # AML.T0010.002 -> AML.T0020
+    virustotal_supply_chain.add_associated_assets(
+        "trainingData",
+        {virustotal_training_data}
     )
 
 

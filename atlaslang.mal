@@ -12,65 +12,81 @@ category AI {
     asset AIResearchMaterial {
         
         | prePrintRepositories
-        user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
-        -> trainingData.datasets
+            user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
+            -> trainingData.datasets
         
         | searchOpenTechnicalDatabases
-        user info: "AML.T0000 - Search Open Technical Databases"
-        -> publicArtifacts.acquirePublicAIArtifacts
+            user info: "AML.T0000 - Search Open Technical Databases"
+            -> publicArtifacts.acquirePublicAIArtifacts
     }
     
     
     asset TrainingData {
         
         | datasets
-        user info: "AML.T0002.000 - Acquire Public AI Artifacts: Datasets"
-        -> proxyModel.createProxyAIModel
+            user info: "AML.T0002.000 - Acquire Public AI Artifacts: Datasets"
+            -> proxyModel.createProxyAIModel
+        
+        | poisonTrainingData
+            user info: "AML.T0020 - Poison Training Data"
     }
     
     
     asset ProxyAIModel {
         
         | createProxyAIModel
-        user info: "AML.T0005 - Create Proxy AI Model"
-        -> adversarialSample.manualModification
+            user info: "AML.T0005 - Create Proxy AI Model"
+            -> adversarialSample.manualModification
     }
     
     asset PublicAIArtifacts {
         
         | acquirePublicAIArtifacts
-        user info: "AML.T0002 - Acquire Public AI Artifacts"
-        -> capability.adversarialAIAttacks
+            user info: "AML.T0002 - Acquire Public AI Artifacts"
+            -> capability.adversarialAIAttacks
     }
     
     
     asset AdversarialCapability {
         
         | adversarialAIAttacks
-        user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
-        -> generatedSample.blackBoxOptimization
+            user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
+            -> generatedSample.blackBoxOptimization
     }
+    
+    
+    asset AdversarialAttackImplementation {
+        
+        | obtainAdversarialAIAttackImplementation
+            user info: "AML.T0016.000 - Obtain Capabilities: Adversarial AI Attack Implementations"
+            -> adversarialSample.craftAdversarialData
+    }
+    
     
     asset AdversarialSample {
         
         | manualModification
-        user info: "AML.T0043.003 - Craft Adversarial Data: Manual Modification"
-        -> targetModel.verifyAttack
+            user info: "AML.T0043.003 - Craft Adversarial Data: Manual Modification"
+            -> targetModel.verifyAttack
         
         | blackBoxOptimization
-        user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
-        -> targetModel.verifyAttack
+            user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
+            -> targetModel.verifyAttack
+        
+        | craftAdversarialData
+            user info: "AML.T0043 - Craft Adversarial Data"
+            -> dataSupplyChain.aiSupplyChainCompromiseData
     }
     
     
     asset AIMalwareDetector {
         
         | verifyAttack
-        user info: "AML.T0042 - Verify Attack"
-        -> evadeAIModel
+            user info: "AML.T0042 - Verify Attack"
+            -> evadeAIModel
         
         | evadeAIModel
-        user info: "AML.T0015 - Evade AI Model"
+            user info: "AML.T0015 - Evade AI Model"
     }
     
     // AML.CS0062
@@ -101,6 +117,14 @@ category AI {
             user info: "AML.T0053 - AI Agent Tool Invocation"
             -> vectorStore.vulnerableFilterEvaluation
     }
+    
+    
+    asset AISupplyChainData {
+        
+        | aiSupplyChainCompromiseData
+            user info: "AML.T0010.002 - AI Supply Chain Compromise: Data"
+            -> trainingData.poisonTrainingData
+    }
 
 
     asset VectorStore {
@@ -121,7 +145,7 @@ associations {
     
     AIResearchMaterial [researchMaterial] * <--Identifies--> * [trainingData] TrainingData
     
-    TrainingData [trainingData] * <--UsedToCreate--> 1 [proxyModel] ProxyAIModel
+    TrainingData [trainingData] * <--UsedToCreate--> * [proxyModel] ProxyAIModel
     
     ProxyAIModel [proxyModel] * <--SupportsCrafting--> * [adversarialSample] AdversarialSample
     
@@ -142,4 +166,12 @@ associations {
     AITool [tool] * <--Uses--> 1 [vectorStore] VectorStore
 
     VectorStore [vectorStore] * <--RunsOn--> 1 [os] OS
+    
+    // AML.CS0002 associations
+    
+    AdversarialAttackImplementation [attackImplementation] * <--Produces--> * [adversarialSample] AdversarialSample
+    
+    AdversarialSample [poisoningSamples] * <--SubmittedTo--> * [dataSupplyChain] AISupplyChainData
+    
+    AISupplyChainData [dataSupplyChain] * <--Poisons--> * [trainingData] TrainingData
 }
