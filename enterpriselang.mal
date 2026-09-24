@@ -2075,6 +2075,7 @@ category Software {
             developer info: "Sources for distribution results: https://capec.mitre.org/data/definitions/94.html, https://www.csoonline.com/article/3340117/what-is-a-man-in-the-middle-attack-how-mitm-attacks-work-and-how-to-prevent-them.html#:~:text=Though%20not%20as%20common%20as,are%20difficult%20to%20come%20by."
             user info: "Adversaries may attempt to position themselves between two or more networked devices using a man-in-the-middle (MiTM) technique to support follow-on behaviors such as Network Sniffing or Transmitted Data Manipulation."
             ->  networkSniffing,
+                dataFromLocalSystem,
                 computer.router.internalNetwork.attemptTransmittedDataManipulation,
                 computer.router.externalNetwork.attemptTransmittedDataManipulation
 
@@ -5451,6 +5452,10 @@ category Network {
         | dataFromNetworkSharedDrive //(0.892)*Exponential(9.952)]
             developer info: "Sources for distribution results : see automatedCollection.md file"
             user info: "Adversaries may search network shares on computers they have compromised to find files of interest."
+            
+        | wiFiNetworks
+            user info: "T1669 - Wi-Fi Networks"
+            -> router.computer.os.manInTheMiddle
 
         # encryptSensitiveInformation
             user info:"https://attack.mitre.org/mitigations/M1041/"   
@@ -5746,7 +5751,8 @@ category Hardware {
         & hardwareAdditions 
             user info: "Adversaries may introduce computer accessories, computers, or networking hardware into a system or network that can be used as a vector to gain access." 
             +>  os.executeCode,
-                os.attemptGatekeeperBypass
+                os.attemptGatekeeperBypass,
+                router.internalNetwork.wiFiNetworks
     }
 
     asset PeripheralDevice {
@@ -5785,6 +5791,32 @@ category Hardware {
     }
 }
 
+category AdversaryPreparation {
+    
+    asset AttackPreparation {
+        
+        | developMalware
+        user info: "T1587.001 - Develop Capabilities: Malware"
+        -> obtainTool
+        
+        | obtainTool
+        user info: "T1588.002 - Obtain Capabilities: Tool"
+        -> victimRecon.identifyBusinessTempo
+    }
+    
+    
+    asset VictimOrganizationRecon {
+        
+        | identifyBusinessTempo
+        user info: "T1591.003 - Gather Victim Org Information: Identify Business Tempo"
+        -> determinePhysicalLocations
+        
+        | determinePhysicalLocations
+        user info: "T1591.001 - Gather Victim Org Information: Determine Physical Locations"
+        -> hardwareAddition.physicalAccess
+    }
+}
+
 associations {
     User [user] * <--Uses--> * [computer] Computer
     User [user] 1 <--Logsin--> * [userAccount] UserAccount
@@ -5799,4 +5831,6 @@ associations {
     ExternalNetwork [externalNetwork] * <--Connects--> * [router] Router
     Browser [browser] * <--Accesses--> * [service] Service
     Computer [computer] * <--Serves--> * [peripheralDevice] PeripheralDevice
+    AttackPreparation [attackPreparation] * <--PreparesFor--> * [victimRecon] VictimOrganizationRecon
+    VictimOrganizationRecon [victimRecon] * <--TargetsHardware--> * [hardwareAddition] HardwareAddition
 }

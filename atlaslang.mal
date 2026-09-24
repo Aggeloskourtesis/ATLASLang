@@ -55,7 +55,10 @@ category AI {
     asset ExternalHarm {
         
         | financialHarm
-        user info: "AML.T0048.000 - External Harms: Financial Harm"
+            user info: "AML.T0048.000 - External Harms: Financial Harm"
+        
+        | userHarm
+            user info: "AML.T0048.003 - External Harms: User Harm"
     }
     
     
@@ -103,7 +106,8 @@ category AI {
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
             -> generatedSample.blackBoxOptimization,
-            manualSample.manualModification
+            manualSample.manualModification,
+            attackPreparation.developMalware
     }
     
     
@@ -129,7 +133,8 @@ category AI {
         
         | craftAdversarialData
             user info: "AML.T0043 - Craft Adversarial Data"
-            -> dataSupplyChain.aiSupplyChainCompromiseData
+            -> dataSupplyChain.aiSupplyChainCompromiseData,
+               ctNetwork.attemptTransmittedDataManipulation
     }
     
     
@@ -149,6 +154,8 @@ category AI {
         
         | evadeAIModel
             user info: "AML.T0015 - Evade AI Model"
+            -> externalHarm.financialHarm,
+               externalHarm.userHarm
     }
     
 
@@ -197,6 +204,18 @@ category AI {
         # safeFilterEvaluation
             user info: "Avoid dynamic evaluation of attacker-controlled filter expressions"
             -> vulnerableFilterEvaluation
+    }
+    
+    asset CTAttackOS extends OS {
+        
+        | dataFromLocalSystem
+            +> ctImage.craftAdversarialData
+    }
+    
+    asset CTImageNetwork extends InternalNetwork {
+        
+        & transmittedDataManipulation
+            +> targetModel.evadeAIModel
     }
 }
 
@@ -271,4 +290,17 @@ associations {
     FraudulentAccount [account] * <--Accesses--> * [targetSystem] FacialRecognitionSystem
     
     FacialRecognitionSystem [targetSystem] * <--Causes--> * [impact] ExternalHarm
+    
+    
+    //Scenario 1 associations
+    
+    AdversarialCapability [ctganCapability] * <--EnablesPreparation--> * [attackPreparation] AttackPreparation
+    
+    CTAttackOS [sourceOS] * <--CollectsCTData--> * [ctImage] AdversarialSample
+    
+    AdversarialSample [adversarialSample] * <--InjectedInto--> * [ctNetwork] CTImageNetwork
+    
+    CTImageNetwork [ctNetwork] * <--FeedsModel--> * [targetModel] AIMalwareDetector
+    
+    AIMalwareDetector [aiModel] * <--Causes--> * [externalHarm] ExternalHarm
 }
