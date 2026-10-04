@@ -93,6 +93,13 @@ category AI {
             -> adversarialSample.manualModification
     }
     
+    asset AIArtifactCollection {
+        
+        | aiArtifactCollection
+        user info: "AML.T0035 - AI Artifact Collection"
+        -> adversarialSample.craftAdversarialData
+    }
+    
     asset PublicAIArtifacts {
         
         | acquirePublicAIArtifacts
@@ -116,7 +123,8 @@ category AI {
         | obtainAdversarialAIAttackImplementation
             user info: "AML.T0016.000 - Obtain Capabilities: Adversarial AI Attack Implementations"
             -> adversarialSample.craftAdversarialData,
-            softwareTool.softwareTools
+            softwareTool.softwareTools,
+            vulnerabilityPreparation.obtainVulnerabilities
     }
     
     
@@ -134,9 +142,17 @@ category AI {
         | craftAdversarialData
             user info: "AML.T0043 - Craft Adversarial Data"
             -> dataSupplyChain.aiSupplyChainCompromiseData,
-               ctNetwork.attemptTransmittedDataManipulation
+               ctNetwork.attemptTransmittedDataManipulation,
+               bgmsChannel.attemptTransmittedDataManipulation
     }
     
+    asset PredictiveAIModel {
+        
+        | evadeAIModel
+        user info: "AML.T0015 - Evade AI Model"
+        -> externalHarm.financialHarm,
+        externalHarm.userHarm
+    }
     
     asset AIMalwareDetector {
         
@@ -216,6 +232,18 @@ category AI {
         
         & transmittedDataManipulation
             +> targetModel.evadeAIModel
+    }
+    
+    asset BGMSMobileOS extends OS {
+        
+        & manInTheMiddle
+        +> artifact.aiArtifactCollection
+    }
+    
+    asset BGMSBluetoothChannel extends InternalNetwork {
+        
+        & transmittedDataManipulation
+        +> targetModel.evadeAIModel
     }
 }
 
@@ -302,5 +330,20 @@ associations {
     
     CTImageNetwork [ctNetwork] * <--FeedsModel--> * [targetModel] AIMalwareDetector
     
-    AIMalwareDetector [aiModel] * <--Causes--> * [externalHarm] ExternalHarm
+    AIMalwareDetector [malwareDetector] * <--Causes--> * [externalHarm] ExternalHarm
+    
+    
+    //Scerario 2 associations
+    
+    AdversarialAttackImplementation [bgmsImplementation] * <--EnablesVulnerabilityResearch--> * [vulnerabilityPreparation] AttackPreparation
+    
+    BGMSMobileOS [sourceOS] * <--CollectsAIArtifact--> * [artifact] AIArtifactCollection
+    
+    AIArtifactCollection [artifactCollection] * <--SupportsCrafting--> * [adversarialSample] AdversarialSample
+    
+    AdversarialSample [bgmsSample] * <--InjectedThrough--> * [bgmsChannel] BGMSBluetoothChannel
+    
+    BGMSBluetoothChannel [bgmsChannel] * <--FeedsModel--> * [targetModel] PredictiveAIModel
+    
+    PredictiveAIModel [predictiveModel] * <--Causes--> * [externalHarm] ExternalHarm
 }

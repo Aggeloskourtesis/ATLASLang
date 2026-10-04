@@ -5754,6 +5754,13 @@ category Hardware {
                 os.attemptGatekeeperBypass,
                 router.internalNetwork.wiFiNetworks
     }
+    
+    asset MobileDevice extends Computer {
+        
+        | exploitationForInitialAccess
+        user info: "T1664 - Exploitation for Initial Access"
+        -> os.manInTheMiddle
+    }
 
     asset PeripheralDevice {
         | collectVideo
@@ -5802,6 +5809,10 @@ category AdversaryPreparation {
         | obtainTool
         user info: "T1588.002 - Obtain Capabilities: Tool"
         -> victimRecon.identifyBusinessTempo
+        
+        | obtainVulnerabilities
+        user info: "T1588.006 - Obtain Capabilities: Vulnerabilities"
+        -> mobileDevice.exploitationForInitialAccess
     }
     
     
@@ -5833,4 +5844,5 @@ associations {
     Computer [computer] * <--Serves--> * [peripheralDevice] PeripheralDevice
     AttackPreparation [attackPreparation] * <--PreparesFor--> * [victimRecon] VictimOrganizationRecon
     VictimOrganizationRecon [victimRecon] * <--TargetsHardware--> * [hardwareAddition] HardwareAddition
+    AttackPreparation [attackPreparation] * <--TargetsMobile--> * [mobileDevice] MobileDevice
 }
