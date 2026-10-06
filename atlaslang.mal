@@ -179,7 +179,9 @@ category AI {
 
         | llmPromptCrafting
             user info: "AML.T0065 - LLM Prompt Crafting"
-            -> aiAgent.aiEnabledProductOrService
+            -> aiAgent.aiEnabledProductOrService,
+            browserPreparation.developMalware,
+            browserPreparation.obtainMalware
     }
 
 
@@ -192,6 +194,27 @@ category AI {
         | directPromptInjection
             user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
             -> tool.aiAgentToolInvocation
+    }
+    
+    asset LLMConversation {
+        
+        | llmPromptInjection
+        user info: "AML.T0051 - LLM Prompt Injection"
+        -> agentContext.contextPoisoningThread
+    }
+    
+    
+    asset AIAgentContext {
+        
+        | contextPoisoningThread
+        user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
+        -> externalHarm.userHarm
+    }
+    
+    asset PromptManipulationNetwork extends InternalNetwork {
+        
+        & transmittedDataManipulation
+        +> llmConversation.llmPromptInjection
     }
 
 
@@ -346,4 +369,13 @@ associations {
     BGMSBluetoothChannel [bgmsChannel] * <--FeedsModel--> * [targetModel] PredictiveAIModel
     
     PredictiveAIModel [predictiveModel] * <--Causes--> * [externalHarm] ExternalHarm
+    
+    
+    //Scerario 3 associations
+    
+    LLMPrompt [fabricatedPrompt] * <--PreparesBrowserAttack--> * [browserPreparation] AttackPreparation
+    PromptManipulationNetwork [promptNetwork] * <--CarriesManipulatedPromptTo--> * [llmConversation] LLMConversation
+    LLMConversation [conversation] * <--PersistsIn--> * [agentContext] AIAgentContext
+    AIAgentContext [agentContext] * <--Causes--> * [externalHarm] ExternalHarm
+    
 }

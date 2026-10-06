@@ -1177,6 +1177,12 @@ category Software {
                 service.os.computer.router.externalNetwork.oneWayCommunication,
                 service.os.computer.router.externalNetwork.exfiltrationOverWebService
     }
+    
+    asset PromptInterceptBrowser extends Browser {
+        
+        & browserExtensions
+        +> captureOS.inputCapture
+    }
 
     asset OS {
         | attemptBITSJobs @hidden
@@ -2976,6 +2982,7 @@ category Software {
         # exploitProtection
             user info: "https://attack.mitre.org/mitigations/M1050/"
     }
+    
     
     asset Windows extends OS {
         | abuseElevationControlMechanism
@@ -5333,7 +5340,16 @@ category Software {
         # remoteDataStorage 
             user info: "https://attack.mitre.org/mitigations/M1029/"
             +>  clearMacSystemLogs
-    }    
+    } 
+    
+    asset PromptCaptureOS extends OS {
+        
+        | inputCapture
+        +> attemptAutomatedCollection
+        
+        & automatedCollection
+        +> computer.router.internalNetwork.attemptTransmittedDataManipulation
+    }
 }
 
 category Network {
@@ -5804,7 +5820,8 @@ category AdversaryPreparation {
         
         | developMalware
         user info: "T1587.001 - Develop Capabilities: Malware"
-        -> obtainTool
+        -> obtainTool,
+        browser.installExtensions
         
         | obtainTool
         user info: "T1588.002 - Obtain Capabilities: Tool"
@@ -5813,6 +5830,10 @@ category AdversaryPreparation {
         | obtainVulnerabilities
         user info: "T1588.006 - Obtain Capabilities: Vulnerabilities"
         -> mobileDevice.exploitationForInitialAccess
+        
+        | obtainMalware
+        user info: "T1588.001 - Obtain Capabilities: Malware"
+        -> browser.installExtensions
     }
     
     
@@ -5845,4 +5866,6 @@ associations {
     AttackPreparation [attackPreparation] * <--PreparesFor--> * [victimRecon] VictimOrganizationRecon
     VictimOrganizationRecon [victimRecon] * <--TargetsHardware--> * [hardwareAddition] HardwareAddition
     AttackPreparation [attackPreparation] * <--TargetsMobile--> * [mobileDevice] MobileDevice
+    AttackPreparation [browserPreparation] * <--TargetsBrowser--> * [browser] PromptInterceptBrowser
+    PromptInterceptBrowser [promptBrowser] * <--RunsOn--> 1 [captureOS] PromptCaptureOS
 }
