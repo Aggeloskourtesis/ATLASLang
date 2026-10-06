@@ -37,6 +37,14 @@ category AI {
         | establishAccounts
         user info: "AML.T0021 - Establish Accounts"
         -> targetSystem.aiEnabledProductOrService
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> establishAccounts
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> establishAccounts
     }
     
     
@@ -49,6 +57,38 @@ category AI {
         | evadeAIModel
         user info: "AML.T0015 - Evade AI Model"
         -> impact.financialHarm
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiEnabledProductOrService
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> evadeAIModel
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> evadeAIModel
+        
+        # m0009PredictiveAIMultiSensorFusion [Disabled]
+        user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
+        -> evadeAIModel
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> evadeAIModel
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> evadeAIModel
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> evadeAIModel
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> evadeAIModel
     }
     
     
@@ -72,6 +112,14 @@ category AI {
             user info: "AML.T0000 - Search Open Technical Databases"
             -> publicArtifacts.acquirePublicAIArtifacts,
             targetProduct.aiEnabledProductOrService
+            
+        # m0000LimitPublicReleaseOfInformation [Disabled]
+            user info: "AML.M0000 - Limit Public Release of Information"
+            -> searchOpenTechnicalDatabases
+
+        # m0039AIHoneypots [Disabled]
+            user info: "AML.M0039 - AI Honeypots"
+            -> searchOpenTechnicalDatabases
     }
     
     
@@ -83,6 +131,35 @@ category AI {
         
         | poisonTrainingData
             user info: "AML.T0020 - Poison Training Data"
+            
+        # m0001LimitModelArtifactRelease [Disabled]
+            user info: "AML.M0001 - Limit Model Artifact Release"
+            -> datasets,
+               poisonTrainingData
+
+        # m0005ControlAccessAtRest [Disabled]
+            user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+            -> poisonTrainingData
+
+        # m0007SanitizeTrainingData [Disabled]
+            user info: "AML.M0007 - Sanitize Training Data"
+            -> poisonTrainingData
+
+        # m0008ValidateAIModel [Disabled]
+            user info: "AML.M0008 - Validate AI Model"
+            -> poisonTrainingData
+
+        # m0023AIBillOfMaterials [Disabled]
+            user info: "AML.M0023 - AI Bill of Materials"
+            -> poisonTrainingData
+
+        # m0025MaintainAIDatasetProvenance [Disabled]
+            user info: "AML.M0025 - Maintain AI Dataset Provenance"
+            -> poisonTrainingData
+
+        # m0035AIRedTeam [Disabled]
+            user info: "AML.M0035 - AI Red Team"
+            -> poisonTrainingData
     }
     
     
@@ -91,6 +168,26 @@ category AI {
         | createProxyAIModel
             user info: "AML.T0005 - Create Proxy AI Model"
             -> adversarialSample.manualModification
+        
+        # m0000LimitPublicReleaseOfInformation [Disabled]
+        user info: "AML.M0000 - Limit Public Release of Information"
+        -> createProxyAIModel
+        
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> createProxyAIModel
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> createProxyAIModel
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> createProxyAIModel
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> createProxyAIModel
     }
     
     asset AIArtifactCollection {
@@ -98,6 +195,22 @@ category AI {
         | aiArtifactCollection
         user info: "AML.T0035 - AI Artifact Collection"
         -> adversarialSample.craftAdversarialData
+        
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> aiArtifactCollection
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> aiArtifactCollection
+        
+        # m0012EncryptSensitiveInformation [Disabled]
+        user info: "AML.M0012 - Encrypt Sensitive Information"
+        -> aiArtifactCollection
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> aiArtifactCollection
     }
     
     asset PublicAIArtifacts {
@@ -105,6 +218,10 @@ category AI {
         | acquirePublicAIArtifacts
             user info: "AML.T0002 - Acquire Public AI Artifacts"
             -> capability.adversarialAIAttacks
+        
+        # m0000LimitPublicReleaseOfInformation [Disabled]
+        user info: "AML.M0000 - Limit Public Release of Information"
+        -> acquirePublicAIArtifacts
     }
     
     
@@ -144,6 +261,50 @@ category AI {
             -> dataSupplyChain.aiSupplyChainCompromiseData,
                ctNetwork.attemptTransmittedDataManipulation,
                bgmsChannel.attemptTransmittedDataManipulation
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> manualModification,
+        blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> manualModification,
+        blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> manualModification,
+        blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> craftAdversarialData
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> manualModification,
+        blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> manualModification,
+        blackBoxOptimization,
+        craftAdversarialData
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> blackBoxOptimization,
+        craftAdversarialData
     }
     
     asset PredictiveAIModel {
@@ -152,6 +313,34 @@ category AI {
         user info: "AML.T0015 - Evade AI Model"
         -> externalHarm.financialHarm,
         externalHarm.userHarm
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> evadeAIModel
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> evadeAIModel
+        
+        # m0009PredictiveAIMultiSensorFusion [Disabled]
+        user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
+        -> evadeAIModel
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> evadeAIModel
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> evadeAIModel
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> evadeAIModel
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> evadeAIModel
     }
     
     asset AIMalwareDetector {
@@ -172,6 +361,64 @@ category AI {
             user info: "AML.T0015 - Evade AI Model"
             -> externalHarm.financialHarm,
                externalHarm.userHarm
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiEnabledProductOrService
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> discoverAIModelOutputs,
+        verifyAttack
+        
+        # m0012EncryptSensitiveInformation [Disabled]
+        user info: "AML.M0012 - Encrypt Sensitive Information"
+        -> discoverAIModelOutputs
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> discoverAIModelOutputs
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> discoverAIModelOutputs,
+        verifyAttack
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> verifyAttack
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> verifyAttack
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> evadeAIModel
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> evadeAIModel
+        
+        # m0009PredictiveAIMultiSensorFusion [Disabled]
+        user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
+        -> evadeAIModel
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> evadeAIModel
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> evadeAIModel
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> evadeAIModel
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> evadeAIModel
     }
     
 
@@ -194,6 +441,19 @@ category AI {
         | directPromptInjection
             user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
             -> tool.aiAgentToolInvocation
+            
+        # m0024AITelemetryLogging [Disabled]
+            user info: "AML.M0024 - AI Telemetry Logging"
+            -> aiEnabledProductOrService,
+               directPromptInjection
+
+        # m0033InputOutputValidationAgentComponents [Disabled]
+            user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+            -> directPromptInjection
+
+        # m0035AIRedTeam [Disabled]
+            user info: "AML.M0035 - AI Red Team"
+            -> directPromptInjection
     }
     
     asset LLMConversation {
@@ -201,6 +461,34 @@ category AI {
         | llmPromptInjection
         user info: "AML.T0051 - LLM Prompt Injection"
         -> agentContext.contextPoisoningThread
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> llmPromptInjection
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> llmPromptInjection
+        
+        # m0021GenerativeAIGuidelines [Disabled]
+        user info: "AML.M0021 - Generative AI Guidelines"
+        -> llmPromptInjection
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> llmPromptInjection
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> llmPromptInjection
+        
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> llmPromptInjection
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> llmPromptInjection
     }
     
     
@@ -209,6 +497,10 @@ category AI {
         | contextPoisoningThread
         user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
         -> externalHarm.userHarm
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> contextPoisoningThread
     }
     
     asset PromptManipulationNetwork extends InternalNetwork {
@@ -223,6 +515,54 @@ category AI {
         | aiAgentToolInvocation
             user info: "AML.T0053 - AI Agent Tool Invocation"
             -> vectorStore.vulnerableFilterEvaluation
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> aiAgentToolInvocation
+        
+        # m0021GenerativeAIGuidelines [Disabled]
+        user info: "AML.M0021 - Generative AI Guidelines"
+        -> aiAgentToolInvocation
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> aiAgentToolInvocation
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiAgentToolInvocation
+        
+        # m0026PrivilegedAIAgentPermissions [Disabled]
+        user info: "AML.M0026 - Privileged AI Agent Permissions Configuration"
+        -> aiAgentToolInvocation
+        
+        # m0027SingleUserAIAgentPermissions [Disabled]
+        user info: "AML.M0027 - Single-User AI Agent Permissions Configuration"
+        -> aiAgentToolInvocation
+        
+        # m0028AIAgentToolsPermissions [Disabled]
+        user info: "AML.M0028 - AI Agent Tools Permissions Configuration"
+        -> aiAgentToolInvocation
+        
+        # m0029HumanInTheLoop [Disabled]
+        user info: "AML.M0029 - Human In-the-Loop for AI Agent Actions"
+        -> aiAgentToolInvocation
+        
+        # m0030RestrictToolInvocationOnUntrustedData [Disabled]
+        user info: "AML.M0030 - Restrict AI Agent Tool Invocation on Untrusted Data"
+        -> aiAgentToolInvocation
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> aiAgentToolInvocation
+        
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> aiAgentToolInvocation
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> aiAgentToolInvocation
     }
     
     
@@ -231,6 +571,26 @@ category AI {
         | aiSupplyChainCompromiseData
             user info: "AML.T0010.002 - AI Supply Chain Compromise: Data"
             -> trainingData.poisonTrainingData
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> aiSupplyChainCompromiseData
+        
+        # m0007SanitizeTrainingData [Disabled]
+        user info: "AML.M0007 - Sanitize Training Data"
+        -> aiSupplyChainCompromiseData
+        
+        # m0014VerifyAIArtifacts [Disabled]
+        user info: "AML.M0014 - Verify AI Artifacts"
+        -> aiSupplyChainCompromiseData
+        
+        # m0025MaintainAIDatasetProvenance [Disabled]
+        user info: "AML.M0025 - Maintain AI Dataset Provenance"
+        -> aiSupplyChainCompromiseData
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> aiSupplyChainCompromiseData
     }
 
 
@@ -312,19 +672,12 @@ associations {
     
     // AML.CS0003 associations
     
-    // Research information -> Cylance AI product
     AIResearchMaterial [researchForProduct] * <--IdentifiesProduct--> * [targetProduct] AIMalwareDetector
     
-    
-    // Model outputs -> development of attack capability
     AIMalwareDetector [sourceDetector] * <--InformsDevelopment--> * [capability] AdversarialCapability
     
-    
-    // Developed capability -> manually crafted adversarial sample
     AdversarialCapability [manualCapability] * <--DevelopsManualSample--> * [manualSample] AdversarialSample
     
-    
-    // Manually crafted sample -> directly evade target model
     AdversarialSample [evasionSample] * <--TargetsForEvasion--> * [evasionTarget] AIMalwareDetector
     
     
@@ -374,8 +727,11 @@ associations {
     //Scerario 3 associations
     
     LLMPrompt [fabricatedPrompt] * <--PreparesBrowserAttack--> * [browserPreparation] AttackPreparation
+    
     PromptManipulationNetwork [promptNetwork] * <--CarriesManipulatedPromptTo--> * [llmConversation] LLMConversation
+    
     LLMConversation [conversation] * <--PersistsIn--> * [agentContext] AIAgentContext
+    
     AIAgentContext [agentContext] * <--Causes--> * [externalHarm] ExternalHarm
     
 }
