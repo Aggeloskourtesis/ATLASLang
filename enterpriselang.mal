@@ -38,7 +38,8 @@ category Person {
             developer info: "Sources for distribution result: https://www.tandfonline.com/doi/abs/10.1080/10919392.2019.1552745; https://doi.org/10.1145/1572532.1572536; https://ieeexplore.ieee.org/abstract/document/6585241" 
             ->  maliciousFile,
                 maliciousLink,
-                userAccount.userExecution
+                userAccount.userExecution,
+                computer.os.manInTheMiddle
     }
 }
 
@@ -1142,7 +1143,8 @@ category Software {
         # updateSoftware //(0.567125)]
             developer info: "Sources for distribution result: https://www.usenix.org/system/files/conference/soups2015/soups15-paper-ion.pdf, https://www.computerweekly.com/news/252462476/Most-businesses-vulnerable-to-supply-chain-cyber-attacks#:~:text=Seven%20in%2010%20businesses%20may,to%20research%20commissioned%20by%20Accenture, https://www.bitsight.com/press-releases/thousands-organizations-run-majority-of-computers-onoutdated-operating-systems, https://cdn2.hubspot.net/hubfs/486579/Avast_PC_Trends_Report_2019.pdf, https://netmarketshare.com/operating-system-market-share.aspx?, https://gs.statcounter.com/windows-version-market-share/desktop/worldwide/#monthly-201906-202006, https://www.darkreading.com/mobile/more-than-half-of-android-devices-run-outdated-browsers/d/d-id/1327483, https://www.pcworld.com/article/2013737/out-of-date-vulnerable-browsers-put-users-at-risk.html"
             user info: "https://attack.mitre.org/mitigations/M1051/"
-            ->  driveByCompromise
+            ->  driveByCompromise,
+            browserExtensions
 
         # exploitProtection
             user info: "https://attack.mitre.org/mitigations/M1050/"
@@ -2956,7 +2958,8 @@ category Software {
                 networkSniffing,
                 privateKeys,
                 storedDataManipulation,
-                computer.router.externalNetwork.dataFromCloudStorageObject  
+                computer.router.externalNetwork.dataFromCloudStorageObject,
+                automatedCollection
 
         # remoteDataStorage 
             user info: "https://attack.mitre.org/mitigations/M1029/"
@@ -2981,6 +2984,10 @@ category Software {
 
         # exploitProtection
             user info: "https://attack.mitre.org/mitigations/M1050/"
+        
+        # dataLossPrevention
+            user info: "M1057 - Data Loss Prevention"
+             -> dataFromLocalSystem
     }
     
     
@@ -5476,7 +5483,9 @@ category Network {
         # encryptSensitiveInformation
             user info:"https://attack.mitre.org/mitigations/M1041/"   
             ->  transmittedDataManipulation,
-                exchangeServerCollection
+                exchangeServerCollection,
+                wiFiNetworks,
+                router.computer.os.manInTheMiddle
 
         # executionPrevention             
             user info: "https://attack.mitre.org/mitigations/M1038/"
@@ -5513,7 +5522,8 @@ category Network {
             developer info: "Sources for distribution result: https://security.googleblog.com/2019/05/new-research-how-effective-is-basic.html, https://www.zdnet.com/article/microsoft-using-multi-factor-authentication-blocks-99-9-of-account-hacks/"
             user info: "https://attack.mitre.org/mitigations/M1032/"
             ->  exchangeServerCollection,
-                router.externalNetwork.dataFromCloudStorageObject
+                router.externalNetwork.dataFromCloudStorageObject,
+                wiFiNetworks
 
         # networkIntrusionPrevention
             user info: "https://attack.mitre.org/mitigations/M1031/"
@@ -5561,7 +5571,8 @@ category Network {
                 router.computer.os.domainTrustDiscovery,
                 router.computer.os.lLMNR_NBT_NS_PoisoningAndSMBRelay,
                 router.computer.os.rDPHijacking,
-                router.computer.os.serviceStop
+                router.computer.os.serviceStop,
+                wiFiNetworks
 
         # sSLOrTLSInspection
             user info: "https://attack.mitre.org/mitigations/M1020/"
@@ -5776,6 +5787,15 @@ category Hardware {
         | exploitationForInitialAccess
         user info: "T1664 - Exploitation for Initial Access"
         -> os.manInTheMiddle
+        
+        # antivirusAntimalware [Disabled]
+        user info: "M1058 - Antivirus/Antimalware"
+        -> exploitationForInitialAccess
+        
+        
+        # securityUpdates [Disabled]
+        user info: "M1001 - Security Updates"
+        -> exploitationForInitialAccess
     }
 
     asset PeripheralDevice {
@@ -5834,6 +5854,13 @@ category AdversaryPreparation {
         | obtainMalware
         user info: "T1588.001 - Obtain Capabilities: Malware"
         -> browser.installExtensions
+        
+        # preCompromise [Disabled]
+        user info: "M1056 - Pre-compromise"
+        -> developMalware,
+        obtainTool,
+        obtainVulnerabilities,
+        obtainMalware
     }
     
     
@@ -5846,6 +5873,11 @@ category AdversaryPreparation {
         | determinePhysicalLocations
         user info: "T1591.001 - Gather Victim Org Information: Determine Physical Locations"
         -> hardwareAddition.physicalAccess
+        
+        # preCompromise [Disabled]
+        user info: "M1056 - Pre-compromise"
+        -> identifyBusinessTempo,
+        determinePhysicalLocations
     }
 }
 
