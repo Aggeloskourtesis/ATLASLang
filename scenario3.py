@@ -21,6 +21,20 @@ from malsim.policies import DecisionAgent
 LANG_FILE = Path("atlaslang.mal")
 
 
+# ============================================================
+# DEFENSE CONTROL
+# ============================================================
+#
+# Defenses are NOT enabled/disabled from this Python file.
+# Their state is defined directly in atlaslang.mal /
+# enterpriselang.mal using [Disabled] or [Enabled].
+#
+# The same Python scenario is therefore used for both the
+# baseline and defended experiments.
+#
+
+
+
 # Choose:
 #
 #   "develop" -> T1587.001 Develop Malware
@@ -516,10 +530,22 @@ class LLMExtensionAttacker(DecisionAgent):
         print("=" * 70)
 
 
-        raise RuntimeError(
-            "Attack path stalled at: "
-            f"{next_step}"
+        print(
+            "\n[ATTACK BLOCKED / PATH UNREACHABLE]"
         )
+
+        print(
+            "The expected next attack step is not "
+            "available to the attacker."
+        )
+
+        print(
+            "If a defense is [Enabled] in atlaslang.mal "
+            "or enterpriselang.mal, this is the expected "
+            "defensive outcome."
+        )
+
+        return None
 
 
 # ============================================================
@@ -697,6 +723,11 @@ def main():
     )
 
     print(
+        "Defense configuration is read directly from "
+        "atlaslang.mal / enterpriselang.mal."
+    )
+
+    print(
         f"MALWARE ROUTE: {MALWARE_ROUTE.upper()}"
     )
 
@@ -806,15 +837,26 @@ def main():
     if goal in performed:
 
         print(
-            "[SUCCESS] LLM browser-extension "
+            "[ATTACK SUCCESS] LLM browser-extension "
             "scenario completed."
+        )
+
+        print(
+            "The configured MAL defenses did not prevent "
+            "the complete historical attack path."
         )
 
     else:
 
         print(
-            "[FAILED] Final impact "
+            "[ATTACK BLOCKED] Final impact "
             "was not reached."
+        )
+
+        print(
+            "If one or more defenses are [Enabled] in the MAL "
+            "language, this indicates that the defended model "
+            "prevented the complete historical path."
         )
 
 

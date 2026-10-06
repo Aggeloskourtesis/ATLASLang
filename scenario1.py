@@ -22,6 +22,31 @@ LANG_FILE = Path("atlaslang.mal")
 
 
 # ============================================================
+# DEFENSE CONTROL
+# ============================================================
+#
+# Defenses are NOT enabled/disabled from this Python file.
+#
+# Their initial state is defined directly in atlaslang.mal /
+# enterpriselang.mal:
+#
+#     # someDefense [Disabled]
+#         -> protectedAttackStep
+#
+# or:
+#
+#     # someDefense [Enabled]
+#         -> protectedAttackStep
+#
+# MAL Simulator samples defense-step Bernoulli defaults when the
+# simulation starts, so changing [Disabled] <-> [Enabled] in the MAL
+# file is enough. The same Python scenario can therefore be used for
+# both the baseline and defended experiments.
+#
+
+
+
+# ============================================================
 # CT-GAN SCENARIO
 # ============================================================
 
@@ -493,10 +518,30 @@ class CTGANAttacker(DecisionAgent):
         print("=" * 70)
 
 
-        raise RuntimeError(
-            "CT-GAN attack path stalled at: "
-            f"{next_step}"
+        # ----------------------------------------------------
+        # The historical path is no longer traversable.
+        #
+        # Once defenses are modeled in MAL, this is not
+        # necessarily an implementation error. An [Enabled]
+        # defense may have made the expected next step unviable.
+        # ----------------------------------------------------
+
+        print(
+            "\n[ATTACK BLOCKED / PATH UNREACHABLE]"
         )
+
+        print(
+            "The expected next attack step is not "
+            "available to the attacker."
+        )
+
+        print(
+            "If you enabled a defense in atlaslang.mal "
+            "or enterpriselang.mal, this is the expected "
+            "defensive outcome."
+        )
+
+        return None
 
 
 # ============================================================
@@ -671,6 +716,11 @@ def main():
         "RUNNING CT-GAN ATTACK SIMULATION"
     )
 
+    print(
+        "Defense configuration is read directly from "
+        "atlaslang.mal / enterpriselang.mal."
+    )
+
     print("=" * 70)
 
 
@@ -782,14 +832,25 @@ def main():
     ):
 
         print(
-            "[SUCCESS] CT-GAN scenario completed."
+            "[ATTACK SUCCESS] CT-GAN scenario completed."
+        )
+
+        print(
+            "The configured MAL defenses did not prevent "
+            "the complete historical attack path."
         )
 
     else:
 
         print(
-            "[FAILED] One or more final impacts "
+            "[ATTACK BLOCKED] One or more final impacts "
             "were not reached."
+        )
+
+        print(
+            "If one or more defenses are [Enabled] in the MAL "
+            "language, this indicates that the defended model "
+            "prevented the complete historical path."
         )
 
 
