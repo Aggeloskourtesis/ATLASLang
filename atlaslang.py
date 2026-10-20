@@ -18,7 +18,7 @@ from malsim.policies import DecisionAgent
 # CONFIGURATION
 # ============================================================
 
-LANG_FILE = Path("atlaslang.mal")
+LANG_FILE = Path("atlaslang_updated.mal")
 
 
 # ============================================================
@@ -224,6 +224,62 @@ CASE_STUDIES = {
 
         "goal":
             "TaxFraudImpact:financialHarm",
+    },
+
+    # ========================================================
+    # AML.CS0005
+    # Attack on Machine Translation Services
+    # (UC Berkeley: model replication + adversarial transfer)
+    # ========================================================
+
+    "AML.CS0005": {
+
+        "attacker_name":
+            "AML_CS0005_Attacker",
+
+        # AML.T0000 - Search Open Technical Databases
+        "entry_point":
+            "TranslationResearchPapers:"
+            "searchOpenTechnicalDatabases",
+
+        "path": [
+
+            # AML.T0002.000 - Acquire Public AI Artifacts: Datasets
+            "PublicTranslationDatasets:"
+            "datasets",
+
+            # AML.T0002.001 - Acquire Public AI Artifacts: Models
+            "PublicTranslationModels:"
+            "models",
+
+            # AML.T0040 - AI Model Inference API Access
+            "ProductionTranslationService:"
+            "aiModelInferenceAPIAccess",
+
+            # AML.T0005.001 - Create Proxy AI Model: Train via Replication
+            "ReplicatedTranslationModel:"
+            "trainProxyViaReplication",
+
+            # AML.T0048.004 - AI Intellectual Property Theft
+            "TranslationModelIPTheft:"
+            "aiIntellectualPropertyTheft",
+
+            # AML.T0043.002 - Craft Adversarial Data: Black-Box Transfer
+            "TransferredAdversarialSentences:"
+            "blackBoxTransfer",
+
+            # AML.T0015 - Evade AI Model
+            "ProductionTranslationService:"
+            "evadeAIModel",
+
+            # AML.T0031 - Erode AI Model Integrity
+            "ProductionTranslationService:"
+            "erodeAIModelIntegrity",
+        ],
+
+        "goal":
+            "ProductionTranslationService:"
+            "erodeAIModelIntegrity",
     },
 
 }
@@ -615,6 +671,100 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     facial_recognition_system.add_associated_assets(
        "impact",
        {financial_impact}
+    )
+
+    # ========================================================
+    # AML.CS0005
+    # Attack on Machine Translation Services
+    # ========================================================
+
+    translation_research = model.add_asset(
+        "AIResearchMaterial",
+        "TranslationResearchPapers"
+    )
+
+    translation_datasets = model.add_asset(
+        "TrainingData",
+        "PublicTranslationDatasets"
+    )
+
+    translation_models = model.add_asset(
+        "PublicAIArtifacts",
+        "PublicTranslationModels"
+    )
+
+    translation_service = model.add_asset(
+        "MachineTranslationService",
+        "ProductionTranslationService"
+    )
+
+    replicated_translation_model = model.add_asset(
+        "ProxyAIModel",
+        "ReplicatedTranslationModel"
+    )
+
+    translation_ip_theft = model.add_asset(
+        "ExternalHarm",
+        "TranslationModelIPTheft"
+    )
+
+    transferred_adversarial_sentences = model.add_asset(
+        "AdversarialSample",
+        "TransferredAdversarialSentences"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0005 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0002.000
+    # Search research papers -> acquire public datasets
+    translation_research.add_associated_assets(
+        "trainingData",
+        {translation_datasets}
+    )
+
+    # AML.T0002.000 -> AML.T0002.001
+    # Public datasets -> public model architectures
+    translation_datasets.add_associated_assets(
+        "publicArtifacts",
+        {translation_models}
+    )
+
+    # AML.T0002.001 -> AML.T0040
+    # Public model artifacts -> query the production service
+    translation_models.add_associated_assets(
+        "targetService",
+        {translation_service}
+    )
+
+    # AML.T0040 -> AML.T0005.001
+    # Inference API access -> train replica from query results
+    translation_service.add_associated_assets(
+        "proxyModel",
+        {replicated_translation_model}
+    )
+
+    # AML.T0005.001 -> AML.T0048.004
+    # Functionally replicated model -> IP theft
+    replicated_translation_model.add_associated_assets(
+        "externalHarm",
+        {translation_ip_theft}
+    )
+
+    # AML.T0048.004 -> AML.T0043.002
+    # Stolen/replicated model -> craft transfer adversarial data
+    translation_ip_theft.add_associated_assets(
+        "adversarialSample",
+        {transferred_adversarial_sentences}
+    )
+
+    # AML.T0043.002 -> AML.T0015 -> AML.T0031
+    # Transfer adversarial inputs -> evade -> erode integrity
+    transferred_adversarial_sentences.add_associated_assets(
+        "targetService",
+        {translation_service}
     )
 
 

@@ -99,6 +99,10 @@ category AI {
         
         | userHarm
             user info: "AML.T0048.003 - External Harms: User Harm"
+
+        | aiIntellectualPropertyTheft
+            user info: "AML.T0048.004 - AI Intellectual Property Theft"
+            -> adversarialSample.blackBoxTransfer
     }
     
     
@@ -111,7 +115,9 @@ category AI {
         | searchOpenTechnicalDatabases
             user info: "AML.T0000 - Search Open Technical Databases"
             -> publicArtifacts.acquirePublicAIArtifacts,
-            targetProduct.aiEnabledProductOrService
+            publicArtifacts.models,
+            targetProduct.aiEnabledProductOrService,
+            trainingData.datasets
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
             user info: "AML.M0000 - Limit Public Release of Information"
@@ -127,7 +133,8 @@ category AI {
         
         | datasets
             user info: "AML.T0002.000 - Acquire Public AI Artifacts: Datasets"
-            -> proxyModel.createProxyAIModel
+            -> proxyModel.createProxyAIModel,
+               publicArtifacts.models
         
         | poisonTrainingData
             user info: "AML.T0020 - Poison Training Data"
@@ -168,26 +175,36 @@ category AI {
         | createProxyAIModel
             user info: "AML.T0005 - Create Proxy AI Model"
             -> adversarialSample.manualModification
+
+        | trainProxyViaReplication
+            user info: "AML.T0005.001 - Train Proxy via Replication"
+            -> externalHarm.aiIntellectualPropertyTheft,
+               adversarialSample.blackBoxTransfer
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
-        -> createProxyAIModel
+        -> createProxyAIModel,
+           trainProxyViaReplication
         
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
-        -> createProxyAIModel
+        -> createProxyAIModel,
+           trainProxyViaReplication
         
         # m0002PredictiveAIOutputObfuscation [Disabled]
         user info: "AML.M0002 - Predictive AI Output Obfuscation"
-        -> createProxyAIModel
+        -> createProxyAIModel,
+           trainProxyViaReplication
         
         # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
         user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
-        -> createProxyAIModel
+        -> createProxyAIModel,
+           trainProxyViaReplication
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
-        -> createProxyAIModel
+        -> createProxyAIModel,
+           trainProxyViaReplication
     }
     
     asset AIArtifactCollection {
@@ -219,9 +236,18 @@ category AI {
             user info: "AML.T0002 - Acquire Public AI Artifacts"
             -> capability.adversarialAIAttacks
         
+        | models
+            user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
+            -> targetService.aiModelInferenceAPIAccess
+        
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
-        -> acquirePublicAIArtifacts
+        -> acquirePublicAIArtifacts,
+           models
+
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> models
     }
     
     
@@ -255,6 +281,10 @@ category AI {
         | blackBoxOptimization
             user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
             -> targetModel.verifyAttack
+
+        | blackBoxTransfer
+            user info: "AML.T0043.002 - Craft Adversarial Data: Black-Box Transfer"
+            -> targetService.evadeAIModel
         
         | craftAdversarialData
             user info: "AML.T0043 - Craft Adversarial Data"
@@ -265,46 +295,54 @@ category AI {
         # m0002PredictiveAIOutputObfuscation [Disabled]
         user info: "AML.M0002 - Predictive AI Output Obfuscation"
         -> blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0003PredictiveAIModelHardening [Disabled]
         user info: "AML.M0003 - Predictive AI Model Hardening"
         -> manualModification,
         blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
         user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
         -> manualModification,
         blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0006PredictiveAIEnsembles [Disabled]
         user info: "AML.M0006 - Predictive AI Ensembles"
         -> manualModification,
         blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0008ValidateAIModel [Disabled]
         user info: "AML.M0008 - Validate AI Model"
-        -> craftAdversarialData
+        -> craftAdversarialData,
+        blackBoxTransfer
         
         # m0010PredictiveAIInputRestoration [Disabled]
         user info: "AML.M0010 - Predictive AI Input Restoration"
         -> manualModification,
         blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0015PredictiveAIAdversarialInputDetection [Disabled]
         user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
         -> manualModification,
         blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> blackBoxOptimization,
-        craftAdversarialData
+        craftAdversarialData,
+        blackBoxTransfer
     }
     
     asset PredictiveAIModel {
@@ -341,6 +379,40 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> evadeAIModel
+    }
+    
+    asset MachineTranslationService extends PredictiveAIModel {
+        
+        | aiModelInferenceAPIAccess
+            user info: "AML.T0040 - AI Model Inference API Access"
+            -> proxyModel.trainProxyViaReplication
+        
+        | evadeAIModel
+            +> erodeAIModelIntegrity
+        
+        | erodeAIModelIntegrity
+            user info: "AML.T0031 - Erode AI Model Integrity"
+            
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+            user info: "AML.M0002 - Predictive AI Output Obfuscation"
+            -> aiModelInferenceAPIAccess
+            
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+            user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+            -> aiModelInferenceAPIAccess
+            
+        # m0019ControlAccessInProduction [Disabled]
+            user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+            -> aiModelInferenceAPIAccess
+            
+        # m0024AITelemetryLogging [Disabled]
+            user info: "AML.M0024 - AI Telemetry Logging"
+            -> aiModelInferenceAPIAccess
+
+        # m0035AIRedTeam [Disabled]
+            user info: "AML.M0035 - AI Red Team"
+            -> aiModelInferenceAPIAccess,
+               erodeAIModelIntegrity
     }
     
     asset AIMalwareDetector {
@@ -733,5 +805,20 @@ associations {
     LLMConversation [conversation] * <--PersistsIn--> * [agentContext] AIAgentContext
     
     AIAgentContext [agentContext] * <--Causes--> * [externalHarm] ExternalHarm
+    
+    
+    // AML.CS0005 associations
+    
+    TrainingData [trainingData] * <--PairsWith--> * [publicArtifacts] PublicAIArtifacts
+    
+    PublicAIArtifacts [publicArtifacts] * <--TargetsService--> * [targetService] MachineTranslationService
+    
+    MachineTranslationService [targetService] * <--QueriedBy--> * [proxyModel] ProxyAIModel
+    
+    ProxyAIModel [proxyModel] * <--Causes--> * [externalHarm] ExternalHarm
+    
+    ExternalHarm [externalHarm] * <--EnablesTransfer--> * [adversarialSample] AdversarialSample
+    
+    AdversarialSample [transferSample] * <--TransfersTo--> * [targetService] MachineTranslationService
     
 }
