@@ -18,7 +18,7 @@ from malsim.policies import DecisionAgent
 # CONFIGURATION
 # ============================================================
 
-LANG_FILE = Path("atlaslang_updated.mal")
+LANG_FILE = Path("atlaslang.mal")
 
 
 # ============================================================
