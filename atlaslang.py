@@ -281,6 +281,41 @@ CASE_STUDIES = {
             "ProductionTranslationService:"
             "erodeAIModelIntegrity",
     },
+    
+    # ========================================================
+    # AML.CS0006
+    # ClearviewAI Misconfiguration
+    # ========================================================
+
+    "AML.CS0006": {
+
+        "attacker_name":
+            "AML_CS0006_Attacker",
+
+        # AML.T0021 - Establish Accounts
+        "entry_point":
+            "ClearviewRepositoryAccount:"
+            "establishAccounts",
+
+        "path": [
+
+            # AML.T0036 - Data from Information Repositories
+            "ClearviewRepositoryOS:"
+            "dataFromInformationRepositories",
+
+            # AML.T0002 - Acquire Public AI Artifacts
+            "ClearviewPublicAIArtifacts:"
+            "acquirePublicAIArtifacts",
+
+            # AML.T0031 - Erode AI Model Integrity
+            "ClearviewFacialRecognitionSystem:"
+            "erodeAIModelIntegrity",
+        ],
+
+        "goal":
+            "ClearviewFacialRecognitionSystem:"
+            "erodeAIModelIntegrity",
+    },
 
 }
 
@@ -766,6 +801,60 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "targetService",
         {translation_service}
     )
+    
+    # ========================================================
+    # AML.CS0006
+    # ClearviewAI Misconfiguration
+    # ========================================================
+
+    # AML.T0021 - Establish Accounts
+    clearview_repository_account = model.add_asset(
+        "FraudulentAccount",
+        "ClearviewRepositoryAccount"
+    )
+
+    # AML.T0036 / ATT&CK T1213
+    # Data from Information Repositories
+    clearview_repository_os = model.add_asset(
+        "AIRepositoryOS",
+        "ClearviewRepositoryOS"
+    )
+
+    # AML.T0002 - Acquire Public AI Artifacts
+    clearview_public_artifacts = model.add_asset(
+        "PublicAIArtifacts",
+        "ClearviewPublicAIArtifacts"
+    )
+
+    # AML.T0031 - Erode AI Model Integrity
+    clearview_facial_recognition_system = model.add_asset(
+        "FacialRecognitionSystem",
+        "ClearviewFacialRecognitionSystem"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0006 associations
+    # --------------------------------------------------------
+
+    # AML.T0021 -> AML.T0036
+    clearview_repository_account.add_associated_assets(
+        "repositoryOS",
+        {clearview_repository_os}
+    )
+
+    # AML.T0036 -> AML.T0002
+    clearview_repository_os.add_associated_assets(
+        "publicArtifacts",
+        {clearview_public_artifacts}
+    )
+
+    # AML.T0002 -> AML.T0031
+    clearview_public_artifacts.add_associated_assets(
+        "integrityTarget",
+        {clearview_facial_recognition_system}
+    )
+
 
 
     return model

@@ -36,7 +36,8 @@ category AI {
         
         | establishAccounts
         user info: "AML.T0021 - Establish Accounts"
-        -> targetSystem.aiEnabledProductOrService
+        -> targetSystem.aiEnabledProductOrService,
+        repositoryOS.dataFromInformationRepositories
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -58,17 +59,22 @@ category AI {
         user info: "AML.T0015 - Evade AI Model"
         -> impact.financialHarm
         
+        | erodeAIModelIntegrity
+        user info: "AML.T0031 - Erode AI Model Integrity"
+        
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
         -> aiEnabledProductOrService
         
         # m0003PredictiveAIModelHardening [Disabled]
         user info: "AML.M0003 - Predictive AI Model Hardening"
-        -> evadeAIModel
+        -> evadeAIModel,
+        erodeAIModelIntegrity
         
         # m0006PredictiveAIEnsembles [Disabled]
         user info: "AML.M0006 - Predictive AI Ensembles"
-        -> evadeAIModel
+        -> evadeAIModel,
+        erodeAIModelIntegrity
         
         # m0009PredictiveAIMultiSensorFusion [Disabled]
         user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
@@ -76,11 +82,13 @@ category AI {
         
         # m0010PredictiveAIInputRestoration [Disabled]
         user info: "AML.M0010 - Predictive AI Input Restoration"
-        -> evadeAIModel
+        -> evadeAIModel,
+        erodeAIModelIntegrity
         
         # m0015PredictiveAIAdversarialInputDetection [Disabled]
         user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
-        -> evadeAIModel
+        -> evadeAIModel,
+        erodeAIModelIntegrity
         
         # m0034DeepfakeDetection [Disabled]
         user info: "AML.M0034 - Deepfake Detection"
@@ -234,7 +242,8 @@ category AI {
         
         | acquirePublicAIArtifacts
             user info: "AML.T0002 - Acquire Public AI Artifacts"
-            -> capability.adversarialAIAttacks
+            -> capability.adversarialAIAttacks,
+            integrityTarget.erodeAIModelIntegrity
         
         | models
             user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
@@ -677,6 +686,12 @@ category AI {
             -> vulnerableFilterEvaluation
     }
     
+    asset AIRepositoryOS extends OS {
+        
+        | dataFromInformationRepositories
+        +> publicArtifacts.acquirePublicAIArtifacts
+    }
+    
     asset CTAttackOS extends OS {
         
         | dataFromLocalSystem
@@ -768,6 +783,29 @@ associations {
     FacialRecognitionSystem [targetSystem] * <--Causes--> * [impact] ExternalHarm
     
     
+    // AML.CS0005 associations
+    
+    TrainingData [trainingData] * <--PairsWith--> * [publicArtifacts] PublicAIArtifacts
+    
+    PublicAIArtifacts [publicArtifacts] * <--TargetsService--> * [targetService] MachineTranslationService
+    
+    MachineTranslationService [targetService] * <--QueriedBy--> * [proxyModel] ProxyAIModel
+    
+    ProxyAIModel [proxyModel] * <--Causes--> * [externalHarm] ExternalHarm
+    
+    ExternalHarm [externalHarm] * <--EnablesTransfer--> * [adversarialSample] AdversarialSample
+    
+    AdversarialSample [transferSample] * <--TransfersTo--> * [targetService] MachineTranslationService
+    
+    // AML.CS0006 associations
+    
+    FraudulentAccount [repositoryAccount] * <--AccessesRepository--> * [repositoryOS] AIRepositoryOS
+    
+    AIRepositoryOS [repositoryOS] * <--ExposesAIArtifacts--> * [publicArtifacts] PublicAIArtifacts
+    
+    PublicAIArtifacts [clearviewArtifacts] * <--ImpactsIntegrityOf--> * [integrityTarget] FacialRecognitionSystem
+    
+    
     //Scenario 1 associations
     
     AdversarialCapability [ctganCapability] * <--EnablesPreparation--> * [attackPreparation] AttackPreparation
@@ -805,20 +843,5 @@ associations {
     LLMConversation [conversation] * <--PersistsIn--> * [agentContext] AIAgentContext
     
     AIAgentContext [agentContext] * <--Causes--> * [externalHarm] ExternalHarm
-    
-    
-    // AML.CS0005 associations
-    
-    TrainingData [trainingData] * <--PairsWith--> * [publicArtifacts] PublicAIArtifacts
-    
-    PublicAIArtifacts [publicArtifacts] * <--TargetsService--> * [targetService] MachineTranslationService
-    
-    MachineTranslationService [targetService] * <--QueriedBy--> * [proxyModel] ProxyAIModel
-    
-    ProxyAIModel [proxyModel] * <--Causes--> * [externalHarm] ExternalHarm
-    
-    ExternalHarm [externalHarm] * <--EnablesTransfer--> * [adversarialSample] AdversarialSample
-    
-    AdversarialSample [transferSample] * <--TransfersTo--> * [targetService] MachineTranslationService
     
 }
