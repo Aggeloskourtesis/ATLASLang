@@ -316,6 +316,84 @@ CASE_STUDIES = {
             "ClearviewFacialRecognitionSystem:"
             "erodeAIModelIntegrity",
     },
+    
+    # ========================================================
+    # AML.CS0007
+    # GPT-2 Model Replication
+    # ========================================================
+
+    "AML.CS0007": {
+
+        "attacker_name":
+            "AML_CS0007_Attacker",
+
+        # AML.T0000
+        "entry_point":
+            "GPT2Research:"
+            "searchOpenTechnicalDatabases",
+
+        "path": [
+
+            # AML.T0002.000
+            "GPT2TrainingDataset:"
+            "datasets",
+
+            # AML.T0002.001
+            "PublicGroverModel:"
+            "models",
+
+            # AML.T0008.000
+            "GPT2ReplicationWorkspace:"
+            "aiDevelopmentWorkspaces",
+
+            # AML.T0005.000
+            "ReplicatedGPT2Model:"
+            "trainProxyViaGatheredAIArtifacts",
+        ],
+
+        "goal":
+            "ReplicatedGPT2Model:"
+            "trainProxyViaGatheredAIArtifacts",
+    },
+    
+    # ========================================================
+    # AML.CS0008
+    # ProofPoint Evasion
+    # ========================================================
+
+    "AML.CS0008": {
+
+        "attacker_name":
+            "AML_CS0008_Attacker",
+
+        # AML.T0047
+        "entry_point":
+            "ProofPointEmailProtection:"
+            "aiEnabledProductOrService",
+
+        "path": [
+
+            # AML.T0063
+            "ProofPointEmailProtection:"
+            "discoverAIModelOutputs",
+
+            # AML.T0005.001
+            "ProofPointShadowModel:"
+            "trainProxyViaReplication",
+
+            # AML.T0043.002
+            "ProofPointAdversarialEmail:"
+            "blackBoxTransfer",
+
+            # AML.T0015
+            "ProofPointEmailProtection:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "ProofPointEmailProtection:"
+            "evadeAIModel",
+    },
 
 }
 
@@ -853,6 +931,106 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     clearview_public_artifacts.add_associated_assets(
         "integrityTarget",
         {clearview_facial_recognition_system}
+    )
+    
+    # ========================================================
+    # AML.CS0007
+    # GPT-2 Model Replication
+    # ========================================================
+
+    gpt2_research = model.add_asset(
+        "AIResearchMaterial",
+        "GPT2Research"
+    )
+
+    gpt2_dataset = model.add_asset(
+        "TrainingData",
+        "GPT2TrainingDataset"
+    )
+
+    grover_model = model.add_asset(
+        "PublicAIArtifacts",
+        "PublicGroverModel"
+    )
+
+    gpt2_workspace = model.add_asset(
+        "AIDevelopmentWorkspace",
+        "GPT2ReplicationWorkspace"
+    )
+
+    replicated_gpt2 = model.add_asset(
+        "ProxyAIModel",
+        "ReplicatedGPT2Model"
+    )
+    
+    # --------------------------------------------------------
+    # CS0007 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0002.000
+    gpt2_research.add_associated_assets(
+        "trainingData",
+        {gpt2_dataset}
+    )
+
+    # AML.T0002.000 -> AML.T0002.001
+    gpt2_dataset.add_associated_assets(
+        "publicArtifacts",
+        {grover_model}
+    )
+
+    # AML.T0002.001 -> AML.T0008.000
+    grover_model.add_associated_assets(
+        "developmentWorkspace",
+        {gpt2_workspace}
+    )
+
+    # AML.T0008.000 -> AML.T0005.000
+    gpt2_workspace.add_associated_assets(
+        "proxyModel",
+        {replicated_gpt2}
+    )
+    
+    # ========================================================
+    # AML.CS0008
+    # ProofPoint Evasion
+    # ========================================================
+
+    proofpoint_detector = model.add_asset(
+        "AIMalwareDetector",
+        "ProofPointEmailProtection"
+    )
+
+    proofpoint_proxy = model.add_asset(
+        "ProxyAIModel",
+        "ProofPointShadowModel"
+    )
+
+    proofpoint_adversarial_email = model.add_asset(
+        "AdversarialSample",
+        "ProofPointAdversarialEmail"
+    )
+    
+    # --------------------------------------------------------
+    # CS0008 associations
+    # --------------------------------------------------------
+
+    # AML.T0063 -> AML.T0005.001
+    proofpoint_detector.add_associated_assets(
+        "proxyModel",
+        {proofpoint_proxy}
+    )
+
+    # AML.T0005.001 -> AML.T0043.002
+    proofpoint_proxy.add_associated_assets(
+        "adversarialSample",
+        {proofpoint_adversarial_email}
+    )
+
+    # AML.T0043.002 -> AML.T0015
+    proofpoint_adversarial_email.add_associated_assets(
+        "evasionTarget",
+        {proofpoint_detector}
     )
 
 

@@ -183,6 +183,9 @@ category AI {
         | createProxyAIModel
             user info: "AML.T0005 - Create Proxy AI Model"
             -> adversarialSample.manualModification
+        
+        | trainProxyViaGatheredAIArtifacts
+        user info: "AML.T0005.000 - Train Proxy via Gathered AI Artifacts"
 
         | trainProxyViaReplication
             user info: "AML.T0005.001 - Train Proxy via Replication"
@@ -192,11 +195,13 @@ category AI {
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
         -> createProxyAIModel,
+           trainProxyViaGatheredAIArtifacts,
            trainProxyViaReplication
         
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
         -> createProxyAIModel,
+           trainProxyViaGatheredAIArtifacts,
            trainProxyViaReplication
         
         # m0002PredictiveAIOutputObfuscation [Disabled]
@@ -247,7 +252,8 @@ category AI {
         
         | models
             user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
-            -> targetService.aiModelInferenceAPIAccess
+            -> targetService.aiModelInferenceAPIAccess,
+            developmentWorkspace.aiDevelopmentWorkspaces
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -257,6 +263,17 @@ category AI {
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
         -> models
+        
+        # m0014VerifyAIArtifacts [Disabled]
+        user info: "AML.M0014 - Verify AI Artifacts"
+        -> models
+    }
+    
+    asset AIDevelopmentWorkspace {
+        
+        | aiDevelopmentWorkspaces
+        user info: "AML.T0008.000 - Acquire Infrastructure: AI Development Workspaces"
+        -> proxyModel.trainProxyViaGatheredAIArtifacts
     }
     
     
@@ -293,7 +310,8 @@ category AI {
 
         | blackBoxTransfer
             user info: "AML.T0043.002 - Craft Adversarial Data: Black-Box Transfer"
-            -> targetService.evadeAIModel
+            -> targetService.evadeAIModel,
+            evasionTarget.evadeAIModel
         
         | craftAdversarialData
             user info: "AML.T0043 - Craft Adversarial Data"
@@ -432,7 +450,8 @@ category AI {
         
         | discoverAIModelOutputs
             user info: "AML.T0063 - Discover AI Model Outputs"
-            -> capability.adversarialAIAttacks
+            -> capability.adversarialAIAttacks,
+            proxyModel.trainProxyViaReplication
         
         | verifyAttack
             user info: "AML.T0042 - Verify Attack"
@@ -797,6 +816,7 @@ associations {
     
     AdversarialSample [transferSample] * <--TransfersTo--> * [targetService] MachineTranslationService
     
+    
     // AML.CS0006 associations
     
     FraudulentAccount [repositoryAccount] * <--AccessesRepository--> * [repositoryOS] AIRepositoryOS
@@ -804,6 +824,18 @@ associations {
     AIRepositoryOS [repositoryOS] * <--ExposesAIArtifacts--> * [publicArtifacts] PublicAIArtifacts
     
     PublicAIArtifacts [clearviewArtifacts] * <--ImpactsIntegrityOf--> * [integrityTarget] FacialRecognitionSystem
+    
+    
+    // AML.CS0007 associations
+    
+    PublicAIArtifacts [gpt2Artifacts] * <--SupportsDevelopmentWorkspace--> * [developmentWorkspace] AIDevelopmentWorkspace
+    
+    AIDevelopmentWorkspace [developmentWorkspace] * <--TrainsProxyModel--> * [proxyModel] ProxyAIModel
+    
+    
+    // AML.CS0008 association
+    
+    AIMalwareDetector [replicationTarget] * <--ReplicatedBy--> * [proxyModel] ProxyAIModel
     
     
     //Scenario 1 associations
