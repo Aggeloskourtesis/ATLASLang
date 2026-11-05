@@ -125,7 +125,8 @@ category AI {
             -> publicArtifacts.acquirePublicAIArtifacts,
             publicArtifacts.models,
             targetProduct.aiEnabledProductOrService,
-            trainingData.datasets
+            trainingData.datasets,
+            targetOS.validAccounts
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
             user info: "AML.M0000 - Limit Public Release of Information"
@@ -146,6 +147,7 @@ category AI {
         
         | poisonTrainingData
             user info: "AML.T0020 - Poison Training Data"
+            -> integrityTarget.erodeAIModelIntegrity
             
         # m0001LimitModelArtifactRelease [Disabled]
             user info: "AML.M0001 - Limit Model Artifact Release"
@@ -175,6 +177,53 @@ category AI {
         # m0035AIRedTeam [Disabled]
             user info: "AML.M0035 - AI Red Team"
             -> poisonTrainingData
+    }
+    
+    asset OnlineLearningAIModel {
+        
+        | aiEnabledProductOrService
+        user info: "AML.T0047 - AI-Enabled Product or Service"
+        -> poisoningSupplyChain.aiSupplyChainCompromiseData
+        
+        | erodeAIModelIntegrity
+        user info: "AML.T0031 - Erode AI Model Integrity"
+        
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiEnabledProductOrService
+        
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> erodeAIModelIntegrity
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> erodeAIModelIntegrity
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> erodeAIModelIntegrity
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> erodeAIModelIntegrity
+    }
+    
+    asset AIServiceOS extends OS {
+        
+        | validAccounts
+        +> artifactCollection.aiArtifactCollection
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> validAccounts
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> validAccounts
     }
     
     
@@ -224,7 +273,8 @@ category AI {
         
         | aiArtifactCollection
         user info: "AML.T0035 - AI Artifact Collection"
-        -> adversarialSample.craftAdversarialData
+        -> adversarialSample.craftAdversarialData,
+        exfiltration.exfiltrationViaCyberMeans
         
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
@@ -241,6 +291,18 @@ category AI {
         # m0017AIModelDistributionMethods [Disabled]
         user info: "AML.M0017 - AI Model Distribution Methods"
         -> aiArtifactCollection
+    }
+    
+    asset AIExfiltration {
+        
+        | exfiltrationViaCyberMeans
+        user info: "AML.T0025 - Exfiltration via Cyber Means"
+        -> adversarialSample.whiteBoxOptimization
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> exfiltrationViaCyberMeans
     }
     
     asset PublicAIArtifacts {
@@ -304,6 +366,10 @@ category AI {
             -> targetModel.verifyAttack,
             evasionTarget.evadeAIModel
         
+        | whiteBoxOptimization
+        user info: "AML.T0043.000 - Craft Adversarial Data: White-Box Optimization"
+        -> inferenceTarget.aiModelInferenceAPIAccess
+        
         | blackBoxOptimization
             user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
             -> targetModel.verifyAttack
@@ -328,6 +394,7 @@ category AI {
         # m0003PredictiveAIModelHardening [Disabled]
         user info: "AML.M0003 - Predictive AI Model Hardening"
         -> manualModification,
+        whiteBoxOptimization,
         blackBoxOptimization,
         craftAdversarialData,
         blackBoxTransfer
@@ -339,9 +406,14 @@ category AI {
         craftAdversarialData,
         blackBoxTransfer
         
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> whiteBoxOptimization
+        
         # m0006PredictiveAIEnsembles [Disabled]
         user info: "AML.M0006 - Predictive AI Ensembles"
         -> manualModification,
+        whiteBoxOptimization,
         blackBoxOptimization,
         craftAdversarialData,
         blackBoxTransfer
@@ -354,6 +426,7 @@ category AI {
         # m0010PredictiveAIInputRestoration [Disabled]
         user info: "AML.M0010 - Predictive AI Input Restoration"
         -> manualModification,
+        whiteBoxOptimization,
         blackBoxOptimization,
         craftAdversarialData,
         blackBoxTransfer
@@ -361,9 +434,14 @@ category AI {
         # m0015PredictiveAIAdversarialInputDetection [Disabled]
         user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
         -> manualModification,
+        whiteBoxOptimization,
         blackBoxOptimization,
         craftAdversarialData,
         blackBoxTransfer
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> whiteBoxOptimization
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
@@ -440,6 +518,43 @@ category AI {
             user info: "AML.M0035 - AI Red Team"
             -> aiModelInferenceAPIAccess,
                erodeAIModelIntegrity
+    }
+    
+    asset AIInferenceService extends PredictiveAIModel {
+        
+        | aiModelInferenceAPIAccess
+        user info: "AML.T0040 - AI Model Inference API Access"
+        -> verifyAttack
+        
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> evadeAIModel
+        
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> aiModelInferenceAPIAccess,
+        verifyAttack
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiModelInferenceAPIAccess
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> aiModelInferenceAPIAccess
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> verifyAttack
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> verifyAttack
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> verifyAttack
     }
     
     asset AIMalwareDetector {
@@ -836,6 +951,26 @@ associations {
     // AML.CS0008 association
     
     AIMalwareDetector [replicationTarget] * <--ReplicatedBy--> * [proxyModel] ProxyAIModel
+    
+    
+    // AML.CS0009 associations
+    
+    OnlineLearningAIModel [onlineLearningModel] * <--FeedsInteractionsInto--> * [poisoningSupplyChain] AISupplyChainData
+    
+    TrainingData [poisonedTrainingData] * <--DegradesIntegrityOf--> * [integrityTarget] OnlineLearningAIModel
+    
+    
+    // AML.CS0010 associations
+    
+    AIResearchMaterial [azureResearch] * <--FindsValidAccount--> * [targetOS] AIServiceOS
+    
+    AIServiceOS [azureServiceOS] * <--AllowsArtifactCollection--> * [artifactCollection] AIArtifactCollection
+    
+    AIArtifactCollection [azureArtifactCollection] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
+    
+    AIExfiltration [azureExfiltration] * <--EnablesWhiteBoxOptimization--> * [adversarialSample] AdversarialSample
+    
+    AdversarialSample [whiteBoxSample] * <--TargetsInferenceService--> * [inferenceTarget] AIInferenceService
     
     
     //Scenario 1 associations
