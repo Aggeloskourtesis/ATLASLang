@@ -394,6 +394,92 @@ CASE_STUDIES = {
             "ProofPointEmailProtection:"
             "evadeAIModel",
     },
+        
+    # ========================================================
+    # AML.CS0009
+    # Tay Poisoning
+    # ========================================================
+
+    "AML.CS0009": {
+
+        "attacker_name":
+            "AML_CS0009_Attacker",
+
+        # AML.T0047
+        "entry_point":
+            "TayChatbot:"
+            "aiEnabledProductOrService",
+
+        "path": [
+
+            # AML.T0010.002
+            "TayConversationSupplyChain:"
+            "aiSupplyChainCompromiseData",
+
+            # AML.T0020
+            "TayOnlineTrainingData:"
+            "poisonTrainingData",
+
+            # AML.T0031
+            "TayChatbot:"
+            "erodeAIModelIntegrity",
+        ],
+
+        "goal":
+            "TayChatbot:"
+            "erodeAIModelIntegrity",
+    },
+    
+    # ========================================================
+    # AML.CS0010
+    # Microsoft Azure Service Disruption
+    # ========================================================
+
+    "AML.CS0010": {
+
+        "attacker_name":
+            "AML_CS0010_Attacker",
+
+        # AML.T0000
+        "entry_point":
+            "AzureResearch:"
+            "searchOpenTechnicalDatabases",
+
+        "path": [
+
+            # AML.T0012 / ATT&CK T1078
+            "AzureServiceOS:"
+            "validAccounts",
+
+            # AML.T0035
+            "AzureArtifactCollection:"
+            "aiArtifactCollection",
+
+            # AML.T0025
+            "AzureArtifactExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # AML.T0043.000
+            "AzureAdversarialExample:"
+            "whiteBoxOptimization",
+
+            # AML.T0040
+            "AzureTargetService:"
+            "aiModelInferenceAPIAccess",
+
+            # AML.T0042
+            "AzureTargetService:"
+            "verifyAttack",
+
+            # AML.T0015
+            "AzureTargetService:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "AzureTargetService:"
+            "evadeAIModel",
+    },
 
 }
 
@@ -1031,6 +1117,117 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     proofpoint_adversarial_email.add_associated_assets(
         "evasionTarget",
         {proofpoint_detector}
+    )
+    
+    # ========================================================
+    # AML.CS0009
+    # Tay Poisoning
+    # ========================================================
+
+    tay_chatbot = model.add_asset(
+        "OnlineLearningAIModel",
+        "TayChatbot"
+    )
+
+    tay_supply_chain = model.add_asset(
+        "AISupplyChainData",
+        "TayConversationSupplyChain"
+    )
+
+    tay_training_data = model.add_asset(
+        "TrainingData",
+        "TayOnlineTrainingData"
+    )
+    
+    # --------------------------------------------------------
+    # CS0009 associations
+    # --------------------------------------------------------
+
+    # AML.T0047 -> AML.T0010.002
+    tay_chatbot.add_associated_assets(
+        "poisoningSupplyChain",
+        {tay_supply_chain}
+    )
+
+    # AML.T0010.002 -> AML.T0020
+    tay_supply_chain.add_associated_assets(
+        "trainingData",
+        {tay_training_data}
+    )
+
+    # AML.T0020 -> AML.T0031
+    tay_training_data.add_associated_assets(
+        "integrityTarget",
+        {tay_chatbot}
+    )
+    
+    # ========================================================
+    # AML.CS0010
+    # Microsoft Azure Service Disruption
+    # ========================================================
+
+    azure_research = model.add_asset(
+        "AIResearchMaterial",
+        "AzureResearch"
+    )
+
+    azure_service_os = model.add_asset(
+        "AIServiceOS",
+        "AzureServiceOS"
+    )
+
+    azure_artifact_collection = model.add_asset(
+        "AIArtifactCollection",
+        "AzureArtifactCollection"
+    )
+
+    azure_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "AzureArtifactExfiltration"
+    )
+
+    azure_adversarial_example = model.add_asset(
+        "AdversarialSample",
+        "AzureAdversarialExample"
+    )
+
+    azure_target_service = model.add_asset(
+        "AIInferenceService",
+        "AzureTargetService"
+    )
+    
+    # --------------------------------------------------------
+    # CS0010 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0012 / T1078
+    azure_research.add_associated_assets(
+        "targetOS",
+        {azure_service_os}
+    )
+
+    # AML.T0012 -> AML.T0035
+    azure_service_os.add_associated_assets(
+        "artifactCollection",
+        {azure_artifact_collection}
+    )
+
+    # AML.T0035 -> AML.T0025
+    azure_artifact_collection.add_associated_assets(
+        "exfiltration",
+        {azure_exfiltration}
+    )
+
+    # AML.T0025 -> AML.T0043.000
+    azure_exfiltration.add_associated_assets(
+        "adversarialSample",
+        {azure_adversarial_example}
+    )
+
+    # AML.T0043.000 -> AML.T0040
+    azure_adversarial_example.add_associated_assets(
+        "inferenceTarget",
+        {azure_target_service}
     )
 
 
