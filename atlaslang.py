@@ -480,6 +480,105 @@ CASE_STUDIES = {
             "AzureTargetService:"
             "evadeAIModel",
     },
+    
+    # ========================================================
+    # AML.CS0011
+    # Microsoft Edge AI Evasion
+    # ========================================================
+
+    "AML.CS0011": {
+
+        "attacker_name":
+            "AML_CS0011_Attacker",
+
+        # AML.T0000
+        "entry_point":
+            "EdgeAIResearch:"
+            "searchOpenTechnicalDatabases",
+
+        "path": [
+
+            # AML.T0002
+            "EdgePublicBaseModel:"
+            "acquirePublicAIArtifacts",
+
+            # AML.T0040
+            "EdgePublicInferenceService:"
+            "aiModelInferenceAPIAccess",
+
+            # AML.T0043.001
+            "EdgeAdversarialImage:"
+            "blackBoxOptimization",
+
+            # AML.T0015
+            "MicrosoftEdgeTargetModel:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "MicrosoftEdgeTargetModel:"
+            "evadeAIModel",
+    },
+    
+    # ========================================================
+    # AML.CS0012
+    # Face Identification System Evasion
+    # via Physical Countermeasures
+    # ========================================================
+
+    "AML.CS0012": {
+
+        "attacker_name":
+            "AML_CS0012_Attacker",
+
+        # AML.T0000
+        "entry_point":
+            "FaceIDResearch:"
+            "searchOpenTechnicalDatabases",
+
+        "path": [
+
+            # AML.T0012 / ATT&CK T1078
+            "FaceIDServiceOS:"
+            "validAccounts",
+
+            # AML.T0040
+            "CommercialFaceIDService:"
+            "aiModelInferenceAPIAccess",
+
+            # AML.T0013
+            "CommercialFaceIDService:"
+            "discoverAIModelOntology",
+
+            # AML.T0002.000
+            "PublicFaceDataset:"
+            "datasets",
+
+            # AML.T0005
+            "FaceIDProxyModel:"
+            "createProxyAIModel",
+
+            # AML.T0043.000
+            "OptimizedFacePattern:"
+            "whiteBoxOptimization",
+
+            # AML.T0008.003
+            "PrintedAdversarialSticker:"
+            "physicalCountermeasures",
+
+            # AML.T0041
+            "FaceCaptureEnvironment:"
+            "physicalEnvironmentAccess",
+
+            # AML.T0015
+            "CommercialFaceIDService:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "CommercialFaceIDService:"
+            "evadeAIModel",
+    },
 
 }
 
@@ -1229,7 +1328,161 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "inferenceTarget",
         {azure_target_service}
     )
+    
+    # ========================================================
+    # AML.CS0011
+    # Microsoft Edge AI Evasion
+    # ========================================================
 
+    edge_research = model.add_asset(
+        "AIResearchMaterial",
+        "EdgeAIResearch"
+    )
+
+    edge_public_artifacts = model.add_asset(
+        "PublicAIArtifacts",
+        "EdgePublicBaseModel"
+    )
+
+    edge_public_inference = model.add_asset(
+        "AIInferenceService",
+        "EdgePublicInferenceService"
+    )
+
+    edge_adversarial_image = model.add_asset(
+        "AdversarialSample",
+        "EdgeAdversarialImage"
+    )
+
+    edge_target_model = model.add_asset(
+        "PredictiveAIModel",
+        "MicrosoftEdgeTargetModel"
+    )
+    
+    # --------------------------------------------------------
+    # CS0011 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0002
+    edge_research.add_associated_assets(
+        "publicArtifacts",
+        {edge_public_artifacts}
+    )
+
+    # AML.T0002 -> AML.T0040
+    edge_public_artifacts.add_associated_assets(
+        "inferenceService",
+        {edge_public_inference}
+    )
+
+    # AML.T0040 -> AML.T0043.001
+    edge_public_inference.add_associated_assets(
+        "blackBoxSample",
+        {edge_adversarial_image}
+    )
+
+    # AML.T0043.001 -> AML.T0015
+    edge_adversarial_image.add_associated_assets(
+        "edgeEvasionTarget",
+        {edge_target_model}
+    )
+    
+    # ========================================================
+    # AML.CS0012
+    # Face Identification System Evasion
+    # ========================================================
+
+    face_id_research = model.add_asset(
+        "AIResearchMaterial",
+        "FaceIDResearch"
+    )
+
+    face_id_service_os = model.add_asset(
+        "AIServiceOS",
+        "FaceIDServiceOS"
+    )
+
+    face_id_service = model.add_asset(
+        "AIInferenceService",
+        "CommercialFaceIDService"
+    )
+
+    face_dataset = model.add_asset(
+        "TrainingData",
+        "PublicFaceDataset"
+    )
+
+    face_proxy_model = model.add_asset(
+        "ProxyAIModel",
+        "FaceIDProxyModel"
+    )
+
+    optimized_face_pattern = model.add_asset(
+        "AdversarialSample",
+        "OptimizedFacePattern"
+    )
+
+    printed_sticker = model.add_asset(
+        "PhysicalCountermeasure",
+        "PrintedAdversarialSticker"
+    )
+
+    face_environment = model.add_asset(
+        "PhysicalAIEnvironment",
+        "FaceCaptureEnvironment"
+    )
+    
+    # --------------------------------------------------------
+    # CS0012 associations
+    # --------------------------------------------------------
+
+    # AML.T0000 -> AML.T0012
+    face_id_research.add_associated_assets(
+        "targetOS",
+        {face_id_service_os}
+    )
+
+    # AML.T0012 -> AML.T0040
+    face_id_service_os.add_associated_assets(
+        "inferenceService",
+        {face_id_service}
+    )
+
+    # AML.T0013 -> AML.T0002.000
+    face_id_service.add_associated_assets(
+        "ontologyData",
+        {face_dataset}
+    )
+
+    # AML.T0002.000 -> AML.T0005
+    face_dataset.add_associated_assets(
+        "proxyModel",
+        {face_proxy_model}
+    )
+
+    # AML.T0005 -> AML.T0043.000
+    face_proxy_model.add_associated_assets(
+        "adversarialSample",
+        {optimized_face_pattern}
+    )
+
+    # AML.T0043.000 -> AML.T0008.003
+    optimized_face_pattern.add_associated_assets(
+        "physicalCountermeasure",
+        {printed_sticker}
+    )
+
+    # AML.T0008.003 -> AML.T0041
+    printed_sticker.add_associated_assets(
+        "physicalEnvironment",
+        {face_environment}
+    )
+
+    # AML.T0041 -> AML.T0015
+    face_environment.add_associated_assets(
+        "targetModel",
+        {face_id_service}
+    )
 
 
     return model

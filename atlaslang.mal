@@ -214,7 +214,8 @@ category AI {
     asset AIServiceOS extends OS {
         
         | validAccounts
-        +> artifactCollection.aiArtifactCollection
+        +> artifactCollection.aiArtifactCollection,
+        inferenceService.aiModelInferenceAPIAccess
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -231,7 +232,8 @@ category AI {
         
         | createProxyAIModel
             user info: "AML.T0005 - Create Proxy AI Model"
-            -> adversarialSample.manualModification
+            -> adversarialSample.manualModification,
+            adversarialSample.whiteBoxOptimization
         
         | trainProxyViaGatheredAIArtifacts
         user info: "AML.T0005.000 - Train Proxy via Gathered AI Artifacts"
@@ -310,7 +312,8 @@ category AI {
         | acquirePublicAIArtifacts
             user info: "AML.T0002 - Acquire Public AI Artifacts"
             -> capability.adversarialAIAttacks,
-            integrityTarget.erodeAIModelIntegrity
+            integrityTarget.erodeAIModelIntegrity,
+            inferenceService.aiModelInferenceAPIAccess
         
         | models
             user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
@@ -358,6 +361,25 @@ category AI {
             vulnerabilityPreparation.obtainVulnerabilities
     }
     
+    asset PhysicalCountermeasure {
+        
+        | physicalCountermeasures
+        user info: "AML.T0008.003 - Acquire Infrastructure: Physical Countermeasures"
+        -> physicalEnvironment.physicalEnvironmentAccess
+    }
+    
+    asset PhysicalAIEnvironment {
+        
+        | physicalEnvironmentAccess
+        user info: "AML.T0041 - Physical Environment Access"
+        -> targetModel.evadeAIModel
+        
+        
+        # m0009PredictiveAIMultiSensorFusion [Disabled]
+        user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
+        -> physicalEnvironmentAccess
+    }
+    
     
     asset AdversarialSample {
         
@@ -368,11 +390,13 @@ category AI {
         
         | whiteBoxOptimization
         user info: "AML.T0043.000 - Craft Adversarial Data: White-Box Optimization"
-        -> inferenceTarget.aiModelInferenceAPIAccess
+        -> inferenceTarget.aiModelInferenceAPIAccess,
+        physicalCountermeasure.physicalCountermeasures
         
         | blackBoxOptimization
             user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
-            -> targetModel.verifyAttack
+            -> targetModel.verifyAttack,
+            edgeEvasionTarget.evadeAIModel
 
         | blackBoxTransfer
             user info: "AML.T0043.002 - Craft Adversarial Data: Black-Box Transfer"
@@ -524,7 +548,13 @@ category AI {
         
         | aiModelInferenceAPIAccess
         user info: "AML.T0040 - AI Model Inference API Access"
-        -> verifyAttack
+        -> verifyAttack,
+        blackBoxSample.blackBoxOptimization,
+        discoverAIModelOntology
+        
+        | discoverAIModelOntology
+        user info: "AML.T0013 - Discover AI Model Ontology"
+        -> ontologyData.datasets
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
@@ -546,11 +576,13 @@ category AI {
         
         # m0002PredictiveAIOutputObfuscation [Disabled]
         user info: "AML.M0002 - Predictive AI Output Obfuscation"
-        -> verifyAttack
+        -> verifyAttack,
+        discoverAIModelOntology
         
         # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
         user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
-        -> verifyAttack
+        -> verifyAttack,
+        discoverAIModelOntology
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -971,6 +1003,28 @@ associations {
     AIExfiltration [azureExfiltration] * <--EnablesWhiteBoxOptimization--> * [adversarialSample] AdversarialSample
     
     AdversarialSample [whiteBoxSample] * <--TargetsInferenceService--> * [inferenceTarget] AIInferenceService
+    
+    
+    // AML.CS0011 associations
+    
+    PublicAIArtifacts [edgePublicArtifacts] * <--ProvidesInferenceAccess--> * [inferenceService] AIInferenceService
+    
+    AIInferenceService [publicInferenceService] * <--SupportsBlackBoxOptimization--> * [blackBoxSample] AdversarialSample
+    
+    AdversarialSample [edgeAdversarialSample] * <--EvadesEdgeModel--> * [edgeEvasionTarget] PredictiveAIModel
+    
+    
+    // AML.CS0012 associations
+    
+    AIServiceOS [faceServiceOS] * <--ProvidesAuthenticatedInferenceAccess--> * [inferenceService] AIInferenceService
+    
+    AIInferenceService [ontologyService] * <--RevealsOntologyForDataset--> * [ontologyData] TrainingData
+    
+    AdversarialSample [physicalAdversarialPattern] * <--ProducesPhysicalCountermeasure--> * [physicalCountermeasure] PhysicalCountermeasure
+    
+    PhysicalCountermeasure [physicalCountermeasure] * <--DeployedInto--> * [physicalEnvironment] PhysicalAIEnvironment
+    
+    PhysicalAIEnvironment [physicalEnvironment] * <--TargetsPhysicalModel--> * [targetModel] AIInferenceService
     
     
     //Scenario 1 associations
