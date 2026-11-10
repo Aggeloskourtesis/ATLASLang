@@ -579,6 +579,65 @@ CASE_STUDIES = {
             "CommercialFaceIDService:"
             "evadeAIModel",
     },
+        
+    # ========================================================
+    # AML.CS0013
+    # Backdoor Attack on Deep Learning Models in Mobile Apps
+    # ========================================================
+
+    "AML.CS0013": {
+
+        "attacker_name":
+            "AML_CS0013_Attacker",
+
+        # AML.T0004
+        "entry_point":
+            "MobileAppRepositoryResearch:"
+            "searchApplicationRepositories",
+
+        "path": [
+
+            # AML.T0002.001
+            "DownloadedMobileModel:"
+            "models",
+
+            # AML.T0044
+            "TargetMobileAIModel:"
+            "fullAIModelAccess",
+
+            # AML.T0017.000
+            "NeuralPayloadCapability:"
+            "adversarialAIAttacks",
+
+            # AML.T0018.001
+            "TargetMobileAIModel:"
+            "modifyAIModelArchitecture",
+
+            # AML.T0042
+            "TargetMobileAIModel:"
+            "verifyAttack",
+
+            # AML.T0010.003
+            "CompromisedMobileModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # AML.T0043.004
+            "VisualBackdoorTrigger:"
+            "insertBackdoorTrigger",
+
+            # AML.T0041
+            "VictimPhysicalEnvironment:"
+            "physicalEnvironmentAccess",
+
+            # AML.T0015
+            "TargetMobileAIModel:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "TargetMobileAIModel:"
+            "evadeAIModel",
+    },
 
 }
 
@@ -1482,6 +1541,98 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     face_environment.add_associated_assets(
         "targetModel",
         {face_id_service}
+    )
+    
+    # ========================================================
+    # AML.CS0013
+    # Backdoor Attack on Deep Learning Models in Mobile Apps
+    # ========================================================
+
+    mobile_repository_research = model.add_asset(
+        "AIResearchMaterial",
+        "MobileAppRepositoryResearch"
+    )
+
+    downloaded_mobile_model = model.add_asset(
+        "PublicAIArtifacts",
+        "DownloadedMobileModel"
+    )
+
+    target_mobile_model = model.add_asset(
+        "MobileAIModel",
+        "TargetMobileAIModel"
+    )
+
+    neural_payload_capability = model.add_asset(
+        "AdversarialCapability",
+        "NeuralPayloadCapability"
+    )
+
+    mobile_model_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "CompromisedMobileModelSupplyChain"
+    )
+
+    backdoor_trigger = model.add_asset(
+        "BackdoorTrigger",
+        "VisualBackdoorTrigger"
+    )
+
+    victim_physical_environment = model.add_asset(
+        "PhysicalAIEnvironment",
+        "VictimPhysicalEnvironment"
+    )
+    
+    # --------------------------------------------------------
+    # CS0013 associations
+    # --------------------------------------------------------
+
+    # AML.T0004 -> AML.T0002.001
+    mobile_repository_research.add_associated_assets(
+        "publicArtifacts",
+        {downloaded_mobile_model}
+    )
+
+    # AML.T0002.001 -> AML.T0044
+    downloaded_mobile_model.add_associated_assets(
+        "fullAccessTarget",
+        {target_mobile_model}
+    )
+
+    # AML.T0044 -> AML.T0017.000
+    target_mobile_model.add_associated_assets(
+        "capability",
+        {neural_payload_capability}
+    )
+
+    # AML.T0017.000 -> AML.T0018.001
+    neural_payload_capability.add_associated_assets(
+        "modifiedModel",
+        {target_mobile_model}
+    )
+
+    # AML.T0042 -> AML.T0010.003
+    target_mobile_model.add_associated_assets(
+        "modelSupplyChain",
+        {mobile_model_supply_chain}
+    )
+
+    # AML.T0010.003 -> AML.T0043.004
+    mobile_model_supply_chain.add_associated_assets(
+        "trigger",
+        {backdoor_trigger}
+    )
+
+    # AML.T0043.004 -> AML.T0041
+    backdoor_trigger.add_associated_assets(
+        "physicalEnvironment",
+        {victim_physical_environment}
+    )
+
+    # AML.T0041 -> AML.T0015
+    victim_physical_environment.add_associated_assets(
+        "targetModel",
+        {target_mobile_model}
     )
 
 

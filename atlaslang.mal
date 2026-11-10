@@ -127,10 +127,15 @@ category AI {
             targetProduct.aiEnabledProductOrService,
             trainingData.datasets,
             targetOS.validAccounts
+        
+        | searchApplicationRepositories
+        user info: "AML.T0004 - Search Application Repositories"
+        -> publicArtifacts.models
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
             user info: "AML.M0000 - Limit Public Release of Information"
-            -> searchOpenTechnicalDatabases
+            -> searchOpenTechnicalDatabases,
+            searchApplicationRepositories
 
         # m0039AIHoneypots [Disabled]
             user info: "AML.M0039 - AI Honeypots"
@@ -318,7 +323,8 @@ category AI {
         | models
             user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
             -> targetService.aiModelInferenceAPIAccess,
-            developmentWorkspace.aiDevelopmentWorkspaces
+            developmentWorkspace.aiDevelopmentWorkspaces,
+            fullAccessTarget.fullAIModelAccess
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -348,7 +354,8 @@ category AI {
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
             -> generatedSample.blackBoxOptimization,
             manualSample.manualModification,
-            attackPreparation.developMalware
+            attackPreparation.developMalware,
+            modifiedModel.modifyAIModelArchitecture
     }
     
     
@@ -474,6 +481,66 @@ category AI {
         blackBoxTransfer
     }
     
+    asset AISupplyChainModel {
+        
+        | aiSupplyChainCompromiseModel
+        user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
+        -> trigger.insertBackdoorTrigger
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> aiSupplyChainCompromiseModel
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> aiSupplyChainCompromiseModel
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> aiSupplyChainCompromiseModel
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> aiSupplyChainCompromiseModel
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> aiSupplyChainCompromiseModel
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> aiSupplyChainCompromiseModel
+    }
+    
+    asset BackdoorTrigger {
+        
+        | insertBackdoorTrigger
+        user info: "AML.T0043.004 - Insert Backdoor Trigger"
+        -> physicalEnvironment.physicalEnvironmentAccess
+        
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> insertBackdoorTrigger
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> insertBackdoorTrigger
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> insertBackdoorTrigger
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> insertBackdoorTrigger
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> insertBackdoorTrigger
+    }
+    
     asset PredictiveAIModel {
         
         | evadeAIModel
@@ -586,6 +653,52 @@ category AI {
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> verifyAttack
+    }
+    
+    asset MobileAIModel extends PredictiveAIModel {
+        
+        | fullAIModelAccess
+        user info: "AML.T0044 - Full AI Model Access"
+        -> capability.adversarialAIAttacks
+        
+        | modifyAIModelArchitecture
+        user info: "AML.T0018.001 - Manipulate AI Model: Modify AI Model Architecture"
+        -> verifyAttack
+        
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> modelSupplyChain.aiSupplyChainCompromiseModel
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> fullAIModelAccess,
+        modifyAIModelArchitecture,
+        verifyAttack
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> modifyAIModelArchitecture
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> modifyAIModelArchitecture
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> modifyAIModelArchitecture
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> verifyAttack
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> verifyAttack
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> verifyAttack
     }
     
@@ -1024,7 +1137,22 @@ associations {
     
     PhysicalCountermeasure [physicalCountermeasure] * <--DeployedInto--> * [physicalEnvironment] PhysicalAIEnvironment
     
-    PhysicalAIEnvironment [physicalEnvironment] * <--TargetsPhysicalModel--> * [targetModel] AIInferenceService
+    PhysicalAIEnvironment [physicalEnvironment] * <--TargetsPhysicalModel--> * [targetModel] PredictiveAIModel
+    
+    
+    // AML.CS0013 associations
+    
+    PublicAIArtifacts [mobileModelArtifact] * <--ProvidesFullModelAccess--> * [fullAccessTarget] MobileAIModel
+    
+    MobileAIModel [accessibleModel] * <--EnablesBackdoorDevelopment--> * [capability] AdversarialCapability
+    
+    AdversarialCapability [backdoorCapability] * <--ModifiesArchitectureOf--> * [modifiedModel] MobileAIModel
+    
+    MobileAIModel [verifiedBackdooredModel] * <--IntroducedViaSupplyChain--> * [modelSupplyChain] AISupplyChainModel
+    
+    AISupplyChainModel [modelSupplyChain] * <--ActivatedBy--> * [trigger] BackdoorTrigger
+    
+    BackdoorTrigger [trigger] * <--PlacedIn--> * [physicalEnvironment] PhysicalAIEnvironment
     
     
     //Scenario 1 associations
