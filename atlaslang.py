@@ -638,6 +638,183 @@ CASE_STUDIES = {
             "TargetMobileAIModel:"
             "evadeAIModel",
     },
+    
+    # ========================================================
+    # AML.CS0014
+    # Confusing Antimalware Neural Networks
+    # ========================================================
+
+    "AML.CS0014": {
+
+        "attacker_name":
+            "AML_CS0014_Attacker",
+
+        # AML.T0001
+        "entry_point":
+            "KasperskyGrayBoxResearch:"
+            "searchOpenAIVulnerabilityAnalysis",
+
+        "path": [
+
+            # AML.T0003
+            "KasperskyGrayBoxResearch:"
+            "searchVictimOwnedWebsites",
+
+            # AML.T0047
+            "KasperskyAntimalwareModel:"
+            "aiEnabledProductOrService",
+
+            # AML.T0002.000
+            "KasperskyLabeledDataset:"
+            "datasets",
+
+            # AML.T0005
+            "KasperskyProxyModel:"
+            "createProxyAIModel",
+
+            # AML.T0017.000
+            "KasperskyAdversarialCapability:"
+            "adversarialAIAttacks",
+
+            # AML.T0043.002
+            "KasperskyAdversarialMalware:"
+            "blackBoxTransfer",
+
+            # AML.T0042
+            "KasperskyAntimalwareModel:"
+            "verifyAttack",
+
+            # AML.T0015
+            "KasperskyAntimalwareModel:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "KasperskyAntimalwareModel:"
+            "evadeAIModel",
+    },
+        
+    # ========================================================
+    # AML.CS0015
+    # Compromised PyTorch Dependency Chain
+    # ========================================================
+
+    "AML.CS0015": {
+
+        "attacker_name":
+            "AML_CS0015_Attacker",
+
+        # AML.T0010.001
+        "entry_point":
+            "CompromisedTorchtritonPackage:"
+            "aiSupplyChainCompromiseSoftware",
+
+        "path": [
+
+            # AML.T0037 / ATT&CK T1005
+            "PyTorchVictimHost:"
+            "dataFromLocalSystem",
+
+            # AML.T0025
+            "PyTorchDNSExfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "PyTorchDNSExfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+        
+    # ========================================================
+    # AML.CS0016
+    # MathGPT Prompt Injection - Credential Exposure
+    # ========================================================
+
+    "AML.CS0016": {
+
+        "attacker_name":
+            "AML_CS0016_Attacker",
+
+        # AML.T0001
+        "entry_point":
+            "MathGPTResearch:"
+            "searchOpenAIVulnerabilityAnalysis",
+
+        "path": [
+
+            # AML.T0047
+            "MathGPTApplication:"
+            "aiEnabledProductOrService",
+
+            # AML.T0051.000
+            "MathGPTApplication:"
+            "directPromptInjection",
+
+            # AML.T0042
+            "MathGPTApplication:"
+            "verifyAttack",
+
+            # AML.T0093
+            "MathGPTApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # AML.T0053
+            "MathGPTPythonInterpreter:"
+            "aiAgentToolInvocation",
+
+            # AML.T0055 / ATT&CK T1552
+            "MathGPTHost:"
+            "unsecuredCredentials",
+
+            # AML.T0048.000
+            "MathGPTFinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "MathGPTFinancialImpact:"
+            "financialHarm",
+    },
+        
+    # ========================================================
+    # AML.CS0016 - DoS branch
+    # ========================================================
+
+    "AML.CS0016-DOS": {
+
+        "attacker_name":
+            "AML_CS0016_DOS_Attacker",
+
+        "entry_point":
+            "MathGPTResearch:"
+            "searchOpenAIVulnerabilityAnalysis",
+
+        "path": [
+
+            "MathGPTApplication:"
+            "aiEnabledProductOrService",
+
+            "MathGPTApplication:"
+            "directPromptInjection",
+
+            "MathGPTApplication:"
+            "verifyAttack",
+
+            "MathGPTApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            "MathGPTPythonInterpreter:"
+            "aiAgentToolInvocation",
+
+            # AML.T0029
+            "MathGPTServiceImpact:"
+            "denialOfAIService",
+        ],
+
+        "goal":
+            "MathGPTServiceImpact:"
+            "denialOfAIService",
+    },
 
 }
 
@@ -1633,6 +1810,186 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     victim_physical_environment.add_associated_assets(
         "targetModel",
         {target_mobile_model}
+    )
+    
+    # ========================================================
+    # AML.CS0014
+    # Confusing Antimalware Neural Networks
+    # ========================================================
+
+    kaspersky_research = model.add_asset(
+        "AIResearchMaterial",
+        "KasperskyGrayBoxResearch"
+    )
+
+    kaspersky_detector = model.add_asset(
+        "AIMalwareDetector",
+        "KasperskyAntimalwareModel"
+    )
+
+    kaspersky_dataset = model.add_asset(
+        "TrainingData",
+        "KasperskyLabeledDataset"
+    )
+
+    kaspersky_proxy = model.add_asset(
+        "ProxyAIModel",
+        "KasperskyProxyModel"
+    )
+
+    kaspersky_capability = model.add_asset(
+        "AdversarialCapability",
+        "KasperskyAdversarialCapability"
+    )
+
+    kaspersky_adversarial_malware = model.add_asset(
+        "AdversarialSample",
+        "KasperskyAdversarialMalware"
+    )
+    
+    # --------------------------------------------------------
+    # CS0014 associations
+    # --------------------------------------------------------
+
+    # AML.T0003 -> AML.T0047
+    kaspersky_research.add_associated_assets(
+        "targetProduct",
+        {kaspersky_detector}
+    )
+
+    # AML.T0047 -> AML.T0002.000
+    kaspersky_detector.add_associated_assets(
+        "labeledDataset",
+        {kaspersky_dataset}
+    )
+
+    # AML.T0002.000 -> AML.T0005
+    kaspersky_dataset.add_associated_assets(
+        "proxyModel",
+        {kaspersky_proxy}
+    )
+
+    # AML.T0005 -> AML.T0017.000
+    kaspersky_proxy.add_associated_assets(
+        "capability",
+        {kaspersky_capability}
+    )
+
+    # AML.T0017.000 -> AML.T0043.002
+    kaspersky_capability.add_associated_assets(
+        "transferSample",
+        {kaspersky_adversarial_malware}
+    )
+
+    # AML.T0043.002 -> AML.T0042
+    kaspersky_adversarial_malware.add_associated_assets(
+        "targetModel",
+        {kaspersky_detector}
+    )
+    
+    # ========================================================
+    # AML.CS0015
+    # Compromised PyTorch Dependency Chain
+    # ========================================================
+
+    compromised_torchtriton = model.add_asset(
+        "AISupplyChainSoftware",
+        "CompromisedTorchtritonPackage"
+    )
+
+    pytorch_victim_host = model.add_asset(
+        "AISupplyChainHostOS",
+        "PyTorchVictimHost"
+    )
+
+    pytorch_dns_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "PyTorchDNSExfiltration"
+    )
+    
+    # --------------------------------------------------------
+    # CS0015 associations
+    # --------------------------------------------------------
+
+    # AML.T0010.001 -> AML.T0037
+    compromised_torchtriton.add_associated_assets(
+        "hostOS",
+        {pytorch_victim_host}
+    )
+
+    # AML.T0037 -> AML.T0025
+    pytorch_victim_host.add_associated_assets(
+        "exfiltration",
+        {pytorch_dns_exfiltration}
+    )
+    
+    # ========================================================
+    # AML.CS0016
+    # Achieving Code Execution in MathGPT via Prompt Injection
+    # ========================================================
+
+    mathgpt_research = model.add_asset(
+        "AIResearchMaterial",
+        "MathGPTResearch"
+    )
+
+    mathgpt_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "MathGPTApplication"
+    )
+
+    mathgpt_python_interpreter = model.add_asset(
+        "AITool",
+        "MathGPTPythonInterpreter"
+    )
+
+    mathgpt_host = model.add_asset(
+        "MathGPTHostOS",
+        "MathGPTHost"
+    )
+
+    mathgpt_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "MathGPTFinancialImpact"
+    )
+
+    mathgpt_service_impact = model.add_asset(
+        "AIServiceImpact",
+        "MathGPTServiceImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0016 associations
+    # --------------------------------------------------------
+
+    # AML.T0001 -> AML.T0047
+    mathgpt_research.add_associated_assets(
+        "publicLLMApp",
+        {mathgpt_application}
+    )
+
+    # AML.T0093 -> AML.T0053
+    mathgpt_application.add_associated_assets(
+        "tool",
+        {mathgpt_python_interpreter}
+    )
+
+    # AML.T0053 -> AML.T0055
+    mathgpt_python_interpreter.add_associated_assets(
+        "hostOS",
+        {mathgpt_host}
+    )
+
+    # AML.T0055 -> AML.T0048.000
+    mathgpt_host.add_associated_assets(
+        "impact",
+        {mathgpt_financial_impact}
+    )
+
+    # AML.T0053 -> AML.T0029
+    mathgpt_python_interpreter.add_associated_assets(
+        "serviceImpact",
+        {mathgpt_service_impact}
     )
 
 

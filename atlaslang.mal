@@ -131,11 +131,22 @@ category AI {
         | searchApplicationRepositories
         user info: "AML.T0004 - Search Application Repositories"
         -> publicArtifacts.models
+        
+        | searchOpenAIVulnerabilityAnalysis
+        user info: "AML.T0001 - Search Open AI Vulnerability Analysis"
+        -> searchVictimOwnedWebsites,
+        publicLLMApp.aiEnabledProductOrService
+        
+        | searchVictimOwnedWebsites
+        user info: "AML.T0003 - Search Victim-Owned Websites"
+        -> targetProduct.aiEnabledProductOrService
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
             user info: "AML.M0000 - Limit Public Release of Information"
             -> searchOpenTechnicalDatabases,
-            searchApplicationRepositories
+            searchApplicationRepositories,
+            searchOpenAIVulnerabilityAnalysis,
+            searchVictimOwnedWebsites
 
         # m0039AIHoneypots [Disabled]
             user info: "AML.M0039 - AI Honeypots"
@@ -232,13 +243,41 @@ category AI {
         -> validAccounts
     }
     
+    asset AIServiceImpact {
+        
+        | denialOfAIService
+        user info: "AML.T0029 - Denial of AI Service"
+        
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> denialOfAIService
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> denialOfAIService
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> denialOfAIService
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> denialOfAIService
+        
+        # m0036LimitAIWorkloadResourceConsumption [Disabled]
+        user info: "AML.M0036 - Limit AI Workload Resource Consumption"
+        -> denialOfAIService
+    }
+    
     
     asset ProxyAIModel {
         
         | createProxyAIModel
             user info: "AML.T0005 - Create Proxy AI Model"
             -> adversarialSample.manualModification,
-            adversarialSample.whiteBoxOptimization
+            adversarialSample.whiteBoxOptimization,
+            capability.adversarialAIAttacks
         
         | trainProxyViaGatheredAIArtifacts
         user info: "AML.T0005.000 - Train Proxy via Gathered AI Artifacts"
@@ -355,7 +394,8 @@ category AI {
             -> generatedSample.blackBoxOptimization,
             manualSample.manualModification,
             attackPreparation.developMalware,
-            modifiedModel.modifyAIModelArchitecture
+            modifiedModel.modifyAIModelArchitecture,
+            transferSample.blackBoxTransfer
     }
     
     
@@ -408,7 +448,8 @@ category AI {
         | blackBoxTransfer
             user info: "AML.T0043.002 - Craft Adversarial Data: Black-Box Transfer"
             -> targetService.evadeAIModel,
-            evasionTarget.evadeAIModel
+            evasionTarget.evadeAIModel,
+            targetModel.verifyAttack
         
         | craftAdversarialData
             user info: "AML.T0043 - Craft Adversarial Data"
@@ -511,6 +552,32 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> aiSupplyChainCompromiseModel
+    }
+    
+    asset AISupplyChainSoftware {
+        
+        | aiSupplyChainCompromiseSoftware
+        user info: "AML.T0010.001 - AI Supply Chain Compromise: AI Software"
+        -> hostOS.dataFromLocalSystem
+        
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> aiSupplyChainCompromiseSoftware
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> aiSupplyChainCompromiseSoftware
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> aiSupplyChainCompromiseSoftware
+    }
+    
+    asset AISupplyChainHostOS extends OS {
+        
+        | dataFromLocalSystem
+        +> exfiltration.exfiltrationViaCyberMeans
     }
     
     asset BackdoorTrigger {
@@ -706,7 +773,8 @@ category AI {
         
         | aiEnabledProductOrService
             user info: "AML.T0047 - AI-Enabled Product or Service"
-            -> discoverAIModelOutputs
+            -> discoverAIModelOutputs,
+            labeledDataset.datasets
         
         | discoverAIModelOutputs
             user info: "AML.T0063 - Discover AI Model Outputs"
@@ -779,6 +847,59 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> evadeAIModel
+    }
+    
+    asset PublicFacingLLMApplication {
+        
+        | aiEnabledProductOrService
+        user info: "AML.T0047 - AI-Enabled Product or Service"
+        -> directPromptInjection
+        
+        | directPromptInjection
+        user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
+        -> verifyAttack
+        
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> promptInfiltrationViaPublicFacingApplication
+        
+        | promptInfiltrationViaPublicFacingApplication
+        user info: "AML.T0093 - Prompt Infiltration via Public-Facing Application"
+        -> tool.aiAgentToolInvocation
+        
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiEnabledProductOrService,
+        directPromptInjection
+        
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> directPromptInjection
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> directPromptInjection
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> verifyAttack
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> verifyAttack
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> verifyAttack
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> verifyAttack
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> promptInfiltrationViaPublicFacingApplication
     }
     
 
@@ -874,7 +995,9 @@ category AI {
 
         | aiAgentToolInvocation
             user info: "AML.T0053 - AI Agent Tool Invocation"
-            -> vectorStore.vulnerableFilterEvaluation
+            -> vectorStore.vulnerableFilterEvaluation,
+            hostOS.unsecuredCredentials,
+            serviceImpact.denialOfAIService
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -963,6 +1086,12 @@ category AI {
         # safeFilterEvaluation
             user info: "Avoid dynamic evaluation of attacker-controlled filter expressions"
             -> vulnerableFilterEvaluation
+    }
+    
+    asset MathGPTHostOS extends OS {
+        
+        | unsecuredCredentials
+        +> impact.financialHarm
     }
     
     asset AIRepositoryOS extends OS {
@@ -1153,6 +1282,35 @@ associations {
     AISupplyChainModel [modelSupplyChain] * <--ActivatedBy--> * [trigger] BackdoorTrigger
     
     BackdoorTrigger [trigger] * <--PlacedIn--> * [physicalEnvironment] PhysicalAIEnvironment
+    
+    
+    // AML.CS0014 associations
+    
+    AIMalwareDetector [grayBoxDetector] * <--LabelsDataset--> * [labeledDataset] TrainingData
+    
+    ProxyAIModel [grayBoxProxy] * <--SupportsAttackDevelopment--> * [capability] AdversarialCapability
+    
+    AdversarialCapability [grayBoxCapability] * <--CreatesTransferSample--> * [transferSample] AdversarialSample
+    
+    
+    // AML.CS0015 associations
+    
+    AISupplyChainSoftware [compromisedSoftware] * <--ExecutesOn--> * [hostOS] AISupplyChainHostOS
+    
+    AISupplyChainHostOS [collectionHost] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
+    
+    
+    // AML.CS0016 associations
+    
+    AIResearchMaterial [mathGPTResearch] * <--IdentifiesPublicLLMApplication--> * [publicLLMApp] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [mathGPTApp] * <--InvokesMathTool--> * [tool] AITool
+    
+    AITool [credentialTool] * <--RunsOnMathGPTHost--> 1 [hostOS] MathGPTHostOS
+    
+    MathGPTHostOS [mathGPTHost] * <--CausesFinancialImpact--> * [impact] ExternalHarm
+    
+    AITool [dosTool] * <--CausesServiceImpact--> * [serviceImpact] AIServiceImpact
     
     
     //Scenario 1 associations
