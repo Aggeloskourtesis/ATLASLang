@@ -815,6 +815,37 @@ CASE_STUDIES = {
             "MathGPTServiceImpact:"
             "denialOfAIService",
     },
+    
+    # ========================================================
+    # AML.CS0017
+    # Bypassing ID.me Identity Verification
+    # ========================================================
+
+    "AML.CS0017": {
+
+        "attacker_name":
+            "AML_CS0017_Attacker",
+
+        # AML.T0047
+        "entry_point":
+            "IDMeIdentityVerificationSystem:"
+            "aiEnabledProductOrService",
+
+        "path": [
+
+            # AML.T0015
+            "IDMeIdentityVerificationSystem:"
+            "evadeAIModel",
+
+            # AML.T0048.000
+            "IDMeFraudImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "IDMeFraudImpact:"
+            "financialHarm",
+    },
 
 }
 
@@ -1990,6 +2021,31 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     mathgpt_python_interpreter.add_associated_assets(
         "serviceImpact",
         {mathgpt_service_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0017
+    # Bypassing ID.me Identity Verification
+    # ========================================================
+
+    idme_verification_system = model.add_asset(
+        "FacialRecognitionSystem",
+        "IDMeIdentityVerificationSystem"
+    )
+
+    idme_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "IDMeFraudImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0017 associations
+    # --------------------------------------------------------
+
+    # AML.T0015 -> AML.T0048.000
+    idme_verification_system.add_associated_assets(
+        "impact",
+        {idme_financial_impact}
     )
 
 
