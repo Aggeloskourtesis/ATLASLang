@@ -1031,6 +1031,49 @@ CASE_STUDIES = {
             "ChatGPTUserImpact:"
             "userHarm",
     },
+        
+    # ========================================================
+    # AML.CS0022
+    # ChatGPT Package Hallucination
+    # ========================================================
+
+    "AML.CS0022": {
+
+        "attacker_name":
+            "AML_CS0022_Attacker",
+
+        # AML.T0040
+        "entry_point":
+            "ChatGPTPackageService:"
+            "aiModelInferenceAPIAccess",
+
+        "path": [
+
+            # AML.T0062
+            "ChatGPTPackageService:"
+            "discoverLLMHallucinations",
+
+            # AML.T0060
+            "HallucinatedPackagePublisher:"
+            "publishHallucinatedEntities",
+
+            # AML.T0010.001
+            "HallucinatedPackageSupplyChain:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # AML.T0011.001
+            "HallucinatedPackageExecution:"
+            "maliciousPackage",
+
+            # AML.T0048.003
+            "HallucinatedPackageUserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "HallucinatedPackageUserImpact:"
+            "userHarm",
+    },
 
 }
 
@@ -2518,6 +2561,64 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     chatgpt_rendered_exfiltration.add_associated_assets(
         "externalHarm",
         {chatgpt_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0022
+    # ChatGPT Package Hallucination
+    # ========================================================
+
+    chatgpt_package_service = model.add_asset(
+        "AIInferenceService",
+        "ChatGPTPackageService"
+    )
+
+    hallucinated_package_publisher = model.add_asset(
+        "HallucinatedEntityPublisher",
+        "HallucinatedPackagePublisher"
+    )
+
+    hallucinated_package_supply_chain = model.add_asset(
+        "AISupplyChainSoftware",
+        "HallucinatedPackageSupplyChain"
+    )
+
+    hallucinated_package_execution = model.add_asset(
+        "AIUserExecution",
+        "HallucinatedPackageExecution"
+    )
+
+    hallucinated_package_user_impact = model.add_asset(
+        "ExternalHarm",
+        "HallucinatedPackageUserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0022 associations
+    # --------------------------------------------------------
+
+    # AML.T0062 -> AML.T0060
+    chatgpt_package_service.add_associated_assets(
+        "hallucinatedPublisher",
+        {hallucinated_package_publisher}
+    )
+
+    # AML.T0060 -> AML.T0010.001
+    hallucinated_package_publisher.add_associated_assets(
+        "compromisedSoftware",
+        {hallucinated_package_supply_chain}
+    )
+
+    # AML.T0010.001 -> AML.T0011.001
+    hallucinated_package_supply_chain.add_associated_assets(
+        "userExecution",
+        {hallucinated_package_execution}
+    )
+
+    # AML.T0011.001 -> AML.T0048.003
+    hallucinated_package_execution.add_associated_assets(
+        "externalHarm",
+        {hallucinated_package_user_impact}
     )
 
 

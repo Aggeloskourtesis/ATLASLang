@@ -105,10 +105,19 @@ category AI {
         user info: "AML.T0011 - User Execution"
         -> artifactCollection.aiArtifactCollection
         
+        | maliciousPackage
+        user info: "AML.T0011.001 - User Execution: Malicious Package"
+        -> externalHarm.userHarm
+        
         
         # m0011RestrictLibraryLoading [Disabled]
         user info: "AML.M0011 - Restrict Library Loading"
-        -> userExecution
+        -> userExecution,
+        maliciousPackage
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> maliciousPackage
         
         # m0014VerifyAIArtifacts [Disabled]
         user info: "AML.M0014 - Verify AI Artifacts"
@@ -116,15 +125,18 @@ category AI {
         
         # m0016VulnerabilityScanning [Disabled]
         user info: "AML.M0016 - Vulnerability Scanning"
-        -> userExecution
+        -> userExecution,
+        maliciousPackage
         
         # m0018UserTraining [Disabled]
         user info: "AML.M0018 - User Training"
-        -> userExecution
+        -> userExecution,
+        maliciousPackage
         
         # m0023AIBillOfMaterials [Disabled]
         user info: "AML.M0023 - AI Bill of Materials"
-        -> userExecution
+        -> userExecution,
+        maliciousPackage
     }
     
     
@@ -616,7 +628,8 @@ category AI {
         | aiSupplyChainCompromiseSoftware
         user info: "AML.T0010.001 - AI Supply Chain Compromise: AI Software"
         -> hostOS.dataFromLocalSystem,
-        serviceOS.validAccounts
+        serviceOS.validAccounts,
+        userExecution.maliciousPackage
         
         
         # m0006PredictiveAIEnsembles [Disabled]
@@ -742,11 +755,16 @@ category AI {
         user info: "AML.T0040 - AI Model Inference API Access"
         -> verifyAttack,
         blackBoxSample.blackBoxOptimization,
-        discoverAIModelOntology
+        discoverAIModelOntology,
+        discoverLLMHallucinations
         
         | discoverAIModelOntology
         user info: "AML.T0013 - Discover AI Model Ontology"
         -> ontologyData.datasets
+        
+        | discoverLLMHallucinations
+        user info: "AML.T0062 - Discover LLM Hallucinations"
+        -> hallucinatedPublisher.publishHallucinatedEntities
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
@@ -774,11 +792,24 @@ category AI {
         # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
         user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
         -> verifyAttack,
-        discoverAIModelOntology
+        discoverAIModelOntology,
+        discoverLLMHallucinations
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
         -> verifyAttack
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> discoverLLMHallucinations
+        
+        # m0021GenerativeAIGuidelines [Disabled]
+        user info: "AML.M0021 - Generative AI Guidelines"
+        -> discoverLLMHallucinations
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> discoverLLMHallucinations
     }
     
     asset MobileAIModel extends PredictiveAIModel {
@@ -912,6 +943,13 @@ category AI {
         # m0016VulnerabilityScanning [Disabled]
         user info: "AML.M0016 - Vulnerability Scanning"
         -> publishPoisonedModels
+    }
+    
+    asset HallucinatedEntityPublisher {
+        
+        | publishHallucinatedEntities
+        user info: "AML.T0060 - Publish Hallucinated Entities"
+        -> compromisedSoftware.aiSupplyChainCompromiseSoftware
     }
     
     asset AIMalwareDetector {
@@ -1575,6 +1613,17 @@ associations {
     AITool [exfiltrationTool] * <--ProducesRenderedResponse--> * [renderedResponse] LLMRenderedResponse
     
     LLMRenderedResponse [renderedResponse] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
+    
+    
+    // AML.CS0022 associations
+    
+    AIInferenceService [hallucinationService] * <--DiscoversHallucinationFor--> * [hallucinatedPublisher] HallucinatedEntityPublisher
+    
+    HallucinatedEntityPublisher [hallucinatedPublisher] * <--IntroducesCompromisedSoftware--> * [compromisedSoftware] AISupplyChainSoftware
+    
+    AISupplyChainSoftware [hallucinatedPackageSupplyChain] * <--DeliversMaliciousPackage--> * [userExecution] AIUserExecution
+    
+    AIUserExecution [maliciousPackageExecution] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
     
     
     //Scenario 1 associations
