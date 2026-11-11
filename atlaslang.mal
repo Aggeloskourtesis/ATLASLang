@@ -99,18 +99,66 @@ category AI {
         -> evadeAIModel
     }
     
+    asset AIUserExecution {
+        
+        | userExecution
+        user info: "AML.T0011 - User Execution"
+        -> artifactCollection.aiArtifactCollection
+        
+        
+        # m0011RestrictLibraryLoading [Disabled]
+        user info: "AML.M0011 - Restrict Library Loading"
+        -> userExecution
+        
+        # m0014VerifyAIArtifacts [Disabled]
+        user info: "AML.M0014 - Verify AI Artifacts"
+        -> userExecution
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> userExecution
+        
+        # m0018UserTraining [Disabled]
+        user info: "AML.M0018 - User Training"
+        -> userExecution
+        
+        # m0023AIBillOfMaterials [Disabled]
+        user info: "AML.M0023 - AI Bill of Materials"
+        -> userExecution
+    }
+    
     
     asset ExternalHarm {
         
+        | externalHarms
+            user info: "AML.T0048 - External Harms"
+        
         | financialHarm
             user info: "AML.T0048.000 - External Harms: Financial Harm"
+            
+        | reputationalHarm
+            user info: "AML.T0048.001 - External Harms: Reputational Harm"
         
         | userHarm
             user info: "AML.T0048.003 - External Harms: User Harm"
 
         | aiIntellectualPropertyTheft
             user info: "AML.T0048.004 - AI Intellectual Property Theft"
-            -> adversarialSample.blackBoxTransfer
+            -> adversarialSample.blackBoxTransfer,
+            externalHarms
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> aiIntellectualPropertyTheft
+        
+        # m0012EncryptSensitiveInformation [Disabled]
+        user info: "AML.M0012 - Encrypt Sensitive Information"
+        -> aiIntellectualPropertyTheft
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> aiIntellectualPropertyTheft
+            
     }
     
     
@@ -231,7 +279,8 @@ category AI {
         
         | validAccounts
         +> artifactCollection.aiArtifactCollection,
-        inferenceService.aiModelInferenceAPIAccess
+        inferenceService.aiModelInferenceAPIAccess,
+        userExecution.userExecution
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -343,7 +392,8 @@ category AI {
         
         | exfiltrationViaCyberMeans
         user info: "AML.T0025 - Exfiltration via Cyber Means"
-        -> adversarialSample.whiteBoxOptimization
+        -> adversarialSample.whiteBoxOptimization,
+        impact.aiIntellectualPropertyTheft
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -363,7 +413,8 @@ category AI {
             user info: "AML.T0002.001 - Acquire Public AI Artifacts: Models"
             -> targetService.aiModelInferenceAPIAccess,
             developmentWorkspace.aiDevelopmentWorkspaces,
-            fullAccessTarget.fullAIModelAccess
+            fullAccessTarget.fullAIModelAccess,
+            poisonTarget.poisonAIModel
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -388,6 +439,11 @@ category AI {
     
     
     asset AdversarialCapability {
+        
+        | developCapabilities
+        user info: "AML.T0017 - Develop Capabilities"
+        -> compromisedSoftware.aiSupplyChainCompromiseSoftware,
+        obfuscatedPrompt.llmPromptObfuscation
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -526,7 +582,8 @@ category AI {
         
         | aiSupplyChainCompromiseModel
         user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
-        -> trigger.insertBackdoorTrigger
+        -> trigger.insertBackdoorTrigger,
+        integrityTarget.erodeAIModelIntegrity
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -558,7 +615,8 @@ category AI {
         
         | aiSupplyChainCompromiseSoftware
         user info: "AML.T0010.001 - AI Supply Chain Compromise: AI Software"
-        -> hostOS.dataFromLocalSystem
+        -> hostOS.dataFromLocalSystem,
+        serviceOS.validAccounts
         
         
         # m0006PredictiveAIEnsembles [Disabled]
@@ -769,6 +827,93 @@ category AI {
         -> verifyAttack
     }
     
+    asset PoisonableAIModel extends PredictiveAIModel {
+        
+        | poisonAIModel
+        user info: "AML.T0018.000 - Manipulate AI Model: Poison AI Model"
+        -> verifyAttack
+        
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> publisher.publishPoisonedModels
+        
+        | erodeAIModelIntegrity
+        user info: "AML.T0031 - Erode AI Model Integrity"
+        -> impact.reputationalHarm
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> poisonAIModel,
+        verifyAttack
+        
+        # m0007SanitizeTrainingData [Disabled]
+        user info: "AML.M0007 - Sanitize Training Data"
+        -> poisonAIModel
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> poisonAIModel
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> poisonAIModel
+        
+        # m0025MaintainAIDatasetProvenance [Disabled]
+        user info: "AML.M0025 - Maintain AI Dataset Provenance"
+        -> poisonAIModel
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> poisonAIModel
+        
+        
+        # m0002PredictiveAIOutputObfuscation [Disabled]
+        user info: "AML.M0002 - Predictive AI Output Obfuscation"
+        -> verifyAttack
+        
+        # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
+        user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
+        -> verifyAttack
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> verifyAttack
+        
+        
+        # m0003PredictiveAIModelHardening [Disabled]
+        user info: "AML.M0003 - Predictive AI Model Hardening"
+        -> erodeAIModelIntegrity
+        
+        # m0006PredictiveAIEnsembles [Disabled]
+        user info: "AML.M0006 - Predictive AI Ensembles"
+        -> erodeAIModelIntegrity
+        
+        # m0010PredictiveAIInputRestoration [Disabled]
+        user info: "AML.M0010 - Predictive AI Input Restoration"
+        -> erodeAIModelIntegrity
+        
+        # m0015PredictiveAIAdversarialInputDetection [Disabled]
+        user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
+        -> erodeAIModelIntegrity
+    }
+    
+    asset PoisonedAIModelPublisher {
+        
+        | publishPoisonedModels
+        user info: "AML.T0115.001 - Publish Poisoned AI Artifacts: Models"
+        -> modelSupplyChain.aiSupplyChainCompromiseModel
+        
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> publishPoisonedModels
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> publishPoisonedModels
+    }
+    
     asset AIMalwareDetector {
         
         | aiEnabledProductOrService
@@ -902,6 +1047,43 @@ category AI {
         -> promptInfiltrationViaPublicFacingApplication
     }
     
+    
+    asset AIAgent {
+        
+        | aiEnabledProductOrService
+        user info: "AML.T0047 - AI-Enabled Product or Service"
+        -> directPromptInjection
+        
+        | directPromptInjection
+        user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
+        -> tool.aiAgentToolInvocation
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging"
+        -> aiEnabledProductOrService,
+        directPromptInjection
+        
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> directPromptInjection
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> directPromptInjection
+    }
+    
+    
+    asset AIAgentContext {
+        
+        | contextPoisoningThread
+        user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
+        -> externalHarm.userHarm
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> contextPoisoningThread
+    }
+
 
     asset LLMPrompt {
 
@@ -909,32 +1091,27 @@ category AI {
             user info: "AML.T0065 - LLM Prompt Crafting"
             -> aiAgent.aiEnabledProductOrService,
             browserPreparation.developMalware,
-            browserPreparation.obtainMalware
-    }
-
-
-    asset AIAgent {
-
-        | aiEnabledProductOrService
-            user info: "AML.T0047 - AI-Enabled Product or Service"
-            -> directPromptInjection
-
-        | directPromptInjection
-            user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
-            -> tool.aiAgentToolInvocation
+            browserPreparation.obtainMalware,
+            stagedCapability.stageCapabilities
             
-        # m0024AITelemetryLogging [Disabled]
-            user info: "AML.M0024 - AI Telemetry Logging"
-            -> aiEnabledProductOrService,
-               directPromptInjection
-
-        # m0033InputOutputValidationAgentComponents [Disabled]
-            user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
-            -> directPromptInjection
-
+        | llmPromptObfuscation
+            user info: "AML.T0068 - LLM Prompt Obfuscation"
+            -> indirectConversation.indirectPromptInjection
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> llmPromptObfuscation
+        
         # m0035AIRedTeam [Disabled]
-            user info: "AML.M0035 - AI Red Team"
-            -> directPromptInjection
+        user info: "AML.M0035 - AI Red Team"
+        -> llmPromptObfuscation
+    }
+    
+    
+    asset PromptManipulationNetwork extends InternalNetwork {
+        
+        & transmittedDataManipulation
+        +> llmConversation.llmPromptInjection
     }
     
     asset LLMConversation {
@@ -942,6 +1119,11 @@ category AI {
         | llmPromptInjection
         user info: "AML.T0051 - LLM Prompt Injection"
         -> agentContext.contextPoisoningThread
+        
+        | indirectPromptInjection
+        user info: "AML.T0051.001 - LLM Prompt Injection: Indirect"
+        -> socialEngineering.spearphishingViaSocialEngineeringLLM,
+        tool.aiAgentToolInvocation
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
@@ -961,33 +1143,59 @@ category AI {
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        indirectPromptInjection
         
         # m0033InputOutputValidationAgentComponents [Disabled]
         user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        indirectPromptInjection
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        indirectPromptInjection
     }
     
-    
-    asset AIAgentContext {
+    asset LLMStagedCapability {
         
-        | contextPoisoningThread
-        user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
+        | stageCapabilities
+        user info: "AML.T0079 - Stage Capabilities"
+        -> browser.driveByCompromise
+    }
+    
+    asset SocialEngineeringLLM {
+        
+        | spearphishingViaSocialEngineeringLLM
+        user info: "AML.T0052.000 - Spearphishing via Social Engineering LLM"
         -> externalHarm.userHarm
         
-        # m0035AIRedTeam [Disabled]
-        user info: "AML.M0035 - AI Red Team"
-        -> contextPoisoningThread
+        
+        # m0018UserTraining [Disabled]
+        user info: "AML.M0018 - User Training"
+        -> spearphishingViaSocialEngineeringLLM
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> spearphishingViaSocialEngineeringLLM
     }
     
-    asset PromptManipulationNetwork extends InternalNetwork {
+    asset LLMRenderedResponse {
         
-        & transmittedDataManipulation
-        +> llmConversation.llmPromptInjection
+        | llmResponseRendering
+        user info: "AML.T0077 - LLM Response Rendering"
+        -> externalHarm.userHarm
+    }
+    
+    asset LLMDriveByBrowser extends Browser {
+        
+        & driveByCompromise
+        +> indirectConversation.indirectPromptInjection
+        
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> driveByCompromise
     }
 
 
@@ -997,7 +1205,8 @@ category AI {
             user info: "AML.T0053 - AI Agent Tool Invocation"
             -> vectorStore.vulnerableFilterEvaluation,
             hostOS.unsecuredCredentials,
-            serviceImpact.denialOfAIService
+            serviceImpact.denialOfAIService,
+            renderedResponse.llmResponseRendering
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1311,6 +1520,61 @@ associations {
     MathGPTHostOS [mathGPTHost] * <--CausesFinancialImpact--> * [impact] ExternalHarm
     
     AITool [dosTool] * <--CausesServiceImpact--> * [serviceImpact] AIServiceImpact
+    
+    
+    // AML.CS0017 associations
+    
+    
+    // AML.CS0018 associations
+    
+    AdversarialCapability [colabCapability] * <--CreatesCompromisedSoftware--> * [compromisedSoftware] AISupplyChainSoftware
+    
+    AISupplyChainSoftware [colabSoftware] * <--UsesAuthorizedService--> * [serviceOS] AIServiceOS
+    
+    AIServiceOS [colabServiceOS] * <--RequiresUserExecution--> * [userExecution] AIUserExecution
+    
+    AIUserExecution [colabUserExecution] * <--EnablesCollection--> * [artifactCollection] AIArtifactCollection
+    
+    AIExfiltration [colabExfiltration] * <--CausesExternalImpact--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0019 associations
+    
+    PublicAIArtifacts [poisonSourceArtifact] * <--ProvidesModelToPoison--> * [poisonTarget] PoisonableAIModel
+    
+    PoisonableAIModel [poisonedModel] * <--PublishedBy--> * [publisher] PoisonedAIModelPublisher
+    
+    PoisonedAIModelPublisher [poisonPublisher] * <--CompromisesModelSupplyChain--> * [modelSupplyChain] AISupplyChainModel
+    
+    AISupplyChainModel [poisonedModelSupplyChain] * <--DegradesIntegrityOf--> * [integrityTarget] PoisonableAIModel
+    
+    PoisonableAIModel [victimPoisonedModel] * <--CausesReputationalImpact--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0020 associations
+    
+    AdversarialCapability [bingCapabilitySource] * <--DevelopsObfuscatedPrompt--> * [obfuscatedPrompt] LLMPrompt
+    
+    LLMPrompt [bingObfuscatedPromptSource] * <--InjectedIndirectlyInto--> * [indirectConversation] LLMConversation
+    
+    LLMConversation [bingConversationSource] * <--EnablesSocialEngineering--> * [socialEngineering] SocialEngineeringLLM
+    
+    SocialEngineeringLLM [bingSocialEngineeringSource] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
+    
+    
+    // AML.CS0021 associations    
+    
+    LLMPrompt [chatGPTCraftedPrompt] * <--StagesPrompt--> * [stagedCapability] LLMStagedCapability
+    
+    LLMStagedCapability [stagedCapability] * <--DeliveredThrough--> * [browser] LLMDriveByBrowser
+    
+    LLMDriveByBrowser [driveByBrowser] * <--InjectsIntoConversation--> * [indirectConversation] LLMConversation
+    
+    LLMConversation [exfiltrationConversation] * <--InvokesExfiltrationTool--> * [tool] AITool
+    
+    AITool [exfiltrationTool] * <--ProducesRenderedResponse--> * [renderedResponse] LLMRenderedResponse
+    
+    LLMRenderedResponse [renderedResponse] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
     
     
     //Scenario 1 associations

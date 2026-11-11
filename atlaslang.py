@@ -846,6 +846,191 @@ CASE_STUDIES = {
             "IDMeFraudImpact:"
             "financialHarm",
     },
+    
+    # ========================================================
+    # AML.CS0018
+    # Arbitrary Code Execution with Google Colab
+    # ========================================================
+
+    "AML.CS0018": {
+
+        "attacker_name":
+            "AML_CS0018_Attacker",
+
+        # AML.T0017
+        "entry_point":
+            "ColabMaliciousNotebookCapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # AML.T0010.001
+            "CompromisedColabNotebook:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # AML.T0012
+            "ColabDriveAccess:"
+            "validAccounts",
+
+            # AML.T0011
+            "ColabNotebookExecution:"
+            "userExecution",
+
+            # AML.T0035
+            "ColabArtifactCollection:"
+            "aiArtifactCollection",
+
+            # AML.T0025
+            "ColabExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # AML.T0048.004
+            "ColabExternalImpact:"
+            "aiIntellectualPropertyTheft",
+
+            # AML.T0048
+            "ColabExternalImpact:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "ColabExternalImpact:"
+            "externalHarms",
+    },
+    
+    # ========================================================
+    # AML.CS0019
+    # PoisonGPT
+    # ========================================================
+
+    "AML.CS0019": {
+
+        "attacker_name":
+            "AML_CS0019_Attacker",
+
+        # AML.T0002.001
+        "entry_point":
+            "PublicGPTJModel:"
+            "models",
+
+        "path": [
+
+            # AML.T0018.000
+            "PoisonedGPTJModel:"
+            "poisonAIModel",
+
+            # AML.T0042
+            "PoisonedGPTJModel:"
+            "verifyAttack",
+
+            # AML.T0115.001
+            "HuggingFacePoisonedModelPublisher:"
+            "publishPoisonedModels",
+
+            # AML.T0010.003
+            "PoisonGPTModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # AML.T0031
+            "VictimPoisonGPTModel:"
+            "erodeAIModelIntegrity",
+
+            # AML.T0048.001
+            "PoisonGPTReputationImpact:"
+            "reputationalHarm",
+        ],
+
+        "goal":
+            "PoisonGPTReputationImpact:"
+            "reputationalHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0020
+    # Indirect Prompt Injection Threats:
+    # Bing Chat Data Pirate
+    # ========================================================
+
+    "AML.CS0020": {
+
+        "attacker_name":
+            "AML_CS0020_Attacker",
+
+        # AML.T0017
+        "entry_point":
+            "BingDataPirateCapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # AML.T0068
+            "BingHiddenPrompt:"
+            "llmPromptObfuscation",
+
+            # AML.T0051.001
+            "BingChatConversation:"
+            "indirectPromptInjection",
+
+            # AML.T0052.000
+            "BingSocialEngineering:"
+            "spearphishingViaSocialEngineeringLLM",
+
+            # AML.T0048.003
+            "BingUserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "BingUserImpact:"
+            "userHarm",
+    },
+        
+    # ========================================================
+    # AML.CS0021
+    # ChatGPT Conversation Exfiltration
+    # ========================================================
+
+    "AML.CS0021": {
+
+        "attacker_name":
+            "AML_CS0021_Attacker",
+
+        # AML.T0065
+        "entry_point":
+            "ChatGPTExfiltrationPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # AML.T0079
+            "ChatGPTStagedPrompt:"
+            "stageCapabilities",
+
+            # AML.T0078 / ATT&CK T1189
+            "ChatGPTDriveByBrowser:"
+            "driveByCompromise",
+
+            # AML.T0051.001
+            "ChatGPTExfiltrationConversation:"
+            "indirectPromptInjection",
+
+            # AML.T0053
+            "ChatGPTBrowsingPlugin:"
+            "aiAgentToolInvocation",
+
+            # AML.T0077
+            "ChatGPTRenderedExfiltration:"
+            "llmResponseRendering",
+
+            # AML.T0048.003
+            "ChatGPTUserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "ChatGPTUserImpact:"
+            "userHarm",
+    },
 
 }
 
@@ -2046,6 +2231,293 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     idme_verification_system.add_associated_assets(
         "impact",
         {idme_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0018
+    # Arbitrary Code Execution with Google Colab
+    # ========================================================
+
+    colab_capability = model.add_asset(
+        "AdversarialCapability",
+        "ColabMaliciousNotebookCapability"
+    )
+
+    compromised_colab_notebook = model.add_asset(
+        "AISupplyChainSoftware",
+        "CompromisedColabNotebook"
+    )
+
+    colab_drive_access = model.add_asset(
+        "AIServiceOS",
+        "ColabDriveAccess"
+    )
+
+    colab_user_execution = model.add_asset(
+        "AIUserExecution",
+        "ColabNotebookExecution"
+    )
+
+    colab_artifact_collection = model.add_asset(
+        "AIArtifactCollection",
+        "ColabArtifactCollection"
+    )
+
+    colab_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "ColabExfiltration"
+    )
+
+    colab_external_impact = model.add_asset(
+        "ExternalHarm",
+        "ColabExternalImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0018 associations
+    # --------------------------------------------------------
+
+    # AML.T0017 -> AML.T0010.001
+    colab_capability.add_associated_assets(
+        "compromisedSoftware",
+        {compromised_colab_notebook}
+    )
+
+    # AML.T0010.001 -> AML.T0012
+    compromised_colab_notebook.add_associated_assets(
+        "serviceOS",
+        {colab_drive_access}
+    )
+
+    # AML.T0012 -> AML.T0011
+    colab_drive_access.add_associated_assets(
+        "userExecution",
+        {colab_user_execution}
+    )
+
+    # AML.T0011 -> AML.T0035
+    colab_user_execution.add_associated_assets(
+        "artifactCollection",
+        {colab_artifact_collection}
+    )
+
+    # AML.T0035 -> AML.T0025
+    colab_artifact_collection.add_associated_assets(
+        "exfiltration",
+        {colab_exfiltration}
+    )
+
+    # AML.T0025 -> AML.T0048.004
+    colab_exfiltration.add_associated_assets(
+        "impact",
+        {colab_external_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0019
+    # PoisonGPT
+    # ========================================================
+
+    public_gptj_model = model.add_asset(
+        "PublicAIArtifacts",
+        "PublicGPTJModel"
+    )
+
+    poisoned_gptj_model = model.add_asset(
+        "PoisonableAIModel",
+        "PoisonedGPTJModel"
+    )
+
+    poisoned_model_publisher = model.add_asset(
+        "PoisonedAIModelPublisher",
+        "HuggingFacePoisonedModelPublisher"
+    )
+
+    poisongpt_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "PoisonGPTModelSupplyChain"
+    )
+
+    victim_poisongpt_model = model.add_asset(
+        "PoisonableAIModel",
+        "VictimPoisonGPTModel"
+    )
+
+    poisongpt_reputation_impact = model.add_asset(
+        "ExternalHarm",
+        "PoisonGPTReputationImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0019 associations
+    # --------------------------------------------------------
+
+    # AML.T0002.001 -> AML.T0018.000
+    public_gptj_model.add_associated_assets(
+        "poisonTarget",
+        {poisoned_gptj_model}
+    )
+
+    # AML.T0042 -> AML.T0115.001
+    poisoned_gptj_model.add_associated_assets(
+        "publisher",
+        {poisoned_model_publisher}
+    )
+
+    # AML.T0115.001 -> AML.T0010.003
+    poisoned_model_publisher.add_associated_assets(
+        "modelSupplyChain",
+        {poisongpt_supply_chain}
+    )
+
+    # AML.T0010.003 -> AML.T0031
+    poisongpt_supply_chain.add_associated_assets(
+        "integrityTarget",
+        {victim_poisongpt_model}
+    )
+
+    # AML.T0031 -> AML.T0048.001
+    victim_poisongpt_model.add_associated_assets(
+        "impact",
+        {poisongpt_reputation_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0020
+    # Bing Chat Data Pirate
+    # ========================================================
+
+    bing_capability = model.add_asset(
+        "AdversarialCapability",
+        "BingDataPirateCapability"
+    )
+
+    bing_hidden_prompt = model.add_asset(
+        "LLMPrompt",
+        "BingHiddenPrompt"
+    )
+
+    bing_conversation = model.add_asset(
+        "LLMConversation",
+        "BingChatConversation"
+    )
+
+    bing_social_engineering = model.add_asset(
+        "SocialEngineeringLLM",
+        "BingSocialEngineering"
+    )
+
+    bing_user_impact = model.add_asset(
+        "ExternalHarm",
+        "BingUserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0020 associations
+    # --------------------------------------------------------
+
+    # AML.T0017 -> AML.T0068
+    bing_capability.add_associated_assets(
+        "obfuscatedPrompt",
+        {bing_hidden_prompt}
+    )
+
+    # AML.T0068 -> AML.T0051.001
+    bing_hidden_prompt.add_associated_assets(
+        "indirectConversation",
+        {bing_conversation}
+    )
+
+    # AML.T0051.001 -> AML.T0052.000
+    bing_conversation.add_associated_assets(
+        "socialEngineering",
+        {bing_social_engineering}
+    )
+
+    # AML.T0052.000 -> AML.T0048.003
+    bing_social_engineering.add_associated_assets(
+        "externalHarm",
+        {bing_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0021
+    # ChatGPT Conversation Exfiltration
+    # ========================================================
+
+    chatgpt_exfiltration_prompt = model.add_asset(
+        "LLMPrompt",
+        "ChatGPTExfiltrationPrompt"
+    )
+
+    chatgpt_staged_prompt = model.add_asset(
+        "LLMStagedCapability",
+        "ChatGPTStagedPrompt"
+    )
+
+    chatgpt_driveby_browser = model.add_asset(
+        "LLMDriveByBrowser",
+        "ChatGPTDriveByBrowser"
+    )
+
+    chatgpt_exfiltration_conversation = model.add_asset(
+        "LLMConversation",
+        "ChatGPTExfiltrationConversation"
+    )
+
+    chatgpt_browsing_plugin = model.add_asset(
+        "AITool",
+        "ChatGPTBrowsingPlugin"
+    )
+
+    chatgpt_rendered_exfiltration = model.add_asset(
+        "LLMRenderedResponse",
+        "ChatGPTRenderedExfiltration"
+    )
+
+    chatgpt_user_impact = model.add_asset(
+        "ExternalHarm",
+        "ChatGPTUserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0021 associations
+    # --------------------------------------------------------
+
+    # AML.T0065 -> AML.T0079
+    chatgpt_exfiltration_prompt.add_associated_assets(
+        "stagedCapability",
+        {chatgpt_staged_prompt}
+    )
+
+    # AML.T0079 -> AML.T0078
+    chatgpt_staged_prompt.add_associated_assets(
+        "browser",
+        {chatgpt_driveby_browser}
+    )
+
+    # AML.T0078 -> AML.T0051.001
+    chatgpt_driveby_browser.add_associated_assets(
+        "indirectConversation",
+        {chatgpt_exfiltration_conversation}
+    )
+
+    # AML.T0051.001 -> AML.T0053
+    chatgpt_exfiltration_conversation.add_associated_assets(
+        "tool",
+        {chatgpt_browsing_plugin}
+    )
+
+    # AML.T0053 -> AML.T0077
+    chatgpt_browsing_plugin.add_associated_assets(
+        "renderedResponse",
+        {chatgpt_rendered_exfiltration}
+    )
+
+    # AML.T0077 -> AML.T0048.003
+    chatgpt_rendered_exfiltration.add_associated_assets(
+        "externalHarm",
+        {chatgpt_user_impact}
     )
 
 
