@@ -1074,6 +1074,53 @@ CASE_STUDIES = {
             "HallucinatedPackageUserImpact:"
             "userHarm",
     },
+        
+    # ========================================================
+    # AML.CS0023
+    # ShadowRay: Hijacking Exposed Ray Clusters
+    # ========================================================
+
+    "AML.CS0023": {
+
+        "attacker_name":
+            "AML_CS0023_Attacker",
+
+        # AML.T0006
+        "entry_point":
+            "ShadowRayResearch:"
+            "activeScanning",
+
+        "path": [
+
+            # AML.T0049
+            "ExposedRayCluster:"
+            "exploitPublicFacingApplication",
+
+            # AML.T0035
+            "ShadowRayArtifactCollection:"
+            "aiArtifactCollection",
+
+            # AML.T0055 / ATT&CK T1552
+            "ExposedRayCluster:"
+            "unsecuredCredentials",
+
+            # AML.T0025
+            "ShadowRayExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # AML.T0010.003
+            "ShadowRayModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # AML.T0048.000
+            "ShadowRayFinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "ShadowRayFinancialImpact:"
+            "financialHarm",
+    },
 
 }
 
@@ -2619,6 +2666,81 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     hallucinated_package_execution.add_associated_assets(
         "externalHarm",
         {hallucinated_package_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0023
+    # ShadowRay
+    # ========================================================
+
+    shadowray_research = model.add_asset(
+        "AIResearchMaterial",
+        "ShadowRayResearch"
+    )
+
+    exposed_ray_cluster = model.add_asset(
+        "RayClusterOS",
+        "ExposedRayCluster"
+    )
+
+    shadowray_artifact_collection = model.add_asset(
+        "AIArtifactCollection",
+        "ShadowRayArtifactCollection"
+    )
+
+    shadowray_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "ShadowRayExfiltration"
+    )
+
+    shadowray_model_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "ShadowRayModelSupplyChain"
+    )
+
+    shadowray_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "ShadowRayFinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0023 associations
+    # --------------------------------------------------------
+
+    # AML.T0006 -> AML.T0049
+    shadowray_research.add_associated_assets(
+        "targetCluster",
+        {exposed_ray_cluster}
+    )
+
+    # AML.T0049 -> AML.T0035
+    exposed_ray_cluster.add_associated_assets(
+        "artifactCollection",
+        {shadowray_artifact_collection}
+    )
+
+    # AML.T0035 -> AML.T0055
+    shadowray_artifact_collection.add_associated_assets(
+        "credentialHost",
+        {exposed_ray_cluster}
+    )
+
+    # AML.T0055 -> AML.T0025
+    exposed_ray_cluster.add_associated_assets(
+        "exfiltration",
+        {shadowray_exfiltration}
+    )
+
+    # AML.T0025 -> AML.T0010.003
+    shadowray_exfiltration.add_associated_assets(
+        "modelSupplyChain",
+        {shadowray_model_supply_chain}
+    )
+
+    # AML.T0010.003 -> AML.T0048.000
+    shadowray_model_supply_chain.add_associated_assets(
+        "impact",
+        {shadowray_financial_impact}
     )
 
 

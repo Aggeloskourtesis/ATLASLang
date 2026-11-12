@@ -188,6 +188,10 @@ category AI {
             trainingData.datasets,
             targetOS.validAccounts
         
+        | activeScanning
+        user info: "AML.T0006 - Active Scanning"
+        -> targetCluster.exploitPublicFacingApplication
+        
         | searchApplicationRepositories
         user info: "AML.T0004 - Search Application Repositories"
         -> publicArtifacts.models
@@ -207,6 +211,14 @@ category AI {
             searchApplicationRepositories,
             searchOpenAIVulnerabilityAnalysis,
             searchVictimOwnedWebsites
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> activeScanning
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> activeScanning
 
         # m0039AIHoneypots [Disabled]
             user info: "AML.M0039 - AI Honeypots"
@@ -381,7 +393,8 @@ category AI {
         | aiArtifactCollection
         user info: "AML.T0035 - AI Artifact Collection"
         -> adversarialSample.craftAdversarialData,
-        exfiltration.exfiltrationViaCyberMeans
+        exfiltration.exfiltrationViaCyberMeans,
+        credentialHost.unsecuredCredentials
         
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
@@ -405,7 +418,8 @@ category AI {
         | exfiltrationViaCyberMeans
         user info: "AML.T0025 - Exfiltration via Cyber Means"
         -> adversarialSample.whiteBoxOptimization,
-        impact.aiIntellectualPropertyTheft
+        impact.aiIntellectualPropertyTheft,
+        modelSupplyChain.aiSupplyChainCompromiseModel
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -595,7 +609,8 @@ category AI {
         | aiSupplyChainCompromiseModel
         user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
         -> trigger.insertBackdoorTrigger,
-        integrityTarget.erodeAIModelIntegrity
+        integrityTarget.erodeAIModelIntegrity,
+        impact.financialHarm
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -1347,6 +1362,22 @@ category AI {
         +> publicArtifacts.acquirePublicAIArtifacts
     }
     
+    asset RayClusterOS extends OS {
+        
+        | exploitPublicFacingApplication
+        user info: "AML.T0049 - Exploit Public-Facing Application"
+        -> artifactCollection.aiArtifactCollection
+        
+        
+        | unsecuredCredentials
+        +> exfiltration.exfiltrationViaCyberMeans
+        
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> exploitPublicFacingApplication
+    }
+    
     asset CTAttackOS extends OS {
         
         | dataFromLocalSystem
@@ -1624,6 +1655,21 @@ associations {
     AISupplyChainSoftware [hallucinatedPackageSupplyChain] * <--DeliversMaliciousPackage--> * [userExecution] AIUserExecution
     
     AIUserExecution [maliciousPackageExecution] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
+    
+    
+    // AML.CS0023 associations
+    
+    AIResearchMaterial [shadowRayResearch] * <--IdentifiesExposedCluster--> * [targetCluster] RayClusterOS
+    
+    RayClusterOS [rayCluster] * <--AllowsArtifactCollection--> * [artifactCollection] AIArtifactCollection
+    
+    AIArtifactCollection [rayArtifactCollection] * <--FindsCredentialsOn--> * [credentialHost] RayClusterOS
+    
+    RayClusterOS [credentialHost] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
+    
+    AIExfiltration [rayExfiltration] * <--EnablesModelSupplyChainCompromise--> * [modelSupplyChain] AISupplyChainModel
+    
+    AISupplyChainModel [rayModelSupplyChain] * <--CausesFinancialHarm--> * [impact] ExternalHarm
     
     
     //Scenario 1 associations
