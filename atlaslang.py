@@ -1121,6 +1121,112 @@ CASE_STUDIES = {
             "ShadowRayFinancialImpact:"
             "financialHarm",
     },
+    
+    # ========================================================
+    # AML.CS0024
+    # Morris II Worm - Data Leakage Branch
+    # ========================================================
+
+    "AML.CS0024": {
+
+        "attacker_name":
+            "AML_CS0024_Attacker",
+
+        # S00 - AML.T0040
+        "entry_point":
+            "MorrisGenAIService:"
+            "aiModelInferenceAPIAccess",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "MorrisAdversarialPrompt:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0042
+            "MorrisGenAIService:"
+            "verifyAttack",
+
+            # S03 - AML.T0093
+            "MorrisEmailApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0070
+            "MorrisRAGDatabase:"
+            "ragPoisoning",
+
+            # S05 - AML.T0051.002
+            "MorrisTriggeredConversation:"
+            "triggeredPromptInjection",
+
+            # S06 - AML.T0054
+            "MorrisTriggeredConversation:"
+            "llmJailbreak",
+
+            # S08 - AML.T0085.000
+            "MorrisRAGDatabase:"
+            "ragDatabases",
+
+            # S09 - AML.T0025
+            "MorrisExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S11 - AML.T0048.003
+            "MorrisUserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "MorrisUserImpact:"
+            "userHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0024 - Prompt Propagation Branch
+    # ========================================================
+
+    "AML.CS0024-PROPAGATION": {
+
+        "attacker_name":
+            "AML_CS0024_Propagation_Attacker",
+
+        "entry_point":
+            "MorrisGenAIService:"
+            "aiModelInferenceAPIAccess",
+
+        "path": [
+
+            "MorrisAdversarialPrompt:"
+            "llmPromptCrafting",
+
+            "MorrisGenAIService:"
+            "verifyAttack",
+
+            "MorrisEmailApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            "MorrisRAGDatabase:"
+            "ragPoisoning",
+
+            "MorrisTriggeredConversation:"
+            "triggeredPromptInjection",
+
+            "MorrisTriggeredConversation:"
+            "llmJailbreak",
+
+            # S07 - AML.T0061
+            "MorrisAdversarialPrompt:"
+            "llmPromptSelfReplication",
+
+            # S10 - AML.T0143
+            "MorrisPromptPropagation:"
+            "llmPromptPropagation",
+        ],
+
+        "goal":
+            "MorrisPromptPropagation:"
+            "llmPromptPropagation",
+    },
 
 }
 
@@ -2741,6 +2847,106 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     shadowray_model_supply_chain.add_associated_assets(
         "impact",
         {shadowray_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0024
+    # Morris II Worm
+    # ========================================================
+
+    morris_model_service = model.add_asset(
+        "AIInferenceService",
+        "MorrisGenAIService"
+    )
+
+    morris_prompt = model.add_asset(
+        "LLMPrompt",
+        "MorrisAdversarialPrompt"
+    )
+
+    morris_email_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "MorrisEmailApplication"
+    )
+
+    morris_rag_database = model.add_asset(
+        "RAGKnowledgeBase",
+        "MorrisRAGDatabase"
+    )
+
+    morris_conversation = model.add_asset(
+        "LLMConversation",
+        "MorrisTriggeredConversation"
+    )
+
+    morris_prompt_propagation = model.add_asset(
+        "LLMPromptPropagation",
+        "MorrisPromptPropagation"
+    )
+
+    morris_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "MorrisExfiltration"
+    )
+
+    morris_user_impact = model.add_asset(
+        "ExternalHarm",
+        "MorrisUserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0024 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # Reverse association also provides S01 -> S02
+    morris_model_service.add_associated_assets(
+        "craftedPrompt",
+        {morris_prompt}
+    )
+
+    # S02 -> S03
+    morris_model_service.add_associated_assets(
+        "infiltrationTarget",
+        {morris_email_application}
+    )
+
+    # S03 -> S04
+    morris_email_application.add_associated_assets(
+        "ragStore",
+        {morris_rag_database}
+    )
+
+    # S04 -> S05
+    # Reverse role also provides S06 -> S08
+    morris_rag_database.add_associated_assets(
+        "triggeredConversation",
+        {morris_conversation}
+    )
+
+    # S06 -> S07
+    morris_conversation.add_associated_assets(
+        "selfReplicatingPrompt",
+        {morris_prompt}
+    )
+
+    # S07 -> S10
+    morris_prompt.add_associated_assets(
+        "propagation",
+        {morris_prompt_propagation}
+    )
+
+    # S08 -> S09
+    morris_rag_database.add_associated_assets(
+        "exfiltration",
+        {morris_exfiltration}
+    )
+
+    # S09 -> S11
+    # Reuses existing AIExfiltration <-> ExternalHarm association
+    morris_exfiltration.add_associated_assets(
+        "impact",
+        {morris_user_impact}
     )
 
 

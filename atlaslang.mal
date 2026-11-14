@@ -267,6 +267,56 @@ category AI {
             -> poisonTrainingData
     }
     
+    asset RAGKnowledgeBase {
+        
+        | ragPoisoning
+        user info: "AML.T0070 - RAG Poisoning"
+        -> triggeredConversation.triggeredPromptInjection
+        
+        
+        | ragDatabases
+        user info: "AML.T0085.000 - Data from AI Services: RAG Databases"
+        -> exfiltration.exfiltrationViaCyberMeans
+        
+        
+        // AML.T0070 defenses
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> ragPoisoning
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> ragPoisoning
+        
+        
+        // AML.T0085.000 defenses
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> ragDatabases
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging and Monitoring"
+        -> ragDatabases
+        
+        # m0026ManageAIAgentServiceAccess [Disabled]
+        user info: "AML.M0026 - Manage AI Agent Service Access"
+        -> ragDatabases
+        
+        # m0027ManageUserDelegatedAIAgentAccess [Disabled]
+        user info: "AML.M0027 - Manage User-Delegated AI Agent Access"
+        -> ragDatabases
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> ragDatabases
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> ragDatabases
+    }
+    
     asset OnlineLearningAIModel {
         
         | aiEnabledProductOrService
@@ -419,7 +469,8 @@ category AI {
         user info: "AML.T0025 - Exfiltration via Cyber Means"
         -> adversarialSample.whiteBoxOptimization,
         impact.aiIntellectualPropertyTheft,
-        modelSupplyChain.aiSupplyChainCompromiseModel
+        modelSupplyChain.aiSupplyChainCompromiseModel,
+        impact.userHarm
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -771,7 +822,8 @@ category AI {
         -> verifyAttack,
         blackBoxSample.blackBoxOptimization,
         discoverAIModelOntology,
-        discoverLLMHallucinations
+        discoverLLMHallucinations,
+        craftedPrompt.llmPromptCrafting
         
         | discoverAIModelOntology
         user info: "AML.T0013 - Discover AI Model Ontology"
@@ -783,7 +835,8 @@ category AI {
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
-        -> evadeAIModel
+        -> evadeAIModel,
+        infiltrationTarget.promptInfiltrationViaPublicFacingApplication
         
         
         # m0019ControlAccessInProduction [Disabled]
@@ -1063,7 +1116,8 @@ category AI {
         
         | promptInfiltrationViaPublicFacingApplication
         user info: "AML.T0093 - Prompt Infiltration via Public-Facing Application"
-        -> tool.aiAgentToolInvocation
+        -> tool.aiAgentToolInvocation,
+        ragStore.ragPoisoning
         
         
         # m0024AITelemetryLogging [Disabled]
@@ -1139,13 +1193,18 @@ category AI {
 
 
     asset LLMPrompt {
+        
+        | llmPromptSelfReplication
+        user info: "AML.T0061 - LLM Prompt Self-Replication"
+        -> propagation.llmPromptPropagation
 
         | llmPromptCrafting
             user info: "AML.T0065 - LLM Prompt Crafting"
             -> aiAgent.aiEnabledProductOrService,
             browserPreparation.developMalware,
             browserPreparation.obtainMalware,
-            stagedCapability.stageCapabilities
+            stagedCapability.stageCapabilities,
+            verificationTarget.verifyAttack
             
         | llmPromptObfuscation
             user info: "AML.T0068 - LLM Prompt Obfuscation"
@@ -1153,7 +1212,16 @@ category AI {
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
-        -> llmPromptObfuscation
+        -> llmPromptObfuscation,
+        llmPromptSelfReplication
+        
+        # m0021GenerativeAIGuidelines [Disabled]
+        user info: "AML.M0021 - Generative AI Guidelines"
+        -> llmPromptSelfReplication
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> llmPromptSelfReplication
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
@@ -1167,6 +1235,37 @@ category AI {
         +> llmConversation.llmPromptInjection
     }
     
+    asset LLMPromptPropagation {
+        
+        | llmPromptPropagation
+        user info: "AML.T0143 - LLM Prompt Propagation"
+        
+        
+        # m0026ManageAIAgentServiceAccess [Disabled]
+        user info: "AML.M0026 - Manage AI Agent Service Access"
+        -> llmPromptPropagation
+        
+        # m0027ManageUserDelegatedAIAgentAccess [Disabled]
+        user info: "AML.M0027 - Manage User-Delegated AI Agent Access"
+        -> llmPromptPropagation
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> llmPromptPropagation
+        
+        # m0030RestrictAIAgentToolInvocationOnUntrustedData [Disabled]
+        user info: "AML.M0030 - Restrict AI Agent Tool Invocation on Untrusted Data"
+        -> llmPromptPropagation
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> llmPromptPropagation
+        
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> llmPromptPropagation
+    }
+    
     asset LLMConversation {
         
         | llmPromptInjection
@@ -1178,36 +1277,56 @@ category AI {
         -> socialEngineering.spearphishingViaSocialEngineeringLLM,
         tool.aiAgentToolInvocation
         
+        | triggeredPromptInjection
+        user info: "AML.T0051.002 - LLM Prompt Injection: Triggered"
+        -> llmJailbreak
+        
+        | llmJailbreak
+        user info: "AML.T0054 - LLM Jailbreak"
+        -> selfReplicatingPrompt.llmPromptSelfReplication,
+        ragData.ragDatabases
+        
+        # m0008ValidateAIModel [Disabled]
+        user info: "AML.M0008 - Validate AI Model"
+        -> llmJailbreak
+        
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> llmPromptInjection
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        llmJailbreak
         
         # m0021GenerativeAIGuidelines [Disabled]
         user info: "AML.M0021 - Generative AI Guidelines"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        llmJailbreak
         
         # m0022GenerativeAIModelAlignment [Disabled]
         user info: "AML.M0022 - Generative AI Model Alignment"
-        -> llmPromptInjection
+        -> llmPromptInjection,
+        llmJailbreak
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
         -> llmPromptInjection,
-        indirectPromptInjection
+        indirectPromptInjection,
+        triggeredPromptInjection
         
         # m0033InputOutputValidationAgentComponents [Disabled]
         user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
         -> llmPromptInjection,
-        indirectPromptInjection
+        indirectPromptInjection,
+        triggeredPromptInjection
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> llmPromptInjection,
-        indirectPromptInjection
+        indirectPromptInjection,
+        triggeredPromptInjection,
+        llmJailbreak
     }
     
     asset LLMStagedCapability {
@@ -1670,6 +1789,23 @@ associations {
     AIExfiltration [rayExfiltration] * <--EnablesModelSupplyChainCompromise--> * [modelSupplyChain] AISupplyChainModel
     
     AISupplyChainModel [rayModelSupplyChain] * <--CausesFinancialHarm--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0024 associations
+    
+    AIInferenceService [verificationTarget] * <--UsesCraftedPrompt--> * [craftedPrompt] LLMPrompt
+    
+    AIInferenceService [morrisInferenceService] * <--TargetsEmailApplication--> * [infiltrationTarget] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [morrisEmailApplication] * <--PoisonsRAGDatabase--> * [ragStore] RAGKnowledgeBase
+    
+    RAGKnowledgeBase [ragData] * <--FeedsTriggeredConversation--> * [triggeredConversation] LLMConversation
+    
+    LLMConversation [morrisConversation] * <--ProducesSelfReplicatingPrompt--> * [selfReplicatingPrompt] LLMPrompt
+    
+    LLMPrompt [morrisReplicatingPrompt] * <--PropagatesPrompt--> * [propagation] LLMPromptPropagation
+    
+    RAGKnowledgeBase [morrisRAGDatabase] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
     
     
     //Scenario 1 associations
