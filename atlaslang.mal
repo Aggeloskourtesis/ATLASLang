@@ -231,11 +231,17 @@ category AI {
         | datasets
             user info: "AML.T0002.000 - Acquire Public AI Artifacts: Datasets"
             -> proxyModel.createProxyAIModel,
-               publicArtifacts.models
+               publicArtifacts.models,
+               domainInfrastructure.domains
         
         | poisonTrainingData
             user info: "AML.T0020 - Poison Training Data"
-            -> integrityTarget.erodeAIModelIntegrity
+            -> integrityTarget.erodeAIModelIntegrity,
+            publisher.publishPoisonedDatasets
+            
+        | erodeDatasetIntegrity
+            user info: "AML.T0059 - Erode Dataset Integrity"
+            -> modelIntegrityTarget.erodeAIModelIntegrity
             
         # m0001LimitModelArtifactRelease [Disabled]
             user info: "AML.M0001 - Limit Model Artifact Release"
@@ -248,7 +254,8 @@ category AI {
 
         # m0007SanitizeTrainingData [Disabled]
             user info: "AML.M0007 - Sanitize Training Data"
-            -> poisonTrainingData
+            -> poisonTrainingData,
+            erodeDatasetIntegrity
 
         # m0008ValidateAIModel [Disabled]
             user info: "AML.M0008 - Validate AI Model"
@@ -260,11 +267,19 @@ category AI {
 
         # m0025MaintainAIDatasetProvenance [Disabled]
             user info: "AML.M0025 - Maintain AI Dataset Provenance"
-            -> poisonTrainingData
+            -> poisonTrainingData,
+            erodeDatasetIntegrity
 
         # m0035AIRedTeam [Disabled]
             user info: "AML.M0035 - AI Red Team"
             -> poisonTrainingData
+    }
+    
+    asset AIDomainInfrastructure {
+        
+        | domains
+        user info: "AML.T0008.002 - Acquire Infrastructure: Domains"
+        -> poisonedData.poisonTrainingData
     }
     
     asset RAGKnowledgeBase {
@@ -995,6 +1010,23 @@ category AI {
         # m0015PredictiveAIAdversarialInputDetection [Disabled]
         user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
         -> erodeAIModelIntegrity
+    }
+    
+    asset PoisonedDatasetPublisher {
+        
+        | publishPoisonedDatasets
+        user info: "AML.T0115.000 - Publish Poisoned AI Artifacts: Datasets"
+        -> targetDataset.erodeDatasetIntegrity
+        
+        
+        # m0007SanitizeTrainingData [Disabled]
+        user info: "AML.M0007 - Sanitize Training Data"
+        -> publishPoisonedDatasets
+        
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> publishPoisonedDatasets
     }
     
     asset PoisonedAIModelPublisher {
@@ -1806,6 +1838,19 @@ associations {
     LLMPrompt [morrisReplicatingPrompt] * <--PropagatesPrompt--> * [propagation] LLMPromptPropagation
     
     RAGKnowledgeBase [morrisRAGDatabase] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
+    
+    
+    // AML.CS0025
+    
+    TrainingData [webScaleDataset] * <--ContainsExpiredDomains--> * [domainInfrastructure] AIDomainInfrastructure
+    
+    AIDomainInfrastructure [controlledDomains] * <--SupportsPoisoningOf--> * [poisonedData] TrainingData
+    
+    TrainingData [poisonedTrainingData] * <--PublishedThrough--> * [publisher] PoisonedDatasetPublisher
+    
+    PoisonedDatasetPublisher [datasetPublisher] * <--DegradesDataset--> * [targetDataset] TrainingData
+    
+    TrainingData [degradedDataset] * <--DegradesModelIntegrityOf--> * [modelIntegrityTarget] PoisonableAIModel
     
     
     //Scenario 1 associations

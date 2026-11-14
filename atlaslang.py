@@ -1227,6 +1227,49 @@ CASE_STUDIES = {
             "MorrisPromptPropagation:"
             "llmPromptPropagation",
     },
+    
+    # ========================================================
+    # AML.CS0025
+    # Web-Scale Data Poisoning: Split-View Attack
+    # ========================================================
+
+    "AML.CS0025": {
+
+        "attacker_name":
+            "AML_CS0025_Attacker",
+
+        # S00 - AML.T0002.000
+        "entry_point":
+            "WebScaleDataset:"
+            "datasets",
+
+        "path": [
+
+            # S01 - AML.T0008.002
+            "ExpiredDatasetDomains:"
+            "domains",
+
+            # S02 - AML.T0020
+            "PoisonedWebScaleData:"
+            "poisonTrainingData",
+
+            # S03 - AML.T0115.000
+            "SplitViewDatasetPublisher:"
+            "publishPoisonedDatasets",
+
+            # S04 - AML.T0059
+            "PoisonedWebScaleData:"
+            "erodeDatasetIntegrity",
+
+            # S05 - AML.T0031
+            "SplitViewAffectedModel:"
+            "erodeAIModelIntegrity",
+        ],
+
+        "goal":
+            "SplitViewAffectedModel:"
+            "erodeAIModelIntegrity",
+    },
 
 }
 
@@ -2947,6 +2990,70 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     morris_exfiltration.add_associated_assets(
         "impact",
         {morris_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0025
+    # Web-Scale Data Poisoning: Split-View Attack
+    # ========================================================
+
+    web_scale_dataset = model.add_asset(
+        "TrainingData",
+        "WebScaleDataset"
+    )
+
+    expired_dataset_domains = model.add_asset(
+        "AIDomainInfrastructure",
+        "ExpiredDatasetDomains"
+    )
+
+    poisoned_web_scale_data = model.add_asset(
+        "TrainingData",
+        "PoisonedWebScaleData"
+    )
+
+    split_view_publisher = model.add_asset(
+        "PoisonedDatasetPublisher",
+        "SplitViewDatasetPublisher"
+    )
+
+    split_view_affected_model = model.add_asset(
+        "PoisonableAIModel",
+        "SplitViewAffectedModel"
+    )
+    
+    # --------------------------------------------------------
+    # CS0025 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    web_scale_dataset.add_associated_assets(
+        "domainInfrastructure",
+        {expired_dataset_domains}
+    )
+
+    # S01 -> S02
+    expired_dataset_domains.add_associated_assets(
+        "poisonedData",
+        {poisoned_web_scale_data}
+    )
+
+    # S02 -> S03
+    poisoned_web_scale_data.add_associated_assets(
+        "publisher",
+        {split_view_publisher}
+    )
+
+    # S03 -> S04
+    split_view_publisher.add_associated_assets(
+        "targetDataset",
+        {poisoned_web_scale_data}
+    )
+
+    # S04 -> S05
+    poisoned_web_scale_data.add_associated_assets(
+        "modelIntegrityTarget",
+        {split_view_affected_model}
     )
 
 
