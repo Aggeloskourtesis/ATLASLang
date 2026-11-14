@@ -1270,6 +1270,81 @@ CASE_STUDIES = {
             "SplitViewAffectedModel:"
             "erodeAIModelIntegrity",
     },
+        
+    # ========================================================
+    # AML.CS0026
+    # Financial Transaction Hijacking with M365 Copilot
+    # ========================================================
+
+    "AML.CS0026": {
+
+        "attacker_name":
+            "AML_CS0026_Attacker",
+
+        # S00 - AML.T0064
+        "entry_point":
+            "M365CopilotResearch:"
+            "gatherRAGIndexedTargets",
+
+        "path": [
+
+            # S01 - AML.T0047
+            "M365Copilot:"
+            "aiEnabledProductOrService",
+
+            # S02 - AML.T0069.000
+            "M365Copilot:"
+            "specialCharacterSets",
+
+            # S03 - AML.T0069.001
+            "M365Copilot:"
+            "systemInstructionKeywords",
+
+            # S04 - AML.T0066
+            "M365MaliciousEmail:"
+            "retrievalContentCrafting",
+
+            # S05 - AML.T0065
+            "M365MaliciousEmail:"
+            "llmPromptCrafting",
+
+            # S06 - AML.T0093
+            "M365Copilot:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S07 - AML.T0068
+            "M365MaliciousEmail:"
+            "llmPromptObfuscation",
+
+            # S08 - AML.T0070
+            "M365CopilotRAG:"
+            "ragPoisoning",
+
+            # S09 - AML.T0071
+            "M365CopilotRAG:"
+            "falseRAGEntryInjection",
+
+            # S10 - AML.T0051.001
+            "M365CopilotConversation:"
+            "indirectPromptInjection",
+
+            # S11 - AML.T0053
+            "M365SearchEnterpriseTool:"
+            "aiAgentToolInvocation",
+
+            # S12 - AML.T0067.000
+            "M365ManipulatedResponse:"
+            "citations",
+
+            # S13 - AML.T0048.000
+            "M365FinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "M365FinancialImpact:"
+            "financialHarm",
+    },
 
 }
 
@@ -3054,6 +3129,105 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     poisoned_web_scale_data.add_associated_assets(
         "modelIntegrityTarget",
         {split_view_affected_model}
+    )
+    
+    # ========================================================
+    # AML.CS0026
+    # Financial Transaction Hijacking with M365 Copilot
+    # ========================================================
+
+    m365_copilot_research = model.add_asset(
+        "AIResearchMaterial",
+        "M365CopilotResearch"
+    )
+
+    m365_copilot = model.add_asset(
+        "PublicFacingLLMApplication",
+        "M365Copilot"
+    )
+
+    m365_malicious_email = model.add_asset(
+        "LLMPrompt",
+        "M365MaliciousEmail"
+    )
+
+    m365_copilot_rag = model.add_asset(
+        "RAGKnowledgeBase",
+        "M365CopilotRAG"
+    )
+
+    m365_conversation = model.add_asset(
+        "LLMConversation",
+        "M365CopilotConversation"
+    )
+
+    m365_search_tool = model.add_asset(
+        "AITool",
+        "M365SearchEnterpriseTool"
+    )
+
+    m365_response = model.add_asset(
+        "LLMRenderedResponse",
+        "M365ManipulatedResponse"
+    )
+
+    m365_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "M365FinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0026 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # Reuses existing AIResearchMaterial <-> PublicFacingLLMApplication
+    m365_copilot_research.add_associated_assets(
+        "publicLLMApp",
+        {m365_copilot}
+    )
+
+    # Supports:
+    # S03 -> S04
+    # S05 -> S06
+    # S06 -> S07
+    m365_malicious_email.add_associated_assets(
+        "targetApplication",
+        {m365_copilot}
+    )
+
+    # S07 -> S08
+    m365_malicious_email.add_associated_assets(
+        "ragStore",
+        {m365_copilot_rag}
+    )
+
+    # S09 -> S10
+    # Reuses existing RAGKnowledgeBase <-> LLMConversation
+    m365_copilot_rag.add_associated_assets(
+        "triggeredConversation",
+        {m365_conversation}
+    )
+
+    # S10 -> S11
+    # Reuses existing LLMConversation <-> AITool
+    m365_conversation.add_associated_assets(
+        "tool",
+        {m365_search_tool}
+    )
+
+    # S11 -> S12
+    # Reuses existing AITool <-> LLMRenderedResponse
+    m365_search_tool.add_associated_assets(
+        "renderedResponse",
+        {m365_response}
+    )
+
+    # S12 -> S13
+    # Reuses existing LLMRenderedResponse <-> ExternalHarm
+    m365_response.add_associated_assets(
+        "externalHarm",
+        {m365_financial_impact}
     )
 
 

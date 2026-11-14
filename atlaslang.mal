@@ -204,13 +204,18 @@ category AI {
         | searchVictimOwnedWebsites
         user info: "AML.T0003 - Search Victim-Owned Websites"
         -> targetProduct.aiEnabledProductOrService
+        
+        | gatherRAGIndexedTargets
+        user info: "AML.T0064 - Gather RAG-Indexed Targets"
+        -> publicLLMApp.aiEnabledProductOrService
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
             user info: "AML.M0000 - Limit Public Release of Information"
             -> searchOpenTechnicalDatabases,
             searchApplicationRepositories,
             searchOpenAIVulnerabilityAnalysis,
-            searchVictimOwnedWebsites
+            searchVictimOwnedWebsites,
+            gatherRAGIndexedTargets
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
@@ -286,7 +291,12 @@ category AI {
         
         | ragPoisoning
         user info: "AML.T0070 - RAG Poisoning"
-        -> triggeredConversation.triggeredPromptInjection
+        -> triggeredConversation.triggeredPromptInjection,
+        falseRAGEntryInjection
+        
+        | falseRAGEntryInjection
+        user info: "AML.T0071 - False RAG Entry Injection"
+        -> triggeredConversation.indirectPromptInjection
         
         
         | ragDatabases
@@ -298,7 +308,8 @@ category AI {
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
-        -> ragPoisoning
+        -> ragPoisoning,
+        falseRAGEntryInjection
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
@@ -1136,20 +1147,31 @@ category AI {
         
         | aiEnabledProductOrService
         user info: "AML.T0047 - AI-Enabled Product or Service"
-        -> directPromptInjection
-        
-        | directPromptInjection
-        user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
-        -> verifyAttack
+        -> directPromptInjection,
+        specialCharacterSets
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
         -> promptInfiltrationViaPublicFacingApplication
         
+        | directPromptInjection
+        user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
+        -> verifyAttack
+        
+        | specialCharacterSets
+        user info: "AML.T0069.000 - Discover LLM System Information: Special Character Sets"
+        -> systemInstructionKeywords
+        
+        | systemInstructionKeywords
+        user info: "AML.T0069.001 - Discover LLM System Information: System Instruction Keywords"
+        -> craftedPayload.retrievalContentCrafting
+        
+        
         | promptInfiltrationViaPublicFacingApplication
         user info: "AML.T0093 - Prompt Infiltration via Public-Facing Application"
         -> tool.aiAgentToolInvocation,
-        ragStore.ragPoisoning
+        ragStore.ragPoisoning,
+        craftedPayload.llmPromptObfuscation
         
         
         # m0024AITelemetryLogging [Disabled]
@@ -1175,11 +1197,19 @@ category AI {
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
-        -> verifyAttack
+        -> verifyAttack,
+        specialCharacterSets,
+        systemInstructionKeywords
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
-        -> verifyAttack
+        -> verifyAttack,
+        specialCharacterSets
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> specialCharacterSets,
+        systemInstructionKeywords
         
         # m0039AIHoneypots [Disabled]
         user info: "AML.M0039 - AI Honeypots"
@@ -1236,15 +1266,22 @@ category AI {
             browserPreparation.developMalware,
             browserPreparation.obtainMalware,
             stagedCapability.stageCapabilities,
-            verificationTarget.verifyAttack
+            verificationTarget.verifyAttack,
+            targetApplication.promptInfiltrationViaPublicFacingApplication
+            
+        | retrievalContentCrafting
+            user info: "AML.T0066 - Retrieval Content Crafting"
+            -> llmPromptCrafting
             
         | llmPromptObfuscation
             user info: "AML.T0068 - LLM Prompt Obfuscation"
-            -> indirectConversation.indirectPromptInjection
+            -> indirectConversation.indirectPromptInjection,
+            ragStore.ragPoisoning
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
-        -> llmPromptObfuscation,
+        -> retrievalContentCrafting,
+        llmPromptObfuscation,
         llmPromptSelfReplication
         
         # m0021GenerativeAIGuidelines [Disabled]
@@ -1389,6 +1426,10 @@ category AI {
         | llmResponseRendering
         user info: "AML.T0077 - LLM Response Rendering"
         -> externalHarm.userHarm
+        
+        | citations
+        user info: "AML.T0067.000 - Citations"
+        -> externalHarm.financialHarm
     }
     
     asset LLMDriveByBrowser extends Browser {
@@ -1410,7 +1451,8 @@ category AI {
             -> vectorStore.vulnerableFilterEvaluation,
             hostOS.unsecuredCredentials,
             serviceImpact.denialOfAIService,
-            renderedResponse.llmResponseRendering
+            renderedResponse.llmResponseRendering,
+            renderedResponse.citations
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1851,6 +1893,13 @@ associations {
     PoisonedDatasetPublisher [datasetPublisher] * <--DegradesDataset--> * [targetDataset] TrainingData
     
     TrainingData [degradedDataset] * <--DegradesModelIntegrityOf--> * [modelIntegrityTarget] PoisonableAIModel
+    
+    
+    // AML.CS0026 new associations
+    
+    LLMPrompt [craftedPayload] * <--TargetsApplication--> * [targetApplication] PublicFacingLLMApplication
+    
+    LLMPrompt [ragPayload] * <--PoisonsRAGStore--> * [ragStore] RAGKnowledgeBase
     
     
     //Scenario 1 associations
