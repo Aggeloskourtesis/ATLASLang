@@ -1345,6 +1345,89 @@ CASE_STUDIES = {
             "M365FinancialImpact:"
             "financialHarm",
     },
+    
+    # ========================================================
+    # AML.CS0027
+    # Organization Confusion on Hugging Face
+    # ========================================================
+
+    "AML.CS0027": {
+
+        "attacker_name":
+            "AML_CS0027_Attacker",
+
+        # S00 - AML.T0021
+        "entry_point":
+            "FakeHuggingFaceOrganization:"
+            "establishAccounts",
+
+        "path": [
+
+            # S01 - AML.T0073
+            "FakeHuggingFaceOrganization:"
+            "impersonation",
+
+            # S02 - AML.T0044
+            "HuggingFacePrivateModel:"
+            "fullAIModelAccess",
+
+            # S03 - AML.T0048.004
+            "HuggingFaceModelIPTheft:"
+            "aiIntellectualPropertyTheft",
+
+            # S04 - AML.T0018.002
+            "HuggingFacePrivateModel:"
+            "embedMalware",
+
+            # S05 - AML.T0115.001
+            "HFOrgConfusionPublisher:"
+            "publishPoisonedModels",
+
+            # S06 - AML.T0010.003
+            "HuggingFaceModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # S07 - AML.T0011.000
+            "HuggingFacePrivateModel:"
+            "unsafeAIArtifacts",
+
+            # S08 - AML.T0074
+            "VictimAIEnvironment:"
+            "masquerading",
+
+            # S09 - AML.T0072
+            "SliverC2Channel:"
+            "cyberCommunicationChannel",
+
+            # S10 - AML.T0055
+            "VictimAIEnvironment:"
+            "unsecuredCredentials",
+
+            # S11 - AML.T0025
+            "SliverCredentialExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S12 - AML.T0007
+            "VictimAIArtifactDiscovery:"
+            "discoverAIArtifacts",
+
+            # S13 - AML.T0016.000
+            "EasyEditTool:"
+            "obtainAdversarialAIAttackImplementation",
+
+            # S14 - AML.T0018.000
+            "VictimLlamaModel:"
+            "poisonAIModel",
+
+            # S15 - AML.T0048
+            "ManipulatedModelExternalHarm:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "ManipulatedModelExternalHarm:"
+            "externalHarms",
+    },
 
 }
 
@@ -3228,6 +3311,158 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     m365_response.add_associated_assets(
         "externalHarm",
         {m365_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0027
+    # Organization Confusion on Hugging Face
+    # ========================================================
+
+    fake_hf_org = model.add_asset(
+        "FraudulentAccount",
+        "FakeHuggingFaceOrganization"
+    )
+
+    hf_private_model = model.add_asset(
+        "PoisonableAIModel",
+        "HuggingFacePrivateModel"
+    )
+
+    hf_ip_theft = model.add_asset(
+        "ExternalHarm",
+        "HuggingFaceModelIPTheft"
+    )
+
+    hf_poisoned_publisher = model.add_asset(
+        "PoisonedAIModelPublisher",
+        "HFOrgConfusionPublisher"
+    )
+
+    hf_model_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "HuggingFaceModelSupplyChain"
+    )
+
+    victim_ai_environment = model.add_asset(
+        "HuggingFaceVictimOS",
+        "VictimAIEnvironment"
+    )
+
+    sliver_c2 = model.add_asset(
+        "AICyberCommunication",
+        "SliverC2Channel"
+    )
+
+    sliver_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "SliverCredentialExfiltration"
+    )
+
+    victim_artifact_discovery = model.add_asset(
+        "AIArtifactDiscovery",
+        "VictimAIArtifactDiscovery"
+    )
+
+    easyedit_tool = model.add_asset(
+        "AdversarialAttackImplementation",
+        "EasyEditTool"
+    )
+
+    victim_llama_model = model.add_asset(
+        "PoisonableAIModel",
+        "VictimLlamaModel"
+    )
+
+    manipulated_model_harm = model.add_asset(
+        "ExternalHarm",
+        "ManipulatedModelExternalHarm"
+    )
+    
+    # --------------------------------------------------------
+    # CS0027 associations
+    # --------------------------------------------------------
+
+    # S01 -> S02
+    fake_hf_org.add_associated_assets(
+        "repositoryModel",
+        {hf_private_model}
+    )
+
+    # S02 -> S03
+    # Reuses PoisonableAIModel <-> ExternalHarm
+    hf_private_model.add_associated_assets(
+        "impact",
+        {hf_ip_theft}
+    )
+
+    # S03 -> S04
+    hf_ip_theft.add_associated_assets(
+        "malwareTarget",
+        {hf_private_model}
+    )
+
+    # S04 -> S05
+    # Reuses PoisonableAIModel <-> PoisonedAIModelPublisher
+    hf_private_model.add_associated_assets(
+        "publisher",
+        {hf_poisoned_publisher}
+    )
+
+    # S05 -> S06
+    hf_poisoned_publisher.add_associated_assets(
+        "modelSupplyChain",
+        {hf_model_supply_chain}
+    )
+
+    # S06 -> S07
+    # Reuses AISupplyChainModel <-> PoisonableAIModel
+    hf_model_supply_chain.add_associated_assets(
+        "integrityTarget",
+        {hf_private_model}
+    )
+
+    # S07 -> S08
+    hf_private_model.add_associated_assets(
+        "executionHost",
+        {victim_ai_environment}
+    )
+
+    # S08 -> S09
+    # reverse association also supports S09 -> S10
+    victim_ai_environment.add_associated_assets(
+        "c2",
+        {sliver_c2}
+    )
+
+    # S10 -> S11
+    victim_ai_environment.add_associated_assets(
+        "exfiltration",
+        {sliver_exfiltration}
+    )
+
+    # S11 -> S12
+    sliver_exfiltration.add_associated_assets(
+        "artifactDiscovery",
+        {victim_artifact_discovery}
+    )
+
+    # S12 -> S13
+    victim_artifact_discovery.add_associated_assets(
+        "attackImplementation",
+        {easyedit_tool}
+    )
+
+    # S13 -> S14
+    easyedit_tool.add_associated_assets(
+        "poisonTarget",
+        {victim_llama_model}
+    )
+
+    # S14 -> S15
+    # Reuses PoisonableAIModel <-> ExternalHarm
+    victim_llama_model.add_associated_assets(
+        "impact",
+        {manipulated_model_harm}
     )
 
 

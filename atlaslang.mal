@@ -37,7 +37,12 @@ category AI {
         | establishAccounts
         user info: "AML.T0021 - Establish Accounts"
         -> targetSystem.aiEnabledProductOrService,
-        repositoryOS.dataFromInformationRepositories
+        repositoryOS.dataFromInformationRepositories,
+        impersonation
+        
+        | impersonation
+        user info: "AML.T0073 - Impersonation"
+        -> repositoryModel.fullAIModelAccess
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -46,6 +51,10 @@ category AI {
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> establishAccounts
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> impersonation
     }
     
     
@@ -139,6 +148,13 @@ category AI {
         maliciousPackage
     }
     
+    asset AICyberCommunication {
+        
+        | cyberCommunicationChannel
+        user info: "AML.T0072 - Cyber Communication Channel"
+        -> credentialHost.unsecuredCredentials
+    }
+    
     
     asset ExternalHarm {
         
@@ -157,7 +173,8 @@ category AI {
         | aiIntellectualPropertyTheft
             user info: "AML.T0048.004 - AI Intellectual Property Theft"
             -> adversarialSample.blackBoxTransfer,
-            externalHarms
+            externalHarms,
+            malwareTarget.embedMalware
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -464,6 +481,22 @@ category AI {
            trainProxyViaReplication
     }
     
+    asset AIArtifactDiscovery {
+        
+        | discoverAIArtifacts
+        user info: "AML.T0007 - Discover AI Artifacts"
+        -> attackImplementation.obtainAdversarialAIAttackImplementation
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> discoverAIArtifacts
+        
+        # m0012EncryptSensitiveInformation [Disabled]
+        user info: "AML.M0012 - Encrypt Sensitive Information"
+        -> discoverAIArtifacts
+    }
+    
     asset AIArtifactCollection {
         
         | aiArtifactCollection
@@ -496,7 +529,8 @@ category AI {
         -> adversarialSample.whiteBoxOptimization,
         impact.aiIntellectualPropertyTheft,
         modelSupplyChain.aiSupplyChainCompromiseModel,
-        impact.userHarm
+        impact.userHarm,
+        artifactDiscovery.discoverAIArtifacts
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -564,7 +598,8 @@ category AI {
             user info: "AML.T0016.000 - Obtain Capabilities: Adversarial AI Attack Implementations"
             -> adversarialSample.craftAdversarialData,
             softwareTool.softwareTools,
-            vulnerabilityPreparation.obtainVulnerabilities
+            vulnerabilityPreparation.obtainVulnerabilities,
+            poisonTarget.poisonAIModel
     }
     
     asset PhysicalCountermeasure {
@@ -687,6 +722,7 @@ category AI {
         user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
         -> trigger.insertBackdoorTrigger,
         integrityTarget.erodeAIModelIntegrity,
+        integrityTarget.unsafeAIArtifacts,
         impact.financialHarm
         
         
@@ -954,23 +990,38 @@ category AI {
     
     asset PoisonableAIModel extends PredictiveAIModel {
         
+        | unsafeAIArtifacts
+        user info: "AML.T0011.000 - User Execution: Unsafe AI Artifacts"
+        -> executionHost.masquerading
+        
         | poisonAIModel
         user info: "AML.T0018.000 - Manipulate AI Model: Poison AI Model"
-        -> verifyAttack
+        -> verifyAttack,
+        impact.externalHarms
         
-        | verifyAttack
-        user info: "AML.T0042 - Verify Attack"
+        | embedMalware
+        user info: "AML.T0018.002 - Manipulate AI Model: Embed Malware"
         -> publisher.publishPoisonedModels
         
         | erodeAIModelIntegrity
         user info: "AML.T0031 - Erode AI Model Integrity"
         -> impact.reputationalHarm
         
+        | verifyAttack
+        user info: "AML.T0042 - Verify Attack"
+        -> publisher.publishPoisonedModels
+        
+        | fullAIModelAccess
+        user info: "AML.T0044 - Full AI Model Access"
+        -> impact.aiIntellectualPropertyTheft
+        
+        
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
         -> poisonAIModel,
-        verifyAttack
+        verifyAttack,
+        fullAIModelAccess
         
         # m0007SanitizeTrainingData [Disabled]
         user info: "AML.M0007 - Sanitize Training Data"
@@ -980,9 +1031,35 @@ category AI {
         user info: "AML.M0008 - Validate AI Model"
         -> poisonAIModel
         
+        # m0011RestrictLibraryLoading [Disabled]
+        user info: "AML.M0011 - Restrict Library Loading"
+        -> unsafeAIArtifacts
+        
         # m0013CodeSigning [Disabled]
         user info: "AML.M0013 - Code Signing"
-        -> poisonAIModel
+        -> poisonAIModel,
+        embedMalware,
+        unsafeAIArtifacts
+        
+        # m0014VerifyAIArtifacts [Disabled]
+        user info: "AML.M0014 - Verify AI Artifacts"
+        -> unsafeAIArtifacts
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> unsafeAIArtifacts
+        
+        # m0017AIModelDistributionMethods [Disabled]
+        user info: "AML.M0017 - AI Model Distribution Methods"
+        -> fullAIModelAccess
+        
+        # m0018UserTraining [Disabled]
+        user info: "AML.M0018 - User Training"
+        -> unsafeAIArtifacts
+        
+        # m0023AIBillOfMaterials [Disabled]
+        user info: "AML.M0023 - AI Bill of Materials"
+        -> unsafeAIArtifacts
         
         # m0025MaintainAIDatasetProvenance [Disabled]
         user info: "AML.M0025 - Maintain AI Dataset Provenance"
@@ -1571,6 +1648,24 @@ category AI {
         -> exploitPublicFacingApplication
     }
     
+    asset HuggingFaceVictimOS extends OS {
+        
+        | masquerading
+        +> c2.cyberCommunicationChannel
+        
+        | unsecuredCredentials
+        +> exfiltration.exfiltrationViaCyberMeans
+        
+        
+        # m0011RestrictLibraryLoading [Disabled]
+        user info: "AML.M0011 - Restrict Library Loading"
+        -> masquerading
+        
+        # m0025MaintainAIDatasetProvenance [Disabled]
+        user info: "AML.M0025 - Maintain AI Dataset Provenance"
+        -> masquerading
+    }
+    
     asset CTAttackOS extends OS {
         
         | dataFromLocalSystem
@@ -1900,6 +1995,25 @@ associations {
     LLMPrompt [craftedPayload] * <--TargetsApplication--> * [targetApplication] PublicFacingLLMApplication
     
     LLMPrompt [ragPayload] * <--PoisonsRAGStore--> * [ragStore] RAGKnowledgeBase
+    
+    
+    // AML.CS0027
+
+    FraudulentAccount [fakeHFOrganization] * <--GainsAccessToRepositoryModel--> * [repositoryModel] PoisonableAIModel
+    
+    ExternalHarm [modelTheftImpact] * <--EnablesMalwareEmbeddingIn--> * [malwareTarget] PoisonableAIModel
+    
+    PoisonableAIModel [unsafeModel] * <--LoadsOnVictimHost--> * [executionHost] HuggingFaceVictimOS
+    
+    HuggingFaceVictimOS [credentialHost] * <--CommunicatesThrough--> * [c2] AICyberCommunication
+    
+    HuggingFaceVictimOS [hfCredentialHost] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
+    
+    AIExfiltration [hfExfiltration] * <--EnablesArtifactDiscovery--> * [artifactDiscovery] AIArtifactDiscovery
+    
+    AIArtifactDiscovery [artifactDiscovery] * <--UsesAttackImplementation--> * [attackImplementation] AdversarialAttackImplementation
+    
+    AdversarialAttackImplementation [easyEditImplementation] * <--PoisonsModel--> * [poisonTarget] PoisonableAIModel
     
     
     //Scenario 1 associations
