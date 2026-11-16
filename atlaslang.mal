@@ -15,6 +15,13 @@ category AI {
         -> hardware.consumerHardware
     }
     
+    asset AIInfrastructure {
+        
+        | acquireInfrastructure
+        user info: "AML.T0008 - Acquire Infrastructure"
+        -> capability.developCapabilities
+    }
+    
     
     asset AIConsumerHardware {
         
@@ -600,7 +607,8 @@ category AI {
         | developCapabilities
         user info: "AML.T0017 - Develop Capabilities"
         -> compromisedSoftware.aiSupplyChainCompromiseSoftware,
-        obfuscatedPrompt.llmPromptObfuscation
+        obfuscatedPrompt.llmPromptObfuscation,
+        publicLLMTarget.promptInfiltrationViaPublicFacingApplication
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -1277,7 +1285,8 @@ category AI {
         user info: "AML.T0093 - Prompt Infiltration via Public-Facing Application"
         -> tool.aiAgentToolInvocation,
         ragStore.ragPoisoning,
-        craftedPayload.llmPromptObfuscation
+        craftedPayload.llmPromptObfuscation,
+        indirectConversation.indirectPromptInjection
         
         
         # m0024AITelemetryLogging [Disabled]
@@ -1373,7 +1382,8 @@ category AI {
             browserPreparation.obtainMalware,
             stagedCapability.stageCapabilities,
             verificationTarget.verifyAttack,
-            targetApplication.promptInfiltrationViaPublicFacingApplication
+            targetApplication.promptInfiltrationViaPublicFacingApplication,
+            infrastructure.acquireInfrastructure
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1450,7 +1460,8 @@ category AI {
         | indirectPromptInjection
         user info: "AML.T0051.001 - LLM Prompt Injection: Indirect"
         -> socialEngineering.spearphishingViaSocialEngineeringLLM,
-        tool.aiAgentToolInvocation
+        tool.aiAgentToolInvocation,
+        renderedResponse.llmResponseRendering
         
         | triggeredPromptInjection
         user info: "AML.T0051.002 - LLM Prompt Injection: Triggered"
@@ -2056,6 +2067,19 @@ associations {
     PoisonableAIModel [tamperedRegistryModel] * <--PushedIntoRegistry--> * [registrySupplyChain] AIContainerRegistry
     
     AIContainerRegistry [compromisedRegistry] * <--DeploysManipulatedModel--> * [deploymentTarget] PredictiveAIModel
+    
+    
+    // AML.CS0029
+    
+    LLMPrompt [bardPrompt] * <--UsesInfrastructure--> * [infrastructure] AIInfrastructure
+    
+    AIInfrastructure [bardInfrastructure] * <--SupportsCapabilityDevelopment--> * [capability] AdversarialCapability
+    
+    AdversarialCapability [bardCapability] * <--TargetsPublicLLMApplication--> * [publicLLMTarget] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [bardApplication] * <--TriggersIndirectPrompt--> * [indirectConversation] LLMConversation
+    
+    LLMConversation [bardConversation] * <--ProducesRenderedResponse--> * [renderedResponse] LLMRenderedResponse
     
     
     //Scenario 1 associations

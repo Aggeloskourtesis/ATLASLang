@@ -1483,6 +1483,53 @@ CASE_STUDIES = {
             "DeployedTamperedAIModel:"
             "evadeAIModel",
     },
+    
+    # ========================================================
+    # AML.CS0029
+    # Google Bard Conversation Exfiltration
+    # ========================================================
+
+    "AML.CS0029": {
+
+        "attacker_name":
+            "AML_CS0029_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "BardExfiltrationPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0008
+            "BardGoogleAppsInfrastructure:"
+            "acquireInfrastructure",
+
+            # S02 - AML.T0017
+            "BardExfiltrationCapability:"
+            "developCapabilities",
+
+            # S03 - AML.T0093
+            "BardTargetApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0051.001
+            "BardConversation:"
+            "indirectPromptInjection",
+
+            # S05 - AML.T0077
+            "BardRenderedExfiltration:"
+            "llmResponseRendering",
+
+            # S06 - AML.T0048.003
+            "BardUserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "BardUserImpact:"
+            "userHarm",
+    },
 
 }
 
@@ -3601,6 +3648,87 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     exposed_container_registry.add_associated_assets(
         "deploymentTarget",
         {deployed_tampered_model}
+    )
+    
+    # ========================================================
+    # AML.CS0029
+    # Google Bard Conversation Exfiltration
+    # ========================================================
+
+    bard_exfiltration_prompt = model.add_asset(
+        "LLMPrompt",
+        "BardExfiltrationPrompt"
+    )
+
+    bard_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "BardGoogleAppsInfrastructure"
+    )
+
+    bard_capability = model.add_asset(
+        "AdversarialCapability",
+        "BardExfiltrationCapability"
+    )
+
+    bard_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "BardTargetApplication"
+    )
+
+    bard_conversation = model.add_asset(
+        "LLMConversation",
+        "BardConversation"
+    )
+
+    bard_rendered_response = model.add_asset(
+        "LLMRenderedResponse",
+        "BardRenderedExfiltration"
+    )
+
+    bard_user_impact = model.add_asset(
+        "ExternalHarm",
+        "BardUserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0029 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    bard_exfiltration_prompt.add_associated_assets(
+        "infrastructure",
+        {bard_infrastructure}
+    )
+
+    # S01 -> S02
+    bard_infrastructure.add_associated_assets(
+        "capability",
+        {bard_capability}
+    )
+
+    # S02 -> S03
+    bard_capability.add_associated_assets(
+        "publicLLMTarget",
+        {bard_application}
+    )
+
+    # S03 -> S04
+    bard_application.add_associated_assets(
+        "indirectConversation",
+        {bard_conversation}
+    )
+
+    # S04 -> S05
+    bard_conversation.add_associated_assets(
+        "renderedResponse",
+        {bard_rendered_response}
+    )
+
+    # S05 -> S06
+    # Reuses existing LLMRenderedResponse <-> ExternalHarm
+    bard_rendered_response.add_associated_assets(
+        "externalHarm",
+        {bard_user_impact}
     )
 
 
