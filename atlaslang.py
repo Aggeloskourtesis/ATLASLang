@@ -1428,6 +1428,61 @@ CASE_STUDIES = {
             "ManipulatedModelExternalHarm:"
             "externalHarms",
     },
+    
+    # ========================================================
+    # AML.CS0028
+    # AI Model Tampering via Supply Chain Attack
+    # ========================================================
+
+    "AML.CS0028": {
+
+        "attacker_name":
+            "AML_CS0028_Attacker",
+
+        # S00 - AML.T0004
+        "entry_point":
+            "ContainerRegistryResearch:"
+            "searchApplicationRepositories",
+
+        "path": [
+
+            # S01 - AML.T0049
+            "ExposedAIContainerRegistry:"
+            "exploitPublicFacingApplication",
+
+            # S02 - AML.T0007
+            "ContainerRegistryArtifactDiscovery:"
+            "discoverAIArtifacts",
+
+            # S03 - AML.T0044
+            "ExposedRegistryAIModel:"
+            "fullAIModelAccess",
+
+            # S04 - AML.T0048.004
+            "ContainerRegistryModelIPTheft:"
+            "aiIntellectualPropertyTheft",
+
+            # S05 - AML.T0018.000
+            "ExposedRegistryAIModel:"
+            "poisonAIModel",
+
+            # S06 - AML.T0018.001
+            "ExposedRegistryAIModel:"
+            "modifyAIModelArchitecture",
+
+            # S07 - AML.T0010.004
+            "ExposedAIContainerRegistry:"
+            "containerRegistry",
+
+            # S08 - AML.T0015
+            "DeployedTamperedAIModel:"
+            "evadeAIModel",
+        ],
+
+        "goal":
+            "DeployedTamperedAIModel:"
+            "evadeAIModel",
+    },
 
 }
 
@@ -3463,6 +3518,89 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     victim_llama_model.add_associated_assets(
         "impact",
         {manipulated_model_harm}
+    )
+    
+    # ========================================================
+    # AML.CS0028
+    # AI Model Tampering via Supply Chain Attack
+    # ========================================================
+
+    container_registry_research = model.add_asset(
+        "AIResearchMaterial",
+        "ContainerRegistryResearch"
+    )
+
+    exposed_container_registry = model.add_asset(
+        "AIContainerRegistry",
+        "ExposedAIContainerRegistry"
+    )
+
+    registry_artifact_discovery = model.add_asset(
+        "AIArtifactDiscovery",
+        "ContainerRegistryArtifactDiscovery"
+    )
+
+    exposed_registry_model = model.add_asset(
+        "PoisonableAIModel",
+        "ExposedRegistryAIModel"
+    )
+
+    registry_model_ip_theft = model.add_asset(
+        "ExternalHarm",
+        "ContainerRegistryModelIPTheft"
+    )
+
+    deployed_tampered_model = model.add_asset(
+        "PredictiveAIModel",
+        "DeployedTamperedAIModel"
+    )
+    
+    # --------------------------------------------------------
+    # CS0028 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    container_registry_research.add_associated_assets(
+        "registryTarget",
+        {exposed_container_registry}
+    )
+
+    # S01 -> S02
+    exposed_container_registry.add_associated_assets(
+        "artifactDiscovery",
+        {registry_artifact_discovery}
+    )
+
+    # S02 -> S03
+    registry_artifact_discovery.add_associated_assets(
+        "discoveredModel",
+        {exposed_registry_model}
+    )
+
+    # S03 -> S04
+    # Reuses PoisonableAIModel <-> ExternalHarm
+    exposed_registry_model.add_associated_assets(
+        "impact",
+        {registry_model_ip_theft}
+    )
+
+    # S04 -> S05
+    # Reuses ExternalHarm <-> PoisonableAIModel from CS0027
+    registry_model_ip_theft.add_associated_assets(
+        "malwareTarget",
+        {exposed_registry_model}
+    )
+
+    # S06 -> S07
+    exposed_registry_model.add_associated_assets(
+        "registrySupplyChain",
+        {exposed_container_registry}
+    )
+
+    # S07 -> S08
+    exposed_container_registry.add_associated_assets(
+        "deploymentTarget",
+        {deployed_tampered_model}
     )
 
 

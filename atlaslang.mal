@@ -174,7 +174,8 @@ category AI {
             user info: "AML.T0048.004 - AI Intellectual Property Theft"
             -> adversarialSample.blackBoxTransfer,
             externalHarms,
-            malwareTarget.embedMalware
+            malwareTarget.embedMalware,
+            malwareTarget.poisonAIModel
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -211,7 +212,8 @@ category AI {
         
         | searchApplicationRepositories
         user info: "AML.T0004 - Search Application Repositories"
-        -> publicArtifacts.models
+        -> publicArtifacts.models,
+        registryTarget.exploitPublicFacingApplication
         
         | searchOpenAIVulnerabilityAnalysis
         user info: "AML.T0001 - Search Open AI Vulnerability Analysis"
@@ -302,6 +304,23 @@ category AI {
         | domains
         user info: "AML.T0008.002 - Acquire Infrastructure: Domains"
         -> poisonedData.poisonTrainingData
+    }
+    
+    asset AIContainerRegistry {
+        
+        | exploitPublicFacingApplication
+        user info: "AML.T0049 - Exploit Public-Facing Application"
+        -> artifactDiscovery.discoverAIArtifacts
+        
+        
+        | containerRegistry
+        user info: "AML.T0010.004 - Container Registry"
+        -> deploymentTarget.evadeAIModel
+        
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> exploitPublicFacingApplication
     }
     
     asset RAGKnowledgeBase {
@@ -485,7 +504,8 @@ category AI {
         
         | discoverAIArtifacts
         user info: "AML.T0007 - Discover AI Artifacts"
-        -> attackImplementation.obtainAdversarialAIAttackImplementation
+        -> attackImplementation.obtainAdversarialAIAttackImplementation,
+        discoveredModel.fullAIModelAccess
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -997,7 +1017,12 @@ category AI {
         | poisonAIModel
         user info: "AML.T0018.000 - Manipulate AI Model: Poison AI Model"
         -> verifyAttack,
-        impact.externalHarms
+        impact.externalHarms,
+        modifyAIModelArchitecture
+        
+        | modifyAIModelArchitecture
+        user info: "AML.T0018.001 - Manipulate AI Model: Modify AI Model Architecture"
+        -> registrySupplyChain.containerRegistry
         
         | embedMalware
         user info: "AML.T0018.002 - Manipulate AI Model: Embed Malware"
@@ -1021,7 +1046,8 @@ category AI {
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
         -> poisonAIModel,
         verifyAttack,
-        fullAIModelAccess
+        fullAIModelAccess,
+        modifyAIModelArchitecture
         
         # m0007SanitizeTrainingData [Disabled]
         user info: "AML.M0007 - Sanitize Training Data"
@@ -1029,7 +1055,8 @@ category AI {
         
         # m0008ValidateAIModel [Disabled]
         user info: "AML.M0008 - Validate AI Model"
-        -> poisonAIModel
+        -> poisonAIModel,
+        modifyAIModelArchitecture
         
         # m0011RestrictLibraryLoading [Disabled]
         user info: "AML.M0011 - Restrict Library Loading"
@@ -1039,7 +1066,8 @@ category AI {
         user info: "AML.M0013 - Code Signing"
         -> poisonAIModel,
         embedMalware,
-        unsafeAIArtifacts
+        unsafeAIArtifacts,
+        modifyAIModelArchitecture
         
         # m0014VerifyAIArtifacts [Disabled]
         user info: "AML.M0014 - Verify AI Artifacts"
@@ -1067,7 +1095,8 @@ category AI {
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> poisonAIModel
+        -> poisonAIModel,
+        modifyAIModelArchitecture
         
         
         # m0002PredictiveAIOutputObfuscation [Disabled]
@@ -2014,6 +2043,19 @@ associations {
     AIArtifactDiscovery [artifactDiscovery] * <--UsesAttackImplementation--> * [attackImplementation] AdversarialAttackImplementation
     
     AdversarialAttackImplementation [easyEditImplementation] * <--PoisonsModel--> * [poisonTarget] PoisonableAIModel
+    
+    
+    // AML.CS0028
+    
+    AIResearchMaterial [registryResearch] * <--FindsExposedRegistry--> * [registryTarget] AIContainerRegistry
+    
+    AIContainerRegistry [exposedRegistry] * <--EnablesArtifactDiscovery--> * [artifactDiscovery] AIArtifactDiscovery
+    
+    AIArtifactDiscovery [registryDiscovery] * <--DiscoversModel--> * [discoveredModel] PoisonableAIModel
+    
+    PoisonableAIModel [tamperedRegistryModel] * <--PushedIntoRegistry--> * [registrySupplyChain] AIContainerRegistry
+    
+    AIContainerRegistry [compromisedRegistry] * <--DeploysManipulatedModel--> * [deploymentTarget] PredictiveAIModel
     
     
     //Scenario 1 associations
