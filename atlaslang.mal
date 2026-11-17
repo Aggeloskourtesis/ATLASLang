@@ -15,6 +15,12 @@ category AI {
         -> hardware.consumerHardware
     }
     
+    asset DeepfakeVictimIdentityInformation extends VictimIdentityInformation {
+        
+        | gatherVictimIdentityInformation
+        +> generativeAI.generativeAI
+    }
+    
     asset AIInfrastructure {
         
         | acquireInfrastructure
@@ -38,6 +44,12 @@ category AI {
         -> account.establishAccounts
     }
     
+    asset DeepfakeSoftwareTool extends AIAttackSoftwareTool {
+        
+        | softwareTools
+        +> obtainedCapability.obtainCapabilities
+    }
+    
     asset EnterpriseResourceDiscovery {
         
         | enterpriseResourceDiscovery
@@ -51,12 +63,10 @@ category AI {
         | establishAccounts
         user info: "AML.T0021 - Establish Accounts"
         -> targetSystem.aiEnabledProductOrService,
-        repositoryOS.dataFromInformationRepositories,
-        impersonation
+        repositoryOS.dataFromInformationRepositories
         
         | impersonation
         user info: "AML.T0073 - Impersonation"
-        -> repositoryModel.fullAIModelAccess
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -69,6 +79,21 @@ category AI {
         # m0042ThreatIntelligenceProgram [Disabled]
         user info: "AML.M0042 - Threat Intelligence Program"
         -> impersonation
+    }
+    
+    asset HFOrganizationAccount extends FraudulentAccount {
+        
+        | establishAccounts
+        +> impersonation
+        
+        | impersonation
+        +> repositoryModel.fullAIModelAccess
+    }
+    
+    asset KYCAccount extends FraudulentAccount {
+        
+        | impersonation
+        +> impact.financialHarm
     }
     
     
@@ -120,6 +145,12 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> evadeAIModel
+    }
+    
+    asset KYCFacialRecognitionSystem extends FacialRecognitionSystem {
+        
+        | evadeAIModel
+        +> account.impersonation
     }
     
     asset AIUserExecution {
@@ -320,6 +351,28 @@ category AI {
         -> poisonedData.poisonTrainingData
     }
     
+    asset DeepfakeMedia {
+        
+        | generateDeepfakes
+        user info: "AML.T0088 - Generate Deepfakes"
+        -> account.establishAccounts
+        
+        
+        # m0009PredictiveAIMultiSensorFusion [Disabled]
+        user info: "AML.M0009 - Predictive AI Multi-Sensor Fusion"
+        -> generateDeepfakes
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> generateDeepfakes
+    }
+    
+    asset ProKYCIdentityDocument extends DeepfakeMedia {
+        
+        | generateDeepfakes
+        +> selfieVideo.generateDeepfakes
+    }
+    
     asset AIContainerRegistry {
         
         | exploitPublicFacingApplication
@@ -335,6 +388,44 @@ category AI {
         # m0039AIHoneypots [Disabled]
         user info: "AML.M0039 - AI Honeypots"
         -> exploitPublicFacingApplication
+    }
+    
+    asset GenerativeAICapability {
+        
+        | generativeAI
+        user info: "AML.T0016.002 - Obtain Capabilities: Generative AI"
+        -> softwareTool.softwareTools
+        
+        
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> generativeAI
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> generativeAI
+        
+        # m0022GenerativeAIModelAlignment [Disabled]
+        user info: "AML.M0022 - Generative AI Model Alignment"
+        -> generativeAI
+    }
+    
+    asset ProKYCGenerativeAICapability extends GenerativeAICapability {
+        
+        | generativeAI
+        +> identityDocument.generateDeepfakes
+    }
+    
+    asset AIObtainedCapability {
+        
+        | obtainCapabilities
+        user info: "AML.T0016 - Obtain Capabilities"
+        -> deepfake.generateDeepfakes
+        
+        
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> obtainCapabilities
     }
     
     asset RAGKnowledgeBase {
@@ -753,6 +844,10 @@ category AI {
     
     asset AISupplyChainModel {
         
+        | aiSupplyChainCompromise
+        user info: "AML.T0010 - AI Supply Chain Compromise"
+        -> integrityTarget.unsafeAIArtifacts
+        
         | aiSupplyChainCompromiseModel
         user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
         -> trigger.insertBackdoorTrigger,
@@ -777,13 +872,26 @@ category AI {
         user info: "AML.M0013 - Code Signing"
         -> aiSupplyChainCompromiseModel
         
+        # m0014VerifyAIArtifacts [Disabled]
+        user info: "AML.M0014 - Verify AI Artifacts"
+        -> aiSupplyChainCompromise
+        
         # m0017AIModelDistributionMethods [Disabled]
         user info: "AML.M0017 - AI Model Distribution Methods"
         -> aiSupplyChainCompromiseModel
         
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> aiSupplyChainCompromise
+        
+        # m0023AIBillOfMaterials [Disabled]
+        user info: "AML.M0023 - AI Bill of Materials"
+        -> aiSupplyChainCompromise
+        
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> aiSupplyChainCompromiseModel
+        -> aiSupplyChainCompromiseModel,
+        aiSupplyChainCompromise
     }
     
     asset AISupplyChainSoftware {
@@ -1027,7 +1135,8 @@ category AI {
         
         | unsafeAIArtifacts
         user info: "AML.T0011.000 - User Execution: Unsafe AI Artifacts"
-        -> executionHost.masquerading
+        -> executionHost.masquerading,
+        c2.cyberCommunicationChannel
         
         | poisonAIModel
         user info: "AML.T0018.000 - Manipulate AI Model: Poison AI Model"
@@ -1054,6 +1163,10 @@ category AI {
         | fullAIModelAccess
         user info: "AML.T0044 - Full AI Model Access"
         -> impact.aiIntellectualPropertyTheft
+        
+        | corruptAIModel
+        user info: "AML.T0076 - Corrupt AI Model"
+        -> poisonedModelSupplyChain.aiSupplyChainCompromise
         
         
         
@@ -1165,7 +1278,8 @@ category AI {
         
         | publishPoisonedModels
         user info: "AML.T0115.001 - Publish Poisoned AI Artifacts: Models"
-        -> modelSupplyChain.aiSupplyChainCompromiseModel
+        -> modelSupplyChain.aiSupplyChainCompromiseModel,
+        poisonedModel.corruptAIModel
         
         
         # m0008ValidateAIModel [Disabled]
@@ -1262,6 +1376,12 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> evadeAIModel
+    }
+    
+    asset PhishingVisualSimilarityDetector extends AIMalwareDetector {
+        
+        | evadeAIModel
+        +> phishingCampaign.phishing
     }
     
     asset PublicFacingLLMApplication {
@@ -1770,6 +1890,22 @@ category AI {
         +> artifact.aiArtifactCollection
     }
     
+    asset PhishingCampaignBrowser extends Browser {
+        
+        | phishing
+        +> impact.userHarm
+        
+        
+        # m0018UserTraining [Disabled]
+        user info: "AML.M0018 - User Training"
+        -> phishing
+        
+        
+        # m0034DeepfakeDetection [Disabled]
+        user info: "AML.M0034 - Deepfake Detection"
+        -> phishing
+    }
+    
     asset BGMSBluetoothChannel extends InternalNetwork {
         
         & transmittedDataManipulation
@@ -2085,7 +2221,7 @@ associations {
     
     // AML.CS0027
 
-    FraudulentAccount [fakeHFOrganization] * <--GainsAccessToRepositoryModel--> * [repositoryModel] PoisonableAIModel
+    HFOrganizationAccount [fakeHFOrganization] * <--GainsAccessToRepositoryModel--> * [repositoryModel] PoisonableAIModel
     
     ExternalHarm [modelTheftImpact] * <--EnablesMalwareEmbeddingIn--> * [malwareTarget] PoisonableAIModel
     
@@ -2139,6 +2275,41 @@ associations {
     EnterpriseResourceDiscovery [resourceDiscoverySource] * <--EnablesReverseProxy--> * [proxyTool] LLMJackingSoftwareTool
     
     LLMJackingSoftwareTool [reverseProxyTool] * <--CausesFinancialHarm--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0031
+    
+    PoisonableAIModel [cs0031MaliciousModel] * <--OpensCyberCommunicationChannel--> * [c2] AICyberCommunication
+    
+    
+    // AML.CS0032
+    
+    PhishingVisualSimilarityDetector [phishingDetector] * <--EnablesPhishingCampaign--> * [phishingCampaign] PhishingCampaignBrowser
+    
+    PhishingCampaignBrowser [phishingCampaign] * <--CausesUserHarm--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0033
+    
+    DeepfakeVictimIdentityInformation [victimIdentity] * <--UsesGenerativeAI--> * [generativeAI] GenerativeAICapability
+    
+    GenerativeAICapability [generativeAI] * <--UsesSoftwareTool--> * [softwareTool] DeepfakeSoftwareTool
+    
+    DeepfakeSoftwareTool [softwareTool] * <--ObtainsCapability--> * [obtainedCapability] AIObtainedCapability
+    
+    AIObtainedCapability [obtainedCapability] * <--EnablesDeepfakeGeneration--> * [deepfake] DeepfakeMedia
+    
+    DeepfakeMedia [deepfake] * <--SupportsAccountRegistration--> * [account] KYCAccount
+    
+    KYCAccount [kycAccount] * <--CausesFinancialHarm--> * [impact] ExternalHarm
+    
+    
+    // AML.CS0034
+    
+    ProKYCGenerativeAICapability [prokycGenerativeAI] * <--GeneratesIdentityDocument--> * [identityDocument] ProKYCIdentityDocument
+    
+    ProKYCIdentityDocument [identityDocument] * <--GeneratesMatchingSelfieVideo--> * [selfieVideo] DeepfakeMedia
+    
     
     
     //Scenario 1 associations

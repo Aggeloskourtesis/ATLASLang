@@ -1580,6 +1580,202 @@ CASE_STUDIES = {
             "LLMJackingFinancialImpact:"
             "financialHarm",
     },
+        
+    # ========================================================
+    # AML.CS0031
+    # Malicious Models on Hugging Face
+    # ========================================================
+
+    "AML.CS0031": {
+
+        "attacker_name":
+            "AML_CS0031_Attacker",
+
+        # S00 - AML.T0018.002
+        "entry_point":
+            "CS0031MaliciousHuggingFaceModel:"
+            "embedMalware",
+
+        "path": [
+
+            # S01 - AML.T0115.001
+            "CS0031HuggingFacePublisher:"
+            "publishPoisonedModels",
+
+            # S02 - AML.T0076
+            "CS0031MaliciousHuggingFaceModel:"
+            "corruptAIModel",
+
+            # S03 - AML.T0010
+            "CS0031ModelSupplyChain:"
+            "aiSupplyChainCompromise",
+
+            # S04 - AML.T0011.000
+            "CS0031MaliciousHuggingFaceModel:"
+            "unsafeAIArtifacts",
+
+            # S05 - AML.T0072
+            "CS0031ReverseShell:"
+            "cyberCommunicationChannel",
+        ],
+
+        "goal":
+            "CS0031ReverseShell:"
+            "cyberCommunicationChannel",
+    },
+    
+    # ========================================================
+    # AML.CS0032
+    # Attempted Evasion of ML Phishing Webpage Detection System
+    # ========================================================
+
+    "AML.CS0032": {
+
+        "attacker_name":
+            "AML_CS0032_Attacker",
+
+        # S00 - AML.T0043.003
+        "entry_point":
+            "ModifiedPhishingWebpage:"
+            "manualModification",
+
+        "path": [
+
+            # S01 - AML.T0015
+            "PhishingVisualSimilarityModel:"
+            "evadeAIModel",
+
+            # S02 - AML.T0052 / ATT&CK T1566
+            "CS0032PhishingCampaign:"
+            "phishing",
+
+            # S03 - AML.T0048.003
+            "CS0032UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0032UserImpact:"
+            "userHarm",
+    },
+        
+    # ========================================================
+    # AML.CS0033
+    # Live Deepfake Image Injection to Evade Mobile KYC
+    # Verification
+    # ========================================================
+
+    "AML.CS0033": {
+
+        "attacker_name":
+            "AML_CS0033_Attacker",
+
+        # S00 - AML.T0087
+        "entry_point":
+            "CS0033VictimIdentity:"
+            "gatherVictimIdentityInformation",
+
+        "path": [
+
+            # S01 - AML.T0016.002
+            "CS0033Faceswap:"
+            "generativeAI",
+
+            # S02 - AML.T0016.001
+            "CS0033OBS:"
+            "softwareTools",
+
+            # S03 - AML.T0016
+            "CS0033VirtualCamera:"
+            "obtainCapabilities",
+
+            # S04 - AML.T0088
+            "CS0033LiveDeepfake:"
+            "generateDeepfakes",
+
+            # S05 - AML.T0021
+            "CS0033FraudulentAccount:"
+            "establishAccounts",
+
+            # S06 - AML.T0047
+            "CS0033MobileKYCSystem:"
+            "aiEnabledProductOrService",
+
+            # S07 - AML.T0015
+            "CS0033MobileKYCSystem:"
+            "evadeAIModel",
+
+            # S08 - AML.T0073
+            "CS0033FraudulentAccount:"
+            "impersonation",
+
+            # S09 - AML.T0048.000
+            "CS0033FinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "CS0033FinancialImpact:"
+            "financialHarm",
+    },
+        
+    # ========================================================
+    # AML.CS0034
+    # ProKYC: Deepfake Tool for Account Fraud Attacks
+    # ========================================================
+
+    "AML.CS0034": {
+
+        "attacker_name":
+            "AML_CS0034_Attacker",
+
+        # S00 - AML.T0087
+        "entry_point":
+            "CS0034VictimIdentity:"
+            "gatherVictimIdentityInformation",
+
+        "path": [
+
+            # S01 - AML.T0016.002
+            "CS0034ProKYCTool:"
+            "generativeAI",
+
+            # S02 - AML.T0088
+            # Fake identity document
+            "CS0034FakeIdentityDocument:"
+            "generateDeepfakes",
+
+            # S03 - AML.T0088
+            # Matching deepfake selfie video
+            "CS0034DeepfakeSelfieVideo:"
+            "generateDeepfakes",
+
+            # S04 - AML.T0021
+            "CS0034FraudulentAccount:"
+            "establishAccounts",
+
+            # S05 - AML.T0047
+            "CS0034KYCSystem:"
+            "aiEnabledProductOrService",
+
+            # S06 - AML.T0015
+            "CS0034KYCSystem:"
+            "evadeAIModel",
+
+            # S07 - AML.T0073
+            "CS0034FraudulentAccount:"
+            "impersonation",
+
+            # S08 - AML.T0048.000
+            "CS0034FinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "CS0034FinancialImpact:"
+            "financialHarm",
+    },
+    
 
 }
 
@@ -3471,7 +3667,7 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     # ========================================================
 
     fake_hf_org = model.add_asset(
-        "FraudulentAccount",
+        "HFOrganizationAccount",
         "FakeHuggingFaceOrganization"
     )
 
@@ -3849,6 +4045,291 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "impact",
         {llmjacking_financial_impact}
     )
+    
+    # ========================================================
+    # AML.CS0031
+    # Malicious Models on Hugging Face
+    # ========================================================
+
+    cs0031_malicious_model = model.add_asset(
+        "PoisonableAIModel",
+        "CS0031MaliciousHuggingFaceModel"
+    )
+
+    cs0031_publisher = model.add_asset(
+        "PoisonedAIModelPublisher",
+        "CS0031HuggingFacePublisher"
+    )
+
+    cs0031_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "CS0031ModelSupplyChain"
+    )
+
+    cs0031_reverse_shell = model.add_asset(
+        "AICyberCommunication",
+        "CS0031ReverseShell"
+    )
+    
+    # --------------------------------------------------------
+    # CS0031 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    cs0031_malicious_model.add_associated_assets(
+        "publisher",
+        {cs0031_publisher}
+    )
+
+    # Also provides the reverse publisher.poisonedModel field,
+    # which enables S01 -> S02.
+
+    # S02 -> S03
+    # Also provides S03 -> S04 through integrityTarget.
+    cs0031_supply_chain.add_associated_assets(
+        "integrityTarget",
+        {cs0031_malicious_model}
+    )
+
+    # S04 -> S05
+    cs0031_malicious_model.add_associated_assets(
+        "c2",
+        {cs0031_reverse_shell}
+    )
+    
+    # ========================================================
+    # AML.CS0032
+    # Attempted Evasion of ML Phishing Webpage Detection System
+    # ========================================================
+
+    modified_phishing_webpage = model.add_asset(
+        "AdversarialSample",
+        "ModifiedPhishingWebpage"
+    )
+
+    phishing_visual_detector = model.add_asset(
+        "PhishingVisualSimilarityDetector",
+        "PhishingVisualSimilarityModel"
+    )
+
+    cs0032_phishing_campaign = model.add_asset(
+        "PhishingCampaignBrowser",
+        "CS0032PhishingCampaign"
+    )
+
+    cs0032_user_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0032UserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0032 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # Reuses existing AdversarialSample.evasionTarget
+    modified_phishing_webpage.add_associated_assets(
+        "evasionTarget",
+        {phishing_visual_detector}
+    )
+
+    # S01 -> S02
+    phishing_visual_detector.add_associated_assets(
+        "phishingCampaign",
+        {cs0032_phishing_campaign}
+    )
+
+    # S02 -> S03
+    cs0032_phishing_campaign.add_associated_assets(
+        "impact",
+        {cs0032_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0033
+    # Live Deepfake Image Injection to Evade Mobile KYC
+    # Verification
+    # ========================================================
+
+    cs0033_victim_identity = model.add_asset(
+        "DeepfakeVictimIdentityInformation",
+        "CS0033VictimIdentity"
+    )
+
+    cs0033_faceswap = model.add_asset(
+        "GenerativeAICapability",
+        "CS0033Faceswap"
+    )
+
+    cs0033_obs = model.add_asset(
+        "DeepfakeSoftwareTool",
+        "CS0033OBS"
+    )
+
+    cs0033_virtual_camera = model.add_asset(
+        "AIObtainedCapability",
+        "CS0033VirtualCamera"
+    )
+
+    cs0033_deepfake = model.add_asset(
+        "DeepfakeMedia",
+        "CS0033LiveDeepfake"
+    )
+
+    cs0033_account = model.add_asset(
+        "KYCAccount",
+        "CS0033FraudulentAccount"
+    )
+
+    cs0033_kyc_system = model.add_asset(
+        "KYCFacialRecognitionSystem",
+        "CS0033MobileKYCSystem"
+    )
+
+    cs0033_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0033FinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0033 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0087 -> AML.T0016.002
+    cs0033_victim_identity.add_associated_assets(
+        "generativeAI",
+        {cs0033_faceswap}
+    )
+
+    # S01 -> S02
+    # AML.T0016.002 -> AML.T0016.001
+    cs0033_faceswap.add_associated_assets(
+        "softwareTool",
+        {cs0033_obs}
+    )
+
+    # S02 -> S03
+    # AML.T0016.001 -> AML.T0016
+    cs0033_obs.add_associated_assets(
+        "obtainedCapability",
+        {cs0033_virtual_camera}
+    )
+
+    # S03 -> S04
+    # AML.T0016 -> AML.T0088
+    cs0033_virtual_camera.add_associated_assets(
+        "deepfake",
+        {cs0033_deepfake}
+    )
+
+    # S04 -> S05
+    # AML.T0088 -> AML.T0021
+    cs0033_deepfake.add_associated_assets(
+        "account",
+        {cs0033_account}
+    )
+
+    # S05 -> S06
+    # AML.T0021 -> AML.T0047
+    cs0033_account.add_associated_assets(
+        "targetSystem",
+        {cs0033_kyc_system}
+    )
+
+    # S08 -> S09
+    # AML.T0073 -> AML.T0048.000
+    cs0033_account.add_associated_assets(
+        "impact",
+        {cs0033_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0034
+    # ProKYC: Deepfake Tool for Account Fraud Attacks
+    # ========================================================
+
+    cs0034_victim_identity = model.add_asset(
+        "DeepfakeVictimIdentityInformation",
+        "CS0034VictimIdentity"
+    )
+
+    cs0034_prokyc = model.add_asset(
+        "ProKYCGenerativeAICapability",
+        "CS0034ProKYCTool"
+    )
+
+    cs0034_identity_document = model.add_asset(
+        "ProKYCIdentityDocument",
+        "CS0034FakeIdentityDocument"
+    )
+
+    cs0034_selfie_video = model.add_asset(
+        "DeepfakeMedia",
+        "CS0034DeepfakeSelfieVideo"
+    )
+
+    cs0034_account = model.add_asset(
+        "KYCAccount",
+        "CS0034FraudulentAccount"
+    )
+
+    cs0034_kyc_system = model.add_asset(
+        "KYCFacialRecognitionSystem",
+        "CS0034KYCSystem"
+    )
+
+    cs0034_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0034FinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0034 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0087 -> AML.T0016.002
+    cs0034_victim_identity.add_associated_assets(
+        "generativeAI",
+        {cs0034_prokyc}
+    )
+
+    # S01 -> S02
+    # AML.T0016.002 -> AML.T0088
+    cs0034_prokyc.add_associated_assets(
+        "identityDocument",
+        {cs0034_identity_document}
+    )
+
+    # S02 -> S03
+    # AML.T0088 -> AML.T0088
+    cs0034_identity_document.add_associated_assets(
+        "selfieVideo",
+        {cs0034_selfie_video}
+    )
+
+    # S03 -> S04
+    # AML.T0088 -> AML.T0021
+    cs0034_selfie_video.add_associated_assets(
+        "account",
+        {cs0034_account}
+    )
+
+    # S04 -> S05
+    # AML.T0021 -> AML.T0047
+    cs0034_account.add_associated_assets(
+        "targetSystem",
+        {cs0034_kyc_system}
+    )
+
+    # S07 -> S08
+    # AML.T0073 -> AML.T0048.000
+    cs0034_account.add_associated_assets(
+        "impact",
+        {cs0034_financial_impact}
+    )
+    
 
 
     return model
