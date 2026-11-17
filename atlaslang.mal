@@ -41,6 +41,17 @@ category AI {
         obtainedCapability.obtainCapabilities
     }
     
+    asset AIBackendService extends Service {
+        
+        | applicationAccessToken
+        user info: "AML.T0091.000 - Use Alternate Authentication Material: Application Access Token"
+        +> aiApplication.aiEnabledProductOrService
+        
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> applicationAccessToken
+    }
     
     asset EnterpriseResourceDiscovery {
         
@@ -223,47 +234,58 @@ category AI {
     
     asset AIResearchMaterial {
         
-        | prePrintRepositories
-            user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
-            -> trainingData.datasets
         
         | searchOpenTechnicalDatabases
-            user info: "AML.T0000 - Search Open Technical Databases"
-            -> publicArtifacts.acquirePublicAIArtifacts,
-            publicArtifacts.models,
-            targetProduct.aiEnabledProductOrService,
-            trainingData.datasets,
-            targetOS.validAccounts
-        
-        | activeScanning
-        user info: "AML.T0006 - Active Scanning"
-        -> targetCluster.exploitPublicFacingApplication
+        user info: "AML.T0000 - Search Open Technical Databases"
+        -> publicArtifacts.acquirePublicAIArtifacts,
+        publicArtifacts.models,
+        targetProduct.aiEnabledProductOrService,
+        trainingData.datasets,
+        targetOS.validAccounts
+            
+        | prePrintRepositories
+        user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
+        -> trainingData.datasets
+            
+        | searchOpenAIVulnerabilityAnalysis
+        user info: "AML.T0001 - Search Open AI Vulnerability Analysis"
+        -> searchVictimOwnedWebsites,
+        publicLLMApp.aiEnabledProductOrService
+            
+        | searchVictimOwnedWebsites
+        user info: "AML.T0003 - Search Victim-Owned Websites"
+        -> targetProduct.aiEnabledProductOrService,
+        searchOpenWebsitesDomains
         
         | searchApplicationRepositories
         user info: "AML.T0004 - Search Application Repositories"
         -> publicArtifacts.models,
         registryTarget.exploitPublicFacingApplication
         
-        | searchOpenAIVulnerabilityAnalysis
-        user info: "AML.T0001 - Search Open AI Vulnerability Analysis"
-        -> searchVictimOwnedWebsites,
-        publicLLMApp.aiEnabledProductOrService
+        | activeScanning
+        user info: "AML.T0006 - Active Scanning"
+        -> targetCluster.exploitPublicFacingApplication
         
-        | searchVictimOwnedWebsites
-        user info: "AML.T0003 - Search Victim-Owned Websites"
-        -> targetProduct.aiEnabledProductOrService
+        | probeAIAgentTriggerChannels
+        user info: "AML.T0006.003 - Probe AI Agent Trigger Channels"
+        -> craftedPrompt.llmPromptCrafting
         
         | gatherRAGIndexedTargets
         user info: "AML.T0064 - Gather RAG-Indexed Targets"
         -> publicLLMApp.aiEnabledProductOrService
+        
+        | searchOpenWebsitesDomains
+        user info: "AML.T0095 - Search Open Websites/Domains"
+        -> craftedPrompt.llmPromptCrafting
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
-            user info: "AML.M0000 - Limit Public Release of Information"
-            -> searchOpenTechnicalDatabases,
-            searchApplicationRepositories,
-            searchOpenAIVulnerabilityAnalysis,
-            searchVictimOwnedWebsites,
-            gatherRAGIndexedTargets
+        user info: "AML.M0000 - Limit Public Release of Information"
+        -> searchOpenTechnicalDatabases,
+        searchApplicationRepositories,
+        searchOpenAIVulnerabilityAnalysis,
+        searchVictimOwnedWebsites,
+        searchOpenWebsitesDomains,
+        gatherRAGIndexedTargets
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
@@ -274,8 +296,9 @@ category AI {
         -> activeScanning
 
         # m0039AIHoneypots [Disabled]
-            user info: "AML.M0039 - AI Honeypots"
-            -> searchOpenTechnicalDatabases
+        user info: "AML.M0039 - AI Honeypots"
+        -> searchOpenTechnicalDatabases,
+        searchOpenWebsitesDomains
     }
     
     
@@ -423,7 +446,8 @@ category AI {
         
         | ragDatabases
         user info: "AML.T0085.000 - Data from AI Services: RAG Databases"
-        -> exfiltration.exfiltrationViaCyberMeans
+        -> exfiltration.exfiltrationViaCyberMeans,
+        agentTool.aiAgentTools
         
         
         // AML.T0070 defenses
@@ -1372,7 +1396,8 @@ category AI {
         user info: "AML.T0047 - AI-Enabled Product or Service"
         -> directPromptInjection,
         specialCharacterSets,
-        ragStore.ragPoisoning
+        ragStore.ragPoisoning,
+        conversation.llmPromptInjection
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
@@ -1380,7 +1405,8 @@ category AI {
         
         | directPromptInjection
         user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
-        -> verifyAttack
+        -> verifyAttack,
+        agentContext.contextPoisoningThread
         
         | specialCharacterSets
         user info: "AML.T0069.000 - Discover LLM System Information: Special Character Sets"
@@ -1396,7 +1422,9 @@ category AI {
         -> tool.aiAgentToolInvocation,
         ragStore.ragPoisoning,
         craftedPayload.llmPromptObfuscation,
-        indirectConversation.indirectPromptInjection
+        indirectConversation.indirectPromptInjection,
+        triggeredConversation.triggeredPromptInjection,
+        externalHarm.userHarm
         
         
         # m0024AITelemetryLogging [Disabled]
@@ -1467,16 +1495,51 @@ category AI {
         -> directPromptInjection
     }
     
+    asset AIAgentConfiguration {
+        
+        | embeddedKnowledge
+        user info: "AML.T0084.000 - Discover AI Agent Configuration: Embedded Knowledge"
+        -> toolDefinitions
+        
+        
+        | toolDefinitions
+        user info: "AML.T0084.001 - Discover AI Agent Configuration: Tool Definitions"
+        -> targetApplication.aiEnabledProductOrService,
+        craftedPrompt.llmPromptCrafting
+        
+        
+        | activationTriggers
+        user info: "AML.T0084.002 - Discover AI Agent Configuration: Activation Triggers"
+        -> toolDefinitions
+        
+        
+        # m0000LimitPublicReleaseOfInformation [Disabled]
+        user info: "AML.M0000 - Limit Public Release of Information"
+        -> toolDefinitions,
+        activationTriggers
+    }
+    
     
     asset AIAgentContext {
         
+        | contextPoisoningMemory
+        user info: "AML.T0080.000 - AI Agent Context Poisoning: Memory"
+        -> conversation.manipulateUserLLMChatHistory,
+        persistentApplication.promptInfiltrationViaPublicFacingApplication
+        
         | contextPoisoningThread
         user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
-        -> externalHarm.userHarm
+        -> externalHarm.userHarm,
+        contextPoisoningMemory
+        
+        # m0031MemoryHardening [Disabled]
+        user info: "AML.M0031 - Memory Hardening"
+        -> contextPoisoningMemory
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> contextPoisoningThread
+        -> contextPoisoningThread,
+        contextPoisoningMemory
     }
 
 
@@ -1495,7 +1558,9 @@ category AI {
             verificationTarget.verifyAttack,
             targetApplication.promptInfiltrationViaPublicFacingApplication,
             infrastructure.acquireInfrastructure,
-            serviceOS.validAccounts
+            serviceOS.validAccounts,
+            ragData.ragDatabases,
+            llmPromptObfuscation
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1504,7 +1569,8 @@ category AI {
         | llmPromptObfuscation
             user info: "AML.T0068 - LLM Prompt Obfuscation"
             -> indirectConversation.indirectPromptInjection,
-            ragStore.ragPoisoning
+            ragStore.ragPoisoning,
+            targetApplication.promptInfiltrationViaPublicFacingApplication
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1568,23 +1634,37 @@ category AI {
         
         | llmPromptInjection
         user info: "AML.T0051 - LLM Prompt Injection"
-        -> agentContext.contextPoisoningThread
+        -> agentContext.contextPoisoningThread,
+        agentConfig.embeddedKnowledge
         
         | indirectPromptInjection
         user info: "AML.T0051.001 - LLM Prompt Injection: Indirect"
         -> socialEngineering.spearphishingViaSocialEngineeringLLM,
         tool.aiAgentToolInvocation,
         credentialRAG.ragCredentialHarvesting,
-        renderedResponse.llmResponseRendering
+        renderedResponse.llmResponseRendering,
+        delayExecutionOfLLMInstructions,
+        agentContext.contextPoisoningMemory
         
         | triggeredPromptInjection
         user info: "AML.T0051.002 - LLM Prompt Injection: Triggered"
-        -> llmJailbreak
+        -> llmJailbreak,
+        agentConfig.activationTriggers
         
         | llmJailbreak
         user info: "AML.T0054 - LLM Jailbreak"
         -> selfReplicatingPrompt.llmPromptSelfReplication,
         ragData.ragDatabases
+        
+        | manipulateUserLLMChatHistory
+        user info: "AML.T0092 - Manipulate User LLM Chat History"
+        -> externalHarm.financialHarm,
+        externalHarm.userHarm,
+        serviceImpact.denialOfAIService
+        
+        | delayExecutionOfLLMInstructions
+        user info: "AML.T0094 - Delay Execution of LLM Instructions"
+        -> tool.aiAgentToolInvocation
         
         # m0008ValidateAIModel [Disabled]
         user info: "AML.M0008 - Validate AI Model"
@@ -1683,7 +1763,16 @@ category AI {
             hostOS.unsecuredCredentials,
             serviceImpact.denialOfAIService,
             renderedResponse.llmResponseRendering,
-            renderedResponse.citations
+            renderedResponse.citations,
+            aiAgentTools
+            
+        | aiAgentTools
+            user info: "AML.T0085.001 - Data from AI Services: AI Agent Tools"
+            -> exfiltrationTool.exfiltrationViaAIAgentToolInvocation
+            
+            
+        | exfiltrationViaAIAgentToolInvocation
+            user info: "AML.T0086 - Exfiltration via AI Agent Tool Invocation"
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1699,35 +1788,48 @@ category AI {
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        aiAgentTools,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0026PrivilegedAIAgentPermissions [Disabled]
         user info: "AML.M0026 - Privileged AI Agent Permissions Configuration"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        aiAgentTools,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0027SingleUserAIAgentPermissions [Disabled]
         user info: "AML.M0027 - Single-User AI Agent Permissions Configuration"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        aiAgentTools,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0028AIAgentToolsPermissions [Disabled]
         user info: "AML.M0028 - AI Agent Tools Permissions Configuration"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        aiAgentTools,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0029HumanInTheLoop [Disabled]
         user info: "AML.M0029 - Human In-the-Loop for AI Agent Actions"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0030RestrictToolInvocationOnUntrustedData [Disabled]
         user info: "AML.M0030 - Restrict AI Agent Tool Invocation on Untrusted Data"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0032SegmentationOfAIAgentComponents [Disabled]
         user info: "AML.M0032 - Segmentation of AI Agent Components"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        aiAgentTools,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0033InputOutputValidationAgentComponents [Disabled]
         user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
-        -> aiAgentToolInvocation
+        -> aiAgentToolInvocation,
+        exfiltrationViaAIAgentToolInvocation
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
@@ -1772,6 +1874,28 @@ category AI {
         # safeFilterEvaluation
             user info: "Avoid dynamic evaluation of attacker-controlled filter expressions"
             -> vulnerableFilterEvaluation
+    }
+    
+    asset AIClientOS extends OS {
+        
+        | validAccounts
+        user info: "AML.T0012 - Valid Accounts"
+        +> processDiscovery
+        
+        
+        & processDiscovery
+        user info: "AML.T0089 - Enterprise Environment Discovery"
+        +> oSCredentialDumping
+        
+        
+        | oSCredentialDumping
+        user info: "AML.T0090 - OS Credential Dumping"
+        +> backendService.applicationAccessToken
+        
+        
+        # m0011RestrictLibraryLoading [Disabled]
+        user info: "AML.M0011 - Restrict Library Loading"
+        -> oSCredentialDumping
     }
     
     asset MathGPTHostOS extends OS {
@@ -2307,6 +2431,50 @@ associations {
     LLMPrompt [craftedPrompt] * <--UsesAIServiceAccount--> * [serviceOS] AIServiceOS
     
     AIServiceOS [serviceOS] * <--AccessesPublicLLMApplication--> * [publicLLMApp] PublicFacingLLMApplication
+    
+    
+    // AML.CS0036
+    
+    AIClientOS [aiClient] * <--UsesAIBackendService--> * [backendService] AIBackendService
+    
+    AIBackendService [backendService] * <--ProvidesAIApplication--> * [aiApplication] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [llmApplication] * <--PoisonsAgentContext--> * [agentContext] AIAgentContext
+    
+    LLMConversation [conversationHistory] * <--CausesExternalHarm--> * [externalHarm] ExternalHarm
+    
+    LLMConversation [conversationHistoryImpact] * <--CausesAIServiceImpact--> * [serviceImpact] AIServiceImpact
+    
+    
+    // AML.CS0037
+    
+    AIResearchMaterial [reconSource] * <--InformsPromptCrafting--> * [craftedPrompt] LLMPrompt
+    
+    PublicFacingLLMApplication [promptInfiltrationSource] * <--TriggersConversation--> * [triggeredConversation] LLMConversation
+    
+    LLMConversation [promptConversation] * <--RevealsAgentConfiguration--> * [agentConfig] AIAgentConfiguration
+    
+    AIAgentConfiguration [agentConfiguration] * <--DescribesAIApplication--> * [targetApplication] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [aiApplication] * <--SupportsPromptConversation--> * [conversation] LLMConversation
+    
+    AIAgentConfiguration [agentConfigurationForPrompt] * <--InformsPromptCrafting--> * [craftedPrompt] LLMPrompt
+    
+    LLMPrompt [collectionPrompt] * <--RetrievesRAGDataFrom--> * [ragData] RAGKnowledgeBase
+    
+    RAGKnowledgeBase [ragSource] * <--FeedsAgentToolCollection--> * [agentTool] AITool
+    
+    AITool [collectionTool] * <--ExfiltratesThroughAgentTool--> * [exfiltrationTool] AITool
+    
+    
+    // AML.CS0038-39
+    
+    
+    // AML.CS0040
+    
+    AIAgentContext [memoryContext] * <--PersistsThroughPublicApplication--> * [persistentApplication] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [persistentPromptApplication] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
     
     
     

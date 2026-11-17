@@ -1828,6 +1828,319 @@ CASE_STUDIES = {
             "llmResponseRendering",
     },
     
+    # ========================================================
+    # AML.CS0036
+    # AIKatz: Attacking LLM Desktop Applications
+    # ========================================================
+    
+    "AML.CS0036": {
+
+        "attacker_name":
+            "AML_CS0036_Attacker",
+
+        # S00 - AML.T0012
+        "entry_point":
+            "AIKatzVictimDesktop:validAccounts",
+
+        "path": [
+
+            # S01 - AML.T0089
+            "AIKatzVictimDesktop:processDiscovery",
+
+            # S02 - AML.T0090
+            "AIKatzVictimDesktop:oSCredentialDumping",
+
+            # S03 - AML.T0091.000
+            "AIKatzLLMBackend:applicationAccessToken",
+
+            # S04 - AML.T0047
+            "AIKatzLLMApplication:aiEnabledProductOrService",
+
+            # S05 - AML.T0051.000
+            "AIKatzLLMApplication:directPromptInjection",
+
+            # S06 - AML.T0080.001
+            "AIKatzAgentContext:contextPoisoningThread",
+
+            # S07 - AML.T0080.000
+            "AIKatzAgentContext:contextPoisoningMemory",
+
+            # S08 - AML.T0092
+            "AIKatzConversation:manipulateUserLLMChatHistory",
+
+            # Impact - AML.T0048.003
+            "AIKatzExternalImpact:userHarm",
+        ],
+
+        "goal":
+            "AIKatzExternalImpact:userHarm",
+    },
+    
+    "AML.CS0036-FINANCIAL": {
+
+        "attacker_name":
+            "AML_CS0036_FINANCIAL_Attacker",
+
+        "entry_point":
+            "AIKatzVictimDesktop:validAccounts",
+
+        "path": [
+            "AIKatzVictimDesktop:processDiscovery",
+            "AIKatzVictimDesktop:oSCredentialDumping",
+            "AIKatzLLMBackend:applicationAccessToken",
+            "AIKatzLLMApplication:aiEnabledProductOrService",
+            "AIKatzLLMApplication:directPromptInjection",
+            "AIKatzAgentContext:contextPoisoningThread",
+            "AIKatzAgentContext:contextPoisoningMemory",
+            "AIKatzConversation:manipulateUserLLMChatHistory",
+            "AIKatzExternalImpact:financialHarm",
+        ],
+
+        "goal":
+            "AIKatzExternalImpact:financialHarm",
+    },
+        
+    "AML.CS0036-DOS": {
+
+        "attacker_name":
+            "AML_CS0036_DOS_Attacker",
+
+        "entry_point":
+            "AIKatzVictimDesktop:validAccounts",
+
+        "path": [
+            "AIKatzVictimDesktop:processDiscovery",
+            "AIKatzVictimDesktop:oSCredentialDumping",
+            "AIKatzLLMBackend:applicationAccessToken",
+            "AIKatzLLMApplication:aiEnabledProductOrService",
+            "AIKatzLLMApplication:directPromptInjection",
+            "AIKatzAgentContext:contextPoisoningThread",
+            "AIKatzAgentContext:contextPoisoningMemory",
+            "AIKatzConversation:manipulateUserLLMChatHistory",
+            "AIKatzServiceImpact:denialOfAIService",
+        ],
+
+        "goal":
+            "AIKatzServiceImpact:denialOfAIService",
+    },
+    
+    # ========================================================
+    # AML.CS0037
+    # Data Exfiltration via Agent Tools in Copilot Studio
+    # ========================================================
+
+    "AML.CS0037": {
+
+        "attacker_name":
+            "AML_CS0037_Attacker",
+
+        # S00 - AML.T0006.003
+        "entry_point":
+            "CS0037AgentRecon:"
+            "probeAIAgentTriggerChannels",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "CS0037ProbePrompt:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0093
+            "CS0037CopilotAgent:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S03 - AML.T0051.002
+            "CS0037TriggeredConversation:"
+            "triggeredPromptInjection",
+
+            # S04 - AML.T0084.002
+            "CS0037TriggerConfiguration:"
+            "activationTriggers",
+
+            # S05 - AML.T0084.001
+            "CS0037TriggerConfiguration:"
+            "toolDefinitions",
+
+            # S06 - AML.T0047
+            "CS0037CopilotAgent:"
+            "aiEnabledProductOrService",
+
+            # S07 - AML.T0051
+            "CS0037DiscoveryConversation:"
+            "llmPromptInjection",
+
+            # S08 - AML.T0084.000
+            "CS0037DataConfiguration:"
+            "embeddedKnowledge",
+
+            # S09 - AML.T0084.001
+            "CS0037DataConfiguration:"
+            "toolDefinitions",
+
+            # S10 - AML.T0065
+            "CS0037ExfiltrationPrompt:"
+            "llmPromptCrafting",
+
+            # S11 - AML.T0085.000
+            "CS0037CustomerSupportRAG:"
+            "ragDatabases",
+
+            # S12 - AML.T0085.001
+            "CS0037SalesforceTool:"
+            "aiAgentTools",
+
+            # S13 - AML.T0086
+            "CS0037EmailTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0037EmailTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+    },
+    
+    # ========================================================
+    # AML.CS0038
+    # Planting Instructions for Delayed Automatic
+    # AI Agent Tool Invocation
+    # ========================================================
+
+    "AML.CS0038": {
+
+        "attacker_name":
+            "AML_CS0038_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0038DelayedPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0093
+            "CS0038Gemini:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S02 - AML.T0051.001
+            "CS0038GeminiConversation:"
+            "indirectPromptInjection",
+
+            # S03 - AML.T0094
+            "CS0038GeminiConversation:"
+            "delayExecutionOfLLMInstructions",
+
+            # S04 - AML.T0053
+            "CS0038WorkspaceExtension:"
+            "aiAgentToolInvocation",
+
+            # S05 - AML.T0085.001
+            "CS0038WorkspaceExtension:"
+            "aiAgentTools",
+        ],
+
+        "goal":
+            "CS0038WorkspaceExtension:"
+            "aiAgentTools",
+    },
+    
+    # ========================================================
+    # AML.CS0039
+    # Living Off AI: Prompt Injection via
+    # Jira Service Management
+    # ========================================================
+
+    "AML.CS0039": {
+
+        "attacker_name":
+            "AML_CS0039_Attacker",
+
+        # S00 - AML.T0003
+        "entry_point":
+            "CS0039Recon:"
+            "searchVictimOwnedWebsites",
+
+        "path": [
+
+            # S01 - AML.T0095
+            "CS0039Recon:"
+            "searchOpenWebsitesDomains",
+
+            # S02 - AML.T0065
+            "CS0039MaliciousPrompt:"
+            "llmPromptCrafting",
+
+            # S03 - AML.T0093
+            "CS0039JSMApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0051.001
+            "CS0039Conversation:"
+            "indirectPromptInjection",
+
+            # S05 - AML.T0053
+            "CS0039AtlassianDataTool:"
+            "aiAgentToolInvocation",
+
+            # S06 - AML.T0085.001
+            "CS0039AtlassianDataTool:"
+            "aiAgentTools",
+
+            # S07 - AML.T0086
+            "CS0039AtlassianExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0039AtlassianExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+    },
+        
+    # ========================================================
+    # AML.CS0040
+    # Hacking ChatGPT's Memories with Prompt Injection
+    # ========================================================
+
+    "AML.CS0040": {
+
+        "attacker_name":
+            "AML_CS0040_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0040MemoryPoisoningPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0068
+            "CS0040MemoryPoisoningPrompt:"
+            "llmPromptObfuscation",
+
+            # S02 - AML.T0093
+            "CS0040InitialPromptInfiltration:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S03 - AML.T0051.001
+            "CS0040Conversation:"
+            "indirectPromptInjection",
+
+            # S04 - AML.T0080.000
+            "CS0040MemoryContext:"
+            "contextPoisoningMemory",
+
+            # S05 - AML.T0093
+            "CS0040PersistentPromptInfiltration:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S06 - AML.T0048.003
+            "CS0040UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0040UserImpact:"
+            "userHarm",
+    },
 
 }
 
@@ -4460,6 +4773,426 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     slack_rag.add_associated_assets(
         "renderedResponse",
         {slack_rendered_response}
+    )
+    
+    # ========================================================
+    # AML.CS0036
+    # AIKatz: Attacking LLM Desktop Applications
+    # ========================================================
+
+    aikatz_client_os = model.add_asset(
+        "AIClientOS",
+        "AIKatzVictimDesktop"
+    )
+
+    aikatz_backend = model.add_asset(
+        "AIBackendService",
+        "AIKatzLLMBackend"
+    )
+
+    aikatz_llm_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "AIKatzLLMApplication"
+    )
+
+    aikatz_context = model.add_asset(
+        "AIAgentContext",
+        "AIKatzAgentContext"
+    )
+
+    aikatz_conversation = model.add_asset(
+        "LLMConversation",
+        "AIKatzConversation"
+    )
+
+    aikatz_external_impact = model.add_asset(
+        "ExternalHarm",
+        "AIKatzExternalImpact"
+    )
+
+    aikatz_service_impact = model.add_asset(
+        "AIServiceImpact",
+        "AIKatzServiceImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0036 associations
+    # --------------------------------------------------------
+    
+        # S02/S03 -> S04
+    aikatz_client_os.add_associated_assets(
+        "backendService",
+        {aikatz_backend}
+    )
+
+    # S04 -> S05
+    aikatz_backend.add_associated_assets(
+        "aiApplication",
+        {aikatz_llm_application}
+    )
+
+    # S06 -> S07
+    aikatz_llm_application.add_associated_assets(
+        "agentContext",
+        {aikatz_context}
+    )
+
+    # S08 -> S09
+    # Uses existing LLMConversation <-> AIAgentContext association
+    aikatz_context.add_associated_assets(
+        "conversation",
+        {aikatz_conversation}
+    )
+
+    # Impact branches
+    aikatz_conversation.add_associated_assets(
+        "externalHarm",
+        {aikatz_external_impact}
+    )
+
+    aikatz_conversation.add_associated_assets(
+        "serviceImpact",
+        {aikatz_service_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0037
+    # Data Exfiltration via Agent Tools in Copilot Studio
+    # ========================================================
+
+    cs0037_agent_recon = model.add_asset(
+        "AIResearchMaterial",
+        "CS0037AgentRecon"
+    )
+
+    cs0037_probe_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0037ProbePrompt"
+    )
+
+    cs0037_copilot_agent = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0037CopilotAgent"
+    )
+
+    cs0037_triggered_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0037TriggeredConversation"
+    )
+
+    cs0037_trigger_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0037TriggerConfiguration"
+    )
+
+    cs0037_discovery_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0037DiscoveryConversation"
+    )
+
+    cs0037_data_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0037DataConfiguration"
+    )
+
+    cs0037_exfiltration_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0037ExfiltrationPrompt"
+    )
+
+    cs0037_rag = model.add_asset(
+        "RAGKnowledgeBase",
+        "CS0037CustomerSupportRAG"
+    )
+
+    cs0037_salesforce_tool = model.add_asset(
+        "AITool",
+        "CS0037SalesforceTool"
+    )
+
+    cs0037_email_tool = model.add_asset(
+        "AITool",
+        "CS0037EmailTool"
+    )
+    
+    # --------------------------------------------------------
+    # CS0037 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0006.003 -> AML.T0065
+    cs0037_agent_recon.add_associated_assets(
+        "craftedPrompt",
+        {cs0037_probe_prompt}
+    )
+
+    # S01 -> S02
+    # AML.T0065 -> AML.T0093
+    cs0037_probe_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0037_copilot_agent}
+    )
+
+    # S02 -> S03
+    # AML.T0093 -> AML.T0051.002
+    cs0037_copilot_agent.add_associated_assets(
+        "triggeredConversation",
+        {cs0037_triggered_conversation}
+    )
+
+    # S03 -> S04
+    # AML.T0051.002 -> AML.T0084.002
+    cs0037_triggered_conversation.add_associated_assets(
+        "agentConfig",
+        {cs0037_trigger_configuration}
+    )
+
+    # S05 -> S06
+    # AML.T0084.001 -> AML.T0047
+    cs0037_trigger_configuration.add_associated_assets(
+        "targetApplication",
+        {cs0037_copilot_agent}
+    )
+
+    # S06 -> S07
+    # AML.T0047 -> AML.T0051
+    cs0037_copilot_agent.add_associated_assets(
+        "conversation",
+        {cs0037_discovery_conversation}
+    )
+
+    # S07 -> S08
+    # AML.T0051 -> AML.T0084.000
+    cs0037_discovery_conversation.add_associated_assets(
+        "agentConfig",
+        {cs0037_data_configuration}
+    )
+
+    # S09 -> S10
+    # AML.T0084.001 -> AML.T0065
+    cs0037_data_configuration.add_associated_assets(
+        "craftedPrompt",
+        {cs0037_exfiltration_prompt}
+    )
+
+    # S10 -> S11
+    # AML.T0065 -> AML.T0085.000
+    cs0037_exfiltration_prompt.add_associated_assets(
+        "ragData",
+        {cs0037_rag}
+    )
+
+    # S11 -> S12
+    # AML.T0085.000 -> AML.T0085.001
+    cs0037_rag.add_associated_assets(
+        "agentTool",
+        {cs0037_salesforce_tool}
+    )
+
+    # S12 -> S13
+    # AML.T0085.001 -> AML.T0086
+    cs0037_salesforce_tool.add_associated_assets(
+        "exfiltrationTool",
+        {cs0037_email_tool}
+    )
+    
+    # ========================================================
+    # AML.CS0038
+    # Planting Instructions for Delayed Automatic
+    # AI Agent Tool Invocation
+    # ========================================================
+
+    cs0038_delayed_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0038DelayedPrompt"
+    )
+
+    cs0038_gemini = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0038Gemini"
+    )
+
+    cs0038_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0038GeminiConversation"
+    )
+
+    cs0038_workspace_extension = model.add_asset(
+        "AITool",
+        "CS0038WorkspaceExtension"
+    )
+    
+    # --------------------------------------------------------
+    # CS0038 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0093
+    cs0038_delayed_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0038_gemini}
+    )
+
+    # S01 -> S02
+    # AML.T0093 -> AML.T0051.001
+    cs0038_gemini.add_associated_assets(
+        "indirectConversation",
+        {cs0038_conversation}
+    )
+
+    # S03 -> S04
+    # AML.T0094 -> AML.T0053
+    cs0038_conversation.add_associated_assets(
+        "tool",
+        {cs0038_workspace_extension}
+    )
+    
+    # ========================================================
+    # AML.CS0039
+    # Living Off AI: Prompt Injection via
+    # Jira Service Management
+    # ========================================================
+
+    cs0039_recon = model.add_asset(
+        "AIResearchMaterial",
+        "CS0039Recon"
+    )
+
+    cs0039_malicious_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0039MaliciousPrompt"
+    )
+
+    cs0039_jsm_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0039JSMApplication"
+    )
+
+    cs0039_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0039Conversation"
+    )
+    cs0039_atlassian_data_tool = model.add_asset(
+        "AITool",
+        "CS0039AtlassianDataTool"
+    )
+
+    cs0039_atlassian_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0039AtlassianExfiltrationTool"
+    )
+    
+    # --------------------------------------------------------
+    # CS0039 associations
+    # --------------------------------------------------------
+
+    # S01 -> S02
+    # AML.T0095 -> AML.T0065
+    cs0039_recon.add_associated_assets(
+        "craftedPrompt",
+        {cs0039_malicious_prompt}
+    )
+
+    # S02 -> S03
+    # AML.T0065 -> AML.T0093
+    cs0039_malicious_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0039_jsm_application}
+    )
+
+    # S03 -> S04
+    # AML.T0093 -> AML.T0051.001
+    cs0039_jsm_application.add_associated_assets(
+        "indirectConversation",
+        {cs0039_conversation}
+    )
+
+    # S04 -> S05
+    # AML.T0051.001 -> AML.T0053
+    cs0039_conversation.add_associated_assets(
+        "tool",
+        {cs0039_atlassian_data_tool}
+    )
+
+    # S06 -> S07
+    # AML.T0085.001 -> AML.T0086
+    cs0039_atlassian_data_tool.add_associated_assets(
+        "exfiltrationTool",
+        {cs0039_atlassian_exfiltration_tool}
+    )
+    
+    # ========================================================
+    # AML.CS0040
+    # Hacking ChatGPT's Memories with Prompt Injection
+    # ========================================================
+
+    cs0040_memory_poisoning_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0040MemoryPoisoningPrompt"
+    )
+
+    cs0040_initial_prompt_infiltration = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0040InitialPromptInfiltration"
+    )
+
+    cs0040_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0040Conversation"
+    )
+
+    cs0040_memory_context = model.add_asset(
+        "AIAgentContext",
+        "CS0040MemoryContext"
+    )
+
+    cs0040_persistent_prompt_infiltration = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0040PersistentPromptInfiltration"
+    )
+
+    cs0040_user_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0040UserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0040 associations
+    # --------------------------------------------------------
+
+    # S01 -> S02
+    # AML.T0068 -> AML.T0093
+    cs0040_memory_poisoning_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0040_initial_prompt_infiltration}
+    )
+
+    # S02 -> S03
+    # AML.T0093 -> AML.T0051.001
+    cs0040_initial_prompt_infiltration.add_associated_assets(
+        "indirectConversation",
+        {cs0040_conversation}
+    )
+
+    # S03 -> S04
+    # AML.T0051.001 -> AML.T0080.000
+    cs0040_conversation.add_associated_assets(
+        "agentContext",
+        {cs0040_memory_context}
+    )
+
+    # S04 -> S05
+    # AML.T0080.000 -> AML.T0093
+    cs0040_memory_context.add_associated_assets(
+        "persistentApplication",
+        {cs0040_persistent_prompt_infiltration}
+    )
+
+    # S05 -> S06
+    # AML.T0093 -> AML.T0048.003
+    cs0040_persistent_prompt_infiltration.add_associated_assets(
+        "externalHarm",
+        {cs0040_user_impact}
     )
 
 
