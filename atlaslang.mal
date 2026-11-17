@@ -12,14 +12,10 @@ category AI {
         
         | gatherVictimIdentityInformation
         user info: "AML.T0087 - Gather Victim Identity Information"
-        -> hardware.consumerHardware
+        -> hardware.consumerHardware,
+        generativeAI.generativeAI
     }
     
-    asset DeepfakeVictimIdentityInformation extends VictimIdentityInformation {
-        
-        | gatherVictimIdentityInformation
-        +> generativeAI.generativeAI
-    }
     
     asset AIInfrastructure {
         
@@ -41,14 +37,10 @@ category AI {
         
         | softwareTools
         user info: "AML.T0016.001 - Obtain Capabilities: Software Tools"
-        -> account.establishAccounts
+        -> account.establishAccounts,
+        obtainedCapability.obtainCapabilities
     }
     
-    asset DeepfakeSoftwareTool extends AIAttackSoftwareTool {
-        
-        | softwareTools
-        +> obtainedCapability.obtainCapabilities
-    }
     
     asset EnterpriseResourceDiscovery {
         
@@ -67,6 +59,7 @@ category AI {
         
         | impersonation
         user info: "AML.T0073 - Impersonation"
+        -> impact.financialHarm
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -90,11 +83,6 @@ category AI {
         +> repositoryModel.fullAIModelAccess
     }
     
-    asset KYCAccount extends FraudulentAccount {
-        
-        | impersonation
-        +> impact.financialHarm
-    }
     
     
     asset FacialRecognitionSystem {
@@ -105,7 +93,8 @@ category AI {
         
         | evadeAIModel
         user info: "AML.T0015 - Evade AI Model"
-        -> impact.financialHarm
+        -> impact.financialHarm,
+        account.impersonation
         
         | erodeAIModelIntegrity
         user info: "AML.T0031 - Erode AI Model Integrity"
@@ -147,11 +136,6 @@ category AI {
         -> evadeAIModel
     }
     
-    asset KYCFacialRecognitionSystem extends FacialRecognitionSystem {
-        
-        | evadeAIModel
-        +> account.impersonation
-    }
     
     asset AIUserExecution {
         
@@ -355,7 +339,8 @@ category AI {
         
         | generateDeepfakes
         user info: "AML.T0088 - Generate Deepfakes"
-        -> account.establishAccounts
+        -> account.establishAccounts,
+        relatedDeepfake.generateDeepfakes
         
         
         # m0009PredictiveAIMultiSensorFusion [Disabled]
@@ -367,11 +352,6 @@ category AI {
         -> generateDeepfakes
     }
     
-    asset ProKYCIdentityDocument extends DeepfakeMedia {
-        
-        | generateDeepfakes
-        +> selfieVideo.generateDeepfakes
-    }
     
     asset AIContainerRegistry {
         
@@ -394,7 +374,8 @@ category AI {
         
         | generativeAI
         user info: "AML.T0016.002 - Obtain Capabilities: Generative AI"
-        -> softwareTool.softwareTools
+        -> softwareTool.softwareTools,
+        deepfake.generateDeepfakes
         
         
         # m0001LimitModelArtifactRelease [Disabled]
@@ -410,11 +391,6 @@ category AI {
         -> generativeAI
     }
     
-    asset ProKYCGenerativeAICapability extends GenerativeAICapability {
-        
-        | generativeAI
-        +> identityDocument.generateDeepfakes
-    }
     
     asset AIObtainedCapability {
         
@@ -433,11 +409,16 @@ category AI {
         | ragPoisoning
         user info: "AML.T0070 - RAG Poisoning"
         -> triggeredConversation.triggeredPromptInjection,
+        indirectConversation.indirectPromptInjection,
         falseRAGEntryInjection
         
         | falseRAGEntryInjection
         user info: "AML.T0071 - False RAG Entry Injection"
         -> triggeredConversation.indirectPromptInjection
+        
+        | ragCredentialHarvesting
+        user info: "AML.T0082 - RAG Credential Harvesting"
+        -> renderedResponse.llmResponseRendering
         
         
         | ragDatabases
@@ -450,7 +431,8 @@ category AI {
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
         -> ragPoisoning,
-        falseRAGEntryInjection
+        falseRAGEntryInjection,
+        ragCredentialHarvesting
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
@@ -468,12 +450,14 @@ category AI {
         -> ragDatabases
         
         # m0026ManageAIAgentServiceAccess [Disabled]
-        user info: "AML.M0026 - Manage AI Agent Service Access"
-        -> ragDatabases
+        user info: "AML.M0026 - Manage Service AI Agent Access"
+        -> ragDatabases,
+        ragCredentialHarvesting
         
         # m0027ManageUserDelegatedAIAgentAccess [Disabled]
         user info: "AML.M0027 - Manage User-Delegated AI Agent Access"
-        -> ragDatabases
+        -> ragDatabases,
+        ragCredentialHarvesting
         
         # m0028EnforceAccessControlsForAIAgentTools [Disabled]
         user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
@@ -521,7 +505,8 @@ category AI {
         | validAccounts
         +> artifactCollection.aiArtifactCollection,
         inferenceService.aiModelInferenceAPIAccess,
-        userExecution.userExecution
+        userExecution.userExecution,
+        publicLLMApp.aiEnabledProductOrService
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -532,6 +517,7 @@ category AI {
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> validAccounts
     }
+    
     
     asset AIServiceImpact {
         
@@ -1317,7 +1303,8 @@ category AI {
         | evadeAIModel
             user info: "AML.T0015 - Evade AI Model"
             -> externalHarm.financialHarm,
-               externalHarm.userHarm
+            externalHarm.userHarm,
+            phishingCampaign.phishing
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
@@ -1378,18 +1365,14 @@ category AI {
         -> evadeAIModel
     }
     
-    asset PhishingVisualSimilarityDetector extends AIMalwareDetector {
-        
-        | evadeAIModel
-        +> phishingCampaign.phishing
-    }
     
     asset PublicFacingLLMApplication {
         
         | aiEnabledProductOrService
         user info: "AML.T0047 - AI-Enabled Product or Service"
         -> directPromptInjection,
-        specialCharacterSets
+        specialCharacterSets,
+        ragStore.ragPoisoning
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
@@ -1459,6 +1442,7 @@ category AI {
     }
     
     
+    
     asset AIAgent {
         
         | aiEnabledProductOrService
@@ -1510,7 +1494,8 @@ category AI {
             stagedCapability.stageCapabilities,
             verificationTarget.verifyAttack,
             targetApplication.promptInfiltrationViaPublicFacingApplication,
-            infrastructure.acquireInfrastructure
+            infrastructure.acquireInfrastructure,
+            serviceOS.validAccounts
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1539,6 +1524,7 @@ category AI {
         user info: "AML.M0035 - AI Red Team"
         -> llmPromptObfuscation
     }
+
     
     
     asset PromptManipulationNetwork extends InternalNetwork {
@@ -1588,6 +1574,7 @@ category AI {
         user info: "AML.T0051.001 - LLM Prompt Injection: Indirect"
         -> socialEngineering.spearphishingViaSocialEngineeringLLM,
         tool.aiAgentToolInvocation,
+        credentialRAG.ragCredentialHarvesting,
         renderedResponse.llmResponseRendering
         
         | triggeredPromptInjection
@@ -1890,7 +1877,7 @@ category AI {
         +> artifact.aiArtifactCollection
     }
     
-    asset PhishingCampaignBrowser extends Browser {
+    asset PhishingBrowser extends Browser {
         
         | phishing
         +> impact.userHarm
@@ -2188,7 +2175,7 @@ associations {
     
     AIInferenceService [morrisInferenceService] * <--TargetsEmailApplication--> * [infiltrationTarget] PublicFacingLLMApplication
     
-    PublicFacingLLMApplication [morrisEmailApplication] * <--PoisonsRAGDatabase--> * [ragStore] RAGKnowledgeBase
+    PublicFacingLLMApplication [publicLLMApplication] * <--UsesRAGKnowledgeBase--> * [ragStore] RAGKnowledgeBase
     
     RAGKnowledgeBase [ragData] * <--FeedsTriggeredConversation--> * [triggeredConversation] LLMConversation
     
@@ -2284,31 +2271,42 @@ associations {
     
     // AML.CS0032
     
-    PhishingVisualSimilarityDetector [phishingDetector] * <--EnablesPhishingCampaign--> * [phishingCampaign] PhishingCampaignBrowser
+    AIMalwareDetector [phishingDetector] * <--EnablesPhishingCampaign--> * [phishingCampaign] PhishingBrowser
     
-    PhishingCampaignBrowser [phishingCampaign] * <--CausesUserHarm--> * [impact] ExternalHarm
+    PhishingBrowser [phishingCampaign] * <--CausesUserHarm--> * [impact] ExternalHarm
     
     
     // AML.CS0033
     
-    DeepfakeVictimIdentityInformation [victimIdentity] * <--UsesGenerativeAI--> * [generativeAI] GenerativeAICapability
+    VictimIdentityInformation [victimIdentity] * <--EnablesGenerativeAIUse--> * [generativeAI] GenerativeAICapability
     
-    GenerativeAICapability [generativeAI] * <--UsesSoftwareTool--> * [softwareTool] DeepfakeSoftwareTool
+    AIAttackSoftwareTool [softwareTool] * <--ObtainsCapability--> * [obtainedCapability] AIObtainedCapability
     
-    DeepfakeSoftwareTool [softwareTool] * <--ObtainsCapability--> * [obtainedCapability] AIObtainedCapability
+    FraudulentAccount [fraudulentAccount] * <--CausesFinancialHarm--> * [impact] ExternalHarm
+    
+    GenerativeAICapability [generativeAI] * <--UsesSoftwareTool--> * [softwareTool] AIAttackSoftwareTool
     
     AIObtainedCapability [obtainedCapability] * <--EnablesDeepfakeGeneration--> * [deepfake] DeepfakeMedia
     
-    DeepfakeMedia [deepfake] * <--SupportsAccountRegistration--> * [account] KYCAccount
-    
-    KYCAccount [kycAccount] * <--CausesFinancialHarm--> * [impact] ExternalHarm
+    DeepfakeMedia [deepfake] * <--EnablesAccountEstablishment--> * [account] FraudulentAccount
     
     
     // AML.CS0034
     
-    ProKYCGenerativeAICapability [prokycGenerativeAI] * <--GeneratesIdentityDocument--> * [identityDocument] ProKYCIdentityDocument
+    GenerativeAICapability [generativeAI] * <--GeneratesDeepfakeMedia--> * [deepfake] DeepfakeMedia
     
-    ProKYCIdentityDocument [identityDocument] * <--GeneratesMatchingSelfieVideo--> * [selfieVideo] DeepfakeMedia
+    DeepfakeMedia [sourceDeepfake] * <--EnablesRelatedDeepfake--> * [relatedDeepfake] DeepfakeMedia
+    
+    
+    // AML.CS0035
+    
+    RAGKnowledgeBase [credentialRAG] * <--FeedsIndirectConversation--> * [indirectConversation] LLMConversation
+    
+    RAGKnowledgeBase [credentialRAGSource] * <--ProducesRenderedCredentialResponse--> * [renderedResponse] LLMRenderedResponse
+    
+    LLMPrompt [craftedPrompt] * <--UsesAIServiceAccount--> * [serviceOS] AIServiceOS
+    
+    AIServiceOS [serviceOS] * <--AccessesPublicLLMApplication--> * [publicLLMApp] PublicFacingLLMApplication
     
     
     

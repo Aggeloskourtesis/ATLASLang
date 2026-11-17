@@ -1776,6 +1776,58 @@ CASE_STUDIES = {
             "financialHarm",
     },
     
+    # ========================================================
+    # AML.CS0035
+    # Data Exfiltration from Slack AI via
+    # Indirect Prompt Injection
+    # ========================================================
+
+    "AML.CS0035": {
+
+        "attacker_name":
+            "AML_CS0035_Attacker",
+
+        # S00 - AML.T0066
+        "entry_point":
+            "SlackMaliciousMessage:"
+            "retrievalContentCrafting",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "SlackMaliciousMessage:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0012
+            "SlackWorkspace:"
+            "validAccounts",
+
+            # S03 - AML.T0047
+            "SlackAI:"
+            "aiEnabledProductOrService",
+
+            # S04 - AML.T0070
+            "SlackAIRAG:"
+            "ragPoisoning",
+
+            # S05 - AML.T0051.001
+            "SlackAIConversation:"
+            "indirectPromptInjection",
+
+            # S06 - AML.T0082
+            "SlackAIRAG:"
+            "ragCredentialHarvesting",
+
+            # S07 - AML.T0077
+            "SlackRenderedExfiltration:"
+            "llmResponseRendering",
+        ],
+
+        "goal":
+            "SlackRenderedExfiltration:"
+            "llmResponseRendering",
+    },
+    
 
 }
 
@@ -4108,12 +4160,12 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     phishing_visual_detector = model.add_asset(
-        "PhishingVisualSimilarityDetector",
+        "AIMalwareDetector",
         "PhishingVisualSimilarityModel"
     )
 
     cs0032_phishing_campaign = model.add_asset(
-        "PhishingCampaignBrowser",
+        "PhishingBrowser",
         "CS0032PhishingCampaign"
     )
 
@@ -4152,7 +4204,7 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     # ========================================================
 
     cs0033_victim_identity = model.add_asset(
-        "DeepfakeVictimIdentityInformation",
+        "VictimIdentityInformation",
         "CS0033VictimIdentity"
     )
 
@@ -4162,7 +4214,7 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     cs0033_obs = model.add_asset(
-        "DeepfakeSoftwareTool",
+        "AIAttackSoftwareTool",
         "CS0033OBS"
     )
 
@@ -4177,12 +4229,12 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     cs0033_account = model.add_asset(
-        "KYCAccount",
+        "FraudulentAccount",
         "CS0033FraudulentAccount"
     )
 
     cs0033_kyc_system = model.add_asset(
-        "KYCFacialRecognitionSystem",
+        "FacialRecognitionSystem",
         "CS0033MobileKYCSystem"
     )
 
@@ -4250,17 +4302,17 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     # ========================================================
 
     cs0034_victim_identity = model.add_asset(
-        "DeepfakeVictimIdentityInformation",
+        "VictimIdentityInformation",
         "CS0034VictimIdentity"
     )
 
     cs0034_prokyc = model.add_asset(
-        "ProKYCGenerativeAICapability",
+        "GenerativeAICapability",
         "CS0034ProKYCTool"
     )
 
     cs0034_identity_document = model.add_asset(
-        "ProKYCIdentityDocument",
+        "DeepfakeMedia",
         "CS0034FakeIdentityDocument"
     )
 
@@ -4270,12 +4322,12 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     cs0034_account = model.add_asset(
-        "KYCAccount",
+        "FraudulentAccount",
         "CS0034FraudulentAccount"
     )
 
     cs0034_kyc_system = model.add_asset(
-        "KYCFacialRecognitionSystem",
+        "FacialRecognitionSystem",
         "CS0034KYCSystem"
     )
 
@@ -4298,14 +4350,14 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     # S01 -> S02
     # AML.T0016.002 -> AML.T0088
     cs0034_prokyc.add_associated_assets(
-        "identityDocument",
+        "deepfake",
         {cs0034_identity_document}
     )
 
     # S02 -> S03
     # AML.T0088 -> AML.T0088
     cs0034_identity_document.add_associated_assets(
-        "selfieVideo",
+        "relatedDeepfake",
         {cs0034_selfie_video}
     )
 
@@ -4330,6 +4382,85 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         {cs0034_financial_impact}
     )
     
+    # ========================================================
+    # AML.CS0035
+    # Data Exfiltration from Slack AI via
+    # Indirect Prompt Injection
+    # ========================================================
+
+    slack_malicious_message = model.add_asset(
+        "LLMPrompt",
+        "SlackMaliciousMessage"
+    )
+
+    slack_workspace = model.add_asset(
+        "AIServiceOS",
+        "SlackWorkspace"
+    )
+
+    slack_ai = model.add_asset(
+        "PublicFacingLLMApplication",
+        "SlackAI"
+    )
+
+    slack_rag = model.add_asset(
+        "RAGKnowledgeBase",
+        "SlackAIRAG"
+    )
+
+    slack_conversation = model.add_asset(
+        "LLMConversation",
+        "SlackAIConversation"
+    )
+
+    slack_rendered_response = model.add_asset(
+        "LLMRenderedResponse",
+        "SlackRenderedExfiltration"
+    )
+    
+    # --------------------------------------------------------
+    # CS0035 associations
+    # --------------------------------------------------------
+
+    # S01 -> S02
+    # AML.T0065 -> AML.T0012
+    slack_malicious_message.add_associated_assets(
+        "serviceOS",
+        {slack_workspace}
+    )
+
+    # S02 -> S03
+    # AML.T0012 -> AML.T0047
+    slack_workspace.add_associated_assets(
+        "publicLLMApp",
+        {slack_ai}
+    )
+
+    # S03 -> S04
+    # AML.T0047 -> AML.T0070
+    # Reuses existing PublicFacingLLMApplication
+    # <-> RAGKnowledgeBase association
+    slack_ai.add_associated_assets(
+        "ragStore",
+        {slack_rag}
+    )
+
+    # S04 -> S05
+    # AML.T0070 -> AML.T0051.001
+    #
+    # Reverse association also provides:
+    # SlackAIConversation.credentialRAG -> SlackAIRAG
+    slack_rag.add_associated_assets(
+        "indirectConversation",
+        {slack_conversation}
+    )
+
+    # S06 -> S07
+    # AML.T0082 -> AML.T0077
+    slack_rag.add_associated_assets(
+        "renderedResponse",
+        {slack_rendered_response}
+    )
 
 
     return model
