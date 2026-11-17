@@ -38,6 +38,13 @@ category AI {
         -> account.establishAccounts
     }
     
+    asset EnterpriseResourceDiscovery {
+        
+        | enterpriseResourceDiscovery
+        user info: "AML.T0075 - Enterprise Resource Discovery"
+        -> proxyTool.softwareTools
+    }
+    
     
     asset FraudulentAccount {
         
@@ -1706,6 +1713,45 @@ category AI {
         -> masquerading
     }
     
+    asset LLMJackingCloudEnvironment extends OS {
+        
+        | validAccounts
+        +> keyChecker.softwareTools
+        
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> validAccounts
+        
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> validAccounts
+    }
+    
+    asset LLMJackingVictimOS extends OS {
+        
+        | exploitPublicFacingApplication
+        user info: "AML.T0049 - Exploit Public-Facing Application"
+        -> unsecuredCredentials
+        
+        
+        | unsecuredCredentials
+        +> cloudEnvironment.validAccounts
+        
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> exploitPublicFacingApplication
+    }
+    
+    asset LLMJackingSoftwareTool extends AIAttackSoftwareTool {
+        
+        | softwareTools
+        +> resourceDiscovery.enterpriseResourceDiscovery,
+        impact.financialHarm
+    }
+    
     asset CTAttackOS extends OS {
         
         | dataFromLocalSystem
@@ -2080,6 +2126,19 @@ associations {
     PublicFacingLLMApplication [bardApplication] * <--TriggersIndirectPrompt--> * [indirectConversation] LLMConversation
     
     LLMConversation [bardConversation] * <--ProducesRenderedResponse--> * [renderedResponse] LLMRenderedResponse
+    
+    
+    // AML.CS0030
+    
+    LLMJackingVictimOS [credentialSource] * <--ProvidesCloudCredentialsFor--> * [cloudEnvironment] LLMJackingCloudEnvironment
+    
+    LLMJackingCloudEnvironment [cloudEnvironmentSource] * <--UsesKeyChecker--> * [keyChecker] LLMJackingSoftwareTool
+    
+    LLMJackingSoftwareTool [keyCheckerTool] * <--DiscoversEnterpriseResources--> * [resourceDiscovery] EnterpriseResourceDiscovery
+    
+    EnterpriseResourceDiscovery [resourceDiscoverySource] * <--EnablesReverseProxy--> * [proxyTool] LLMJackingSoftwareTool
+    
+    LLMJackingSoftwareTool [reverseProxyTool] * <--CausesFinancialHarm--> * [impact] ExternalHarm
     
     
     //Scenario 1 associations

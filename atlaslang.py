@@ -1530,6 +1530,56 @@ CASE_STUDIES = {
             "BardUserImpact:"
             "userHarm",
     },
+    
+    # ========================================================
+    # AML.CS0030
+    # LLMjacking:
+    # Stolen Cloud Credentials Used to Access Cloud LLM Services
+    # ========================================================
+
+    "AML.CS0030": {
+
+        "attacker_name":
+            "AML_CS0030_Attacker",
+
+        # S00 - AML.T0049
+        "entry_point":
+            "LLMJackingVictimHost:"
+            "exploitPublicFacingApplication",
+
+        "path": [
+
+            # S01 - AML.T0055
+            "LLMJackingVictimHost:"
+            "unsecuredCredentials",
+
+            # S02 - AML.T0012
+            "CompromisedCloudLLMEnvironment:"
+            "validAccounts",
+
+            # S03 - AML.T0016.001
+            # keychecker
+            "LLMJackingKeychecker:"
+            "softwareTools",
+
+            # S04 - AML.T0075
+            "LLMJackingResourceDiscovery:"
+            "enterpriseResourceDiscovery",
+
+            # S05 - AML.T0016.001
+            # OAI Reverse Proxy
+            "LLMJackingReverseProxy:"
+            "softwareTools",
+
+            # S06 - AML.T0048.000
+            "LLMJackingFinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "LLMJackingFinancialImpact:"
+            "financialHarm",
+    },
 
 }
 
@@ -3729,6 +3779,75 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     bard_rendered_response.add_associated_assets(
         "externalHarm",
         {bard_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0030
+    # LLMjacking
+    # ========================================================
+
+    llmjacking_victim_host = model.add_asset(
+        "LLMJackingVictimOS",
+        "LLMJackingVictimHost"
+    )
+
+    compromised_cloud_llm = model.add_asset(
+        "LLMJackingCloudEnvironment",
+        "CompromisedCloudLLMEnvironment"
+    )
+
+    llmjacking_keychecker = model.add_asset(
+        "LLMJackingSoftwareTool",
+        "LLMJackingKeychecker"
+    )
+
+    llmjacking_resource_discovery = model.add_asset(
+        "EnterpriseResourceDiscovery",
+        "LLMJackingResourceDiscovery"
+    )
+
+    llmjacking_reverse_proxy = model.add_asset(
+        "LLMJackingSoftwareTool",
+        "LLMJackingReverseProxy"
+    )
+
+    llmjacking_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "LLMJackingFinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0030 associations
+    # --------------------------------------------------------
+
+    # S01 -> S02
+    llmjacking_victim_host.add_associated_assets(
+        "cloudEnvironment",
+        {compromised_cloud_llm}
+    )
+
+    # S02 -> S03
+    compromised_cloud_llm.add_associated_assets(
+        "keyChecker",
+        {llmjacking_keychecker}
+    )
+
+    # S03 -> S04
+    llmjacking_keychecker.add_associated_assets(
+        "resourceDiscovery",
+        {llmjacking_resource_discovery}
+    )
+
+    # S04 -> S05
+    llmjacking_resource_discovery.add_associated_assets(
+        "proxyTool",
+        {llmjacking_reverse_proxy}
+    )
+
+    # S05 -> S06
+    llmjacking_reverse_proxy.add_associated_assets(
+        "impact",
+        {llmjacking_financial_impact}
     )
 
 
