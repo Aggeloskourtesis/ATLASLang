@@ -910,7 +910,8 @@ category AI {
         user info: "AML.T0010.001 - AI Supply Chain Compromise: AI Software"
         -> hostOS.dataFromLocalSystem,
         serviceOS.validAccounts,
-        userExecution.maliciousPackage
+        userExecution.maliciousPackage,
+        agentConfiguration.modifyAIAgentConfiguration
         
         
         # m0006PredictiveAIEnsembles [Disabled]
@@ -1479,7 +1480,8 @@ category AI {
         
         | directPromptInjection
         user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
-        -> tool.aiAgentToolInvocation
+        -> tool.aiAgentToolInvocation,
+        conversation.llmJailbreak
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
@@ -1496,6 +1498,10 @@ category AI {
     }
     
     asset AIAgentConfiguration {
+        
+        | modifyAIAgentConfiguration
+        user info: "AML.T0081 - Modify AI Agent Configuration"
+        -> propagation.llmPromptPropagation
         
         | embeddedKnowledge
         user info: "AML.T0084.000 - Discover AI Agent Configuration: Embedded Knowledge"
@@ -1517,6 +1523,10 @@ category AI {
         user info: "AML.M0000 - Limit Public Release of Information"
         -> toolDefinitions,
         activationTriggers
+        
+        # m0035AIRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> modifyAIAgentConfiguration
     }
     
     
@@ -1570,7 +1580,8 @@ category AI {
             user info: "AML.T0068 - LLM Prompt Obfuscation"
             -> indirectConversation.indirectPromptInjection,
             ragStore.ragPoisoning,
-            targetApplication.promptInfiltrationViaPublicFacingApplication
+            targetApplication.promptInfiltrationViaPublicFacingApplication,
+            compromisedSoftware.aiSupplyChainCompromiseSoftware
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1603,6 +1614,7 @@ category AI {
         
         | llmPromptPropagation
         user info: "AML.T0143 - LLM Prompt Propagation"
+        -> targetAgent.directPromptInjection
         
         
         # m0026ManageAIAgentServiceAccess [Disabled]
@@ -1654,7 +1666,8 @@ category AI {
         | llmJailbreak
         user info: "AML.T0054 - LLM Jailbreak"
         -> selfReplicatingPrompt.llmPromptSelfReplication,
-        ragData.ragDatabases
+        ragData.ragDatabases,
+        renderedResponse.trustedOutputComponentsManipulation
         
         | manipulateUserLLMChatHistory
         user info: "AML.T0092 - Manipulate User LLM Chat History"
@@ -1713,7 +1726,8 @@ category AI {
         
         | stageCapabilities
         user info: "AML.T0079 - Stage Capabilities"
-        -> browser.driveByCompromise
+        -> browser.driveByCompromise,
+        craftedPrompt.llmPromptCrafting
     }
     
     asset SocialEngineeringLLM {
@@ -1734,13 +1748,17 @@ category AI {
     
     asset LLMRenderedResponse {
         
-        | llmResponseRendering
-        user info: "AML.T0077 - LLM Response Rendering"
+        | trustedOutputComponentsManipulation
+        user info: "AML.T0067 - LLM Trusted Output Components Manipulation"
         -> externalHarm.userHarm
         
         | citations
         user info: "AML.T0067.000 - Citations"
         -> externalHarm.financialHarm
+        
+        | llmResponseRendering
+        user info: "AML.T0077 - LLM Response Rendering"
+        -> externalHarm.userHarm
     }
     
     asset LLMDriveByBrowser extends Browser {
@@ -2475,6 +2493,21 @@ associations {
     AIAgentContext [memoryContext] * <--PersistsThroughPublicApplication--> * [persistentApplication] PublicFacingLLMApplication
     
     PublicFacingLLMApplication [persistentPromptApplication] * <--CausesUserHarm--> * [externalHarm] ExternalHarm
+    
+    
+    // AML.CS0041
+    
+    LLMStagedCapability [stagedCapabilitySource] * <--SupportsPromptCrafting--> * [craftedPrompt] LLMPrompt
+    
+    LLMPrompt [obfuscatedRulesPrompt] * <--EmbeddedInPoisonedAISoftware--> * [compromisedSoftware] AISupplyChainSoftware
+    
+    AISupplyChainSoftware [poisonedRulesSoftware] * <--ModifiesAgentConfiguration--> * [agentConfiguration] AIAgentConfiguration
+    
+    AIAgentConfiguration [modifiedAgentConfiguration] * <--PropagatesInstructionsThrough--> * [propagation] LLMPromptPropagation
+    
+    LLMPromptPropagation [propagationSource] * <--ReachesAIAgent--> * [targetAgent] AIAgent
+    
+    AIAgent [codingAgent] * <--UsesConversation--> * [conversation] LLMConversation
     
     
     

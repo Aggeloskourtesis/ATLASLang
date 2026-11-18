@@ -2141,6 +2141,66 @@ CASE_STUDIES = {
             "CS0040UserImpact:"
             "userHarm",
     },
+    
+    # ========================================================
+    # AML.CS0041
+    # Rules File Backdoor: Supply Chain Attack on
+    # AI Coding Assistants
+    # ========================================================
+
+    "AML.CS0041": {
+
+        "attacker_name":
+            "AML_CS0041_Attacker",
+
+        # S00 - AML.T0079
+        "entry_point":
+            "CS0041StagedCapability:"
+            "stageCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "CS0041RulesPrompt:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0068
+            "CS0041RulesPrompt:"
+            "llmPromptObfuscation",
+
+            # S03 - AML.T0010.001
+            "CS0041PoisonedRulesSoftware:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # S04 - AML.T0081
+            "CS0041AgentConfiguration:"
+            "modifyAIAgentConfiguration",
+
+            # S05 - AML.T0143
+            "CS0041RulesPropagation:"
+            "llmPromptPropagation",
+
+            # S06 - AML.T0051.000
+            "CS0041CodingAssistant:"
+            "directPromptInjection",
+
+            # S07 - AML.T0054
+            "CS0041CodingConversation:"
+            "llmJailbreak",
+
+            # S08 - AML.T0067
+            "CS0041TrustedOutput:"
+            "trustedOutputComponentsManipulation",
+
+            # S09 - AML.T0048.003
+            "CS0041UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0041UserImpact:"
+            "userHarm",
+    },
 
 }
 
@@ -5193,6 +5253,117 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     cs0040_persistent_prompt_infiltration.add_associated_assets(
         "externalHarm",
         {cs0040_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0041
+    # Rules File Backdoor: Supply Chain Attack on
+    # AI Coding Assistants
+    # ========================================================
+
+    cs0041_staged_capability = model.add_asset(
+        "LLMStagedCapability",
+        "CS0041StagedCapability"
+    )
+
+    cs0041_rules_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0041RulesPrompt"
+    )
+
+    cs0041_poisoned_rules_software = model.add_asset(
+        "AISupplyChainSoftware",
+        "CS0041PoisonedRulesSoftware"
+    )
+
+    cs0041_agent_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0041AgentConfiguration"
+    )
+
+    cs0041_rules_propagation = model.add_asset(
+        "LLMPromptPropagation",
+        "CS0041RulesPropagation"
+    )
+
+    cs0041_coding_assistant = model.add_asset(
+        "AIAgent",
+        "CS0041CodingAssistant"
+    )
+
+    cs0041_coding_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0041CodingConversation"
+    )
+
+    cs0041_trusted_output = model.add_asset(
+        "LLMRenderedResponse",
+        "CS0041TrustedOutput"
+    )
+
+    cs0041_user_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0041UserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0041 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0079 -> AML.T0065
+    cs0041_staged_capability.add_associated_assets(
+        "craftedPrompt",
+        {cs0041_rules_prompt}
+    )
+
+    # S02 -> S03
+    # AML.T0068 -> AML.T0010.001
+    cs0041_rules_prompt.add_associated_assets(
+        "compromisedSoftware",
+        {cs0041_poisoned_rules_software}
+    )
+
+    # S03 -> S04
+    # AML.T0010.001 -> AML.T0081
+    cs0041_poisoned_rules_software.add_associated_assets(
+        "agentConfiguration",
+        {cs0041_agent_configuration}
+    )
+
+    # S04 -> S05
+    # AML.T0081 -> AML.T0143
+    cs0041_agent_configuration.add_associated_assets(
+        "propagation",
+        {cs0041_rules_propagation}
+    )
+
+    # S05 -> S06
+    # AML.T0143 -> AML.T0051.000
+    cs0041_rules_propagation.add_associated_assets(
+        "targetAgent",
+        {cs0041_coding_assistant}
+    )
+
+    # S06 -> S07
+    # AML.T0051.000 -> AML.T0054
+    cs0041_coding_assistant.add_associated_assets(
+        "conversation",
+        {cs0041_coding_conversation}
+    )
+
+    # S07 -> S08
+    # AML.T0054 -> AML.T0067
+    cs0041_coding_conversation.add_associated_assets(
+        "renderedResponse",
+        {cs0041_trusted_output}
+    )
+
+    # S08 -> S09
+    # AML.T0067 -> AML.T0048.003
+    cs0041_trusted_output.add_associated_assets(
+        "externalHarm",
+        {cs0041_user_impact}
     )
 
 
