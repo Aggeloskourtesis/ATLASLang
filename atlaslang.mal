@@ -193,6 +193,14 @@ category AI {
         | cyberCommunicationChannel
         user info: "AML.T0072 - Cyber Communication Channel"
         -> credentialHost.unsecuredCredentials
+        
+        | aiServiceAPI
+        user info: "AML.T0096 - AI Service API"
+        
+        
+        # m0019ControlAccessInProduction [Disabled]
+        user info: "AML.M0019 - Control Access to AI Models and Data in Production"
+        -> aiServiceAPI
     }
     
     
@@ -716,7 +724,8 @@ category AI {
         user info: "AML.T0017 - Develop Capabilities"
         -> compromisedSoftware.aiSupplyChainCompromiseSoftware,
         obfuscatedPrompt.llmPromptObfuscation,
-        publicLLMTarget.promptInfiltrationViaPublicFacingApplication
+        publicLLMTarget.promptInfiltrationViaPublicFacingApplication,
+        targetDetector.directPromptInjection
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -1311,29 +1320,36 @@ category AI {
     
     asset AIMalwareDetector {
         
+        | evadeAIModel
+            user info: "AML.T0015 - Evade AI Model"
+            -> externalHarm.financialHarm,
+            externalHarm.userHarm,
+            phishingCampaign.phishing,
+            malwareHost.virtualizationOrSandboxEvasion
+            
+        | verifyAttack
+            user info: "AML.T0042 - Verify Attack"
+            -> evadeAIModel
+        
         | aiEnabledProductOrService
             user info: "AML.T0047 - AI-Enabled Product or Service"
             -> discoverAIModelOutputs,
             labeledDataset.datasets
+            
+        | directPromptInjection
+            user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
+            -> evadeAIModel
         
         | discoverAIModelOutputs
             user info: "AML.T0063 - Discover AI Model Outputs"
             -> capability.adversarialAIAttacks,
             proxyModel.trainProxyViaReplication
         
-        | verifyAttack
-            user info: "AML.T0042 - Verify Attack"
-            -> evadeAIModel
-        
-        | evadeAIModel
-            user info: "AML.T0015 - Evade AI Model"
-            -> externalHarm.financialHarm,
-            externalHarm.userHarm,
-            phishingCampaign.phishing
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
-        -> aiEnabledProductOrService
+        -> aiEnabledProductOrService,
+        directPromptInjection
         
         # m0002PredictiveAIOutputObfuscation [Disabled]
         user info: "AML.M0002 - Predictive AI Output Obfuscation"
@@ -1381,13 +1397,18 @@ category AI {
         user info: "AML.M0015 - Predictive AI Adversarial Input Detection"
         -> evadeAIModel
         
+        # m0033InputOutputValidationAgentComponents [Disabled]
+        user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
+        -> directPromptInjection
+        
         # m0034DeepfakeDetection [Disabled]
         user info: "AML.M0034 - Deepfake Detection"
         -> evadeAIModel
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> evadeAIModel
+        -> evadeAIModel,
+        directPromptInjection
     }
     
     
@@ -1570,7 +1591,8 @@ category AI {
             infrastructure.acquireInfrastructure,
             serviceOS.validAccounts,
             ragData.ragDatabases,
-            llmPromptObfuscation
+            llmPromptObfuscation,
+            malwareCapability.developCapabilities
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1960,6 +1982,20 @@ category AI {
         # m0025MaintainAIDatasetProvenance [Disabled]
         user info: "AML.M0025 - Maintain AI Dataset Provenance"
         -> masquerading
+    }
+    
+    asset MalwareHostOS extends OS {
+        
+        | virtualizationOrSandboxEvasion
+        +> unsecuredCredentials
+        
+        
+        | unsecuredCredentials
+        +> dataFromLocalSystem
+        
+        
+        | dataFromLocalSystem
+        +> exfiltration.exfiltrationViaCyberMeans
     }
     
     asset LLMJackingCloudEnvironment extends OS {
@@ -2508,6 +2544,19 @@ associations {
     LLMPromptPropagation [propagationSource] * <--ReachesAIAgent--> * [targetAgent] AIAgent
     
     AIAgent [codingAgent] * <--UsesConversation--> * [conversation] LLMConversation
+    
+    // AML.CS0042
+    
+    
+    // AML.CS0043
+    
+    LLMPrompt [malwarePrompt] * <--SupportsCapabilityDevelopment--> * [malwareCapability] AdversarialCapability
+    
+    AdversarialCapability [malwareCapability] * <--TargetsLLMMalwareDetector--> * [targetDetector] AIMalwareDetector
+    
+    AIMalwareDetector [llmMalwareDetector] * <--AnalyzesMalwareOnHost--> * [malwareHost] MalwareHostOS
+    
+    MalwareHostOS [malwareHost] * <--ExfiltratesThrough--> * [exfiltration] AIExfiltration
     
     
     

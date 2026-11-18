@@ -2201,6 +2201,81 @@ CASE_STUDIES = {
             "CS0041UserImpact:"
             "userHarm",
     },
+    
+    # ========================================================
+    # AML.CS0042
+    # SesameOp: Novel backdoor uses OpenAI Assistants API
+    # for command and control
+    # ========================================================
+
+    "AML.CS0042": {
+
+        "attacker_name":
+            "AML_CS0042_Attacker",
+
+        # S00 - AML.T0096
+        "entry_point":
+            "CS0042AIServiceC2:"
+            "aiServiceAPI",
+
+        "path": [
+        ],
+
+        "goal":
+            "CS0042AIServiceC2:"
+            "aiServiceAPI",
+    },
+        
+    # ========================================================
+    # AML.CS0043
+    # Malware Prototype with Embedded Prompt Injection
+    # ========================================================
+
+    "AML.CS0043": {
+
+        "attacker_name":
+            "AML_CS0043_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0043EmbeddedPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0017
+            "CS0043MalwareCapability:"
+            "developCapabilities",
+
+            # S02 - AML.T0051.000
+            "CS0043LLMMalwareDetector:"
+            "directPromptInjection",
+
+            # S03 - AML.T0015
+            "CS0043LLMMalwareDetector:"
+            "evadeAIModel",
+
+            # S04 - AML.T0097 / ATT&CK T1497
+            "CS0043SkynetHost:"
+            "virtualizationOrSandboxEvasion",
+
+            # S05 - AML.T0055 / ATT&CK T1552
+            "CS0043SkynetHost:"
+            "unsecuredCredentials",
+
+            # S06 - AML.T0037 / ATT&CK T1005
+            "CS0043SkynetHost:"
+            "dataFromLocalSystem",
+
+            # S07 - AML.T0025
+            "CS0043Exfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0043Exfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
 
 }
 
@@ -5365,6 +5440,79 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "externalHarm",
         {cs0041_user_impact}
     )
+    
+    # ========================================================
+    # AML.CS0042
+    # SesameOp: Novel backdoor uses OpenAI Assistants API
+    # for command and control
+    # ========================================================
+
+    cs0042_ai_service_c2 = model.add_asset(
+        "AICyberCommunication",
+        "CS0042AIServiceC2"
+    )
+    
+    # ========================================================
+    # AML.CS0043
+    # Malware Prototype with Embedded Prompt Injection
+    # ========================================================
+
+    cs0043_embedded_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0043EmbeddedPrompt"
+    )
+
+    cs0043_malware_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0043MalwareCapability"
+    )
+
+    cs0043_llm_malware_detector = model.add_asset(
+        "AIMalwareDetector",
+        "CS0043LLMMalwareDetector"
+    )
+
+    cs0043_skynet_host = model.add_asset(
+        "MalwareHostOS",
+        "CS0043SkynetHost"
+    )
+
+    cs0043_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0043Exfiltration"
+    )
+    
+    # --------------------------------------------------------
+    # CS0043 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0017
+    cs0043_embedded_prompt.add_associated_assets(
+        "malwareCapability",
+        {cs0043_malware_capability}
+    )
+
+    # S01 -> S02
+    # AML.T0017 -> AML.T0051.000
+    cs0043_malware_capability.add_associated_assets(
+        "targetDetector",
+        {cs0043_llm_malware_detector}
+    )
+
+    # S03 -> S04
+    # AML.T0015 -> AML.T0097
+    cs0043_llm_malware_detector.add_associated_assets(
+        "malwareHost",
+        {cs0043_skynet_host}
+    )
+
+    # S06 -> S07
+    # AML.T0037 -> AML.T0025
+    cs0043_skynet_host.add_associated_assets(
+        "exfiltration",
+        {cs0043_exfiltration}
+    )
 
 
     return model
@@ -5667,12 +5815,17 @@ def print_result(
     # Check goal
     # --------------------------------------------------------
 
-    goal_reached = any(
+    goal_reached = (
+
+    goal == entry_point
+
+    or any(
 
         node is not None
         and node.full_name == goal
 
         for node in attacker_actions
+        )
     )
 
 
