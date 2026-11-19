@@ -2770,6 +2770,73 @@ CASE_STUDIES = {
             "CS0051MachineCompromise:"
             "localAIAgent",
     },
+    
+    # ========================================================
+    # AML.CS0052
+    # LLMSmith: RCE Vulnerabilities in
+    # LLM-Integrated Applications
+    # ========================================================
+
+    "AML.CS0052": {
+
+        "attacker_name":
+            "AML_CS0052_Attacker",
+
+        # S00 - AML.T0017
+        "entry_point":
+            "CS0052RCECapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0004
+            "CS0052ApplicationResearch:"
+            "searchApplicationRepositories",
+
+            # S02 - AML.T0084.003
+            "CS0052CallChainConfiguration:"
+            "callChains",
+
+            # S03 - AML.T0065
+            "CS0052RCEPrompt:"
+            "llmPromptCrafting",
+
+            # S04 - AML.T0049
+            "CS0052PublicLLMApplication:"
+            "exploitPublicFacingApplication",
+
+            # S05 - AML.T0051.000
+            "CS0052PublicLLMApplication:"
+            "directPromptInjection",
+
+            # S06 - AML.T0054
+            "CS0052Conversation:"
+            "llmJailbreak",
+            
+            # S07 - AML.T0053
+            "CS0052VulnerableTool:"
+            "aiAgentToolInvocation",
+
+            # S08/S09 - AML.T0050 / AML.T0105
+            # commandAndScriptingInterpreter is an AND-gate in enterpriselang;
+            # the AIServiceOS override (+> escapeToHost) makes escapeToHost
+            # the observable simulation step — skip the AND-gate directly.
+            "CS0052LLMApplicationHost:"
+            "escapeToHost",
+
+            # S10 - AML.T0072
+            "CS0052ReverseShellChannel:"
+            "cyberCommunicationChannel",
+
+            # S11 - AML.T0112.000
+            "CS0052LLMApplicationHost:"
+            "localAIAgent",
+        ],
+
+        "goal":
+            "CS0052LLMApplicationHost:"
+            "localAIAgent",
+    },
 
 }
 
@@ -6826,6 +6893,131 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "machineCompromise",
         {cs0051_machine_compromise}
     )
+    
+    # ========================================================
+    # AML.CS0052
+    # LLMSmith: RCE Vulnerabilities in
+    # LLM-Integrated Applications
+    # ========================================================
+
+    cs0052_rce_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0052RCECapability"
+    )
+
+    cs0052_application_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0052ApplicationResearch"
+    )
+
+    cs0052_call_chain_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0052CallChainConfiguration"
+    )
+
+    cs0052_rce_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0052RCEPrompt"
+    )
+
+    cs0052_public_llm_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0052PublicLLMApplication"
+    )
+
+    cs0052_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0052Conversation"
+    )
+
+    cs0052_vulnerable_tool = model.add_asset(
+        "AITool",
+        "CS0052VulnerableTool"
+    )
+
+    cs0052_llm_application_host = model.add_asset(
+        "AIServiceOS",
+        "CS0052LLMApplicationHost"
+    )
+
+    cs0052_reverse_shell_channel = model.add_asset(
+        "AICyberCommunication",
+        "CS0052ReverseShellChannel"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0052 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0017 -> AML.T0004
+    cs0052_rce_capability.add_associated_assets(
+        "repositoryResearch",
+        {cs0052_application_research}
+    )
+
+    # S01 -> S02
+    # AML.T0004 -> AML.T0084.003
+    cs0052_application_research.add_associated_assets(
+        "callChainConfiguration",
+        {cs0052_call_chain_configuration}
+    )
+
+    # S02 -> S03
+    # AML.T0084.003 -> AML.T0065
+    cs0052_call_chain_configuration.add_associated_assets(
+        "craftedPrompt",
+        {cs0052_rce_prompt}
+    )
+
+    # S03 -> S04
+    # AML.T0065 -> AML.T0049
+    cs0052_rce_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0052_public_llm_application}
+    )
+
+    # S04 -> S05
+    # AML.T0049 -> AML.T0051.000
+    # Same PublicFacingLLMApplication instance — no new association needed.
+
+    # S05 -> S06
+    # AML.T0051.000 -> AML.T0054
+    cs0052_public_llm_application.add_associated_assets(
+        "conversation",
+        {cs0052_conversation}
+    )
+
+    # S06 -> S07
+    # AML.T0054 -> AML.T0053
+    cs0052_conversation.add_associated_assets(
+        "tool",
+        {cs0052_vulnerable_tool}
+    )
+
+    # S07 -> S08
+    # AML.T0053 -> AML.T0050
+    cs0052_vulnerable_tool.add_associated_assets(
+        "executionHostOS",
+        {cs0052_llm_application_host}
+    )
+
+    # S08 -> S09
+    # AML.T0050 -> AML.T0105
+    # Same AIServiceOS instance — no new association needed.
+
+    # S09 -> S10
+    # AML.T0105 -> AML.T0072
+    cs0052_llm_application_host.add_associated_assets(
+        "c2",
+        {cs0052_reverse_shell_channel}
+    )
+
+    # S10 -> S11
+    # AML.T0072 -> AML.T0112.000
+    # Inverse "compromisedHost" role on the same association
+    # points back to CS0052LLMApplicationHost automatically.
 
 
     return model

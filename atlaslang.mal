@@ -236,7 +236,8 @@ category AI {
         
         | cyberCommunicationChannel
         user info: "AML.T0072 - Cyber Communication Channel"
-        -> credentialHost.unsecuredCredentials
+        -> credentialHost.unsecuredCredentials,
+        compromisedHost.localAIAgent
         
         | aiServiceAPI
         user info: "AML.T0096 - AI Service API"
@@ -316,7 +317,8 @@ category AI {
         | searchApplicationRepositories
         user info: "AML.T0004 - Search Application Repositories"
         -> publicArtifacts.models,
-        registryTarget.exploitPublicFacingApplication
+        registryTarget.exploitPublicFacingApplication,
+        callChainConfiguration.callChains
         
         | activeScanning
         user info: "AML.T0006 - Active Scanning"
@@ -600,9 +602,16 @@ category AI {
         publicLLMApp.aiEnabledProductOrService,
         agentConfiguration.modifyAIAgentConfiguration
         
+        & commandAndScriptingInterpreter
+        +> escapeToHost
+        
         | escapeToHost
         user info: "AML.T0105 - Escape to Host"
-        -> commandAndScriptingInterpreter
+        -> commandAndScriptingInterpreter,
+        c2.cyberCommunicationChannel
+        
+        | localAIAgent
+        user info: "AML.T0112.000 - Machine Compromise: Local AI Agent"
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -795,7 +804,8 @@ category AI {
         publicLLMTarget.promptInfiltrationViaPublicFacingApplication,
         targetDetector.directPromptInjection,
         domainInfrastructure.domains,
-        stagedCapability.stageCapabilities
+        stagedCapability.stageCapabilities,
+        repositoryResearch.searchApplicationRepositories
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -1510,10 +1520,15 @@ category AI {
         user info: "AML.T0042 - Verify Attack"
         -> promptInfiltrationViaPublicFacingApplication
         
+        | exploitPublicFacingApplication
+        user info: "AML.T0049 - Exploit Public-Facing Application"
+        -> directPromptInjection
+        
         | directPromptInjection
         user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
         -> verifyAttack,
-        agentContext.contextPoisoningThread
+        agentContext.contextPoisoningThread,
+        conversation.llmJailbreak
         
         | specialCharacterSets
         user info: "AML.T0069.000 - Discover LLM System Information: Special Character Sets"
@@ -1660,15 +1675,21 @@ category AI {
         user info: "AML.T0084.002 - Discover AI Agent Configuration: Activation Triggers"
         -> toolDefinitions
         
+        | callChains
+        user info: "AML.T0084.003 - Discover AI Agent Configuration: Call Chains"
+        -> craftedPrompt.llmPromptCrafting
+        
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
         -> toolDefinitions,
-        activationTriggers
+        activationTriggers,
+        callChains
         
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
-        -> modifyAIAgentConfiguration
+        -> modifyAIAgentConfiguration,
+        callChains
     }
     
     
@@ -1742,6 +1763,7 @@ category AI {
             stagedCapability.stageCapabilities,
             verificationTarget.verifyAttack,
             targetApplication.promptInfiltrationViaPublicFacingApplication,
+            targetApplication.exploitPublicFacingApplication,
             infrastructure.acquireInfrastructure,
             serviceOS.validAccounts,
             ragData.ragDatabases,
@@ -1978,7 +2000,8 @@ category AI {
             dataDestructionViaAIAgentToolInvocation,
             conversation.manipulateUserLLMChatHistory,
             externalHarm.externalHarms,
-            agentConfiguration.modifyAIAgentConfiguration
+            agentConfiguration.modifyAIAgentConfiguration,
+            executionHostOS.escapeToHost
             
         | aiAgentTools
             user info: "AML.T0085.001 - Data from AI Services: AI Agent Tools"
@@ -2853,6 +2876,16 @@ associations {
     AIAgent [contextAwareAgent] * <--UsesAgentContext--> * [agentContext] AIAgentContext
     
     AIAgent [commandControlAgent] * <--CompromisesLocalMachine--> * [machineCompromise] AIMachineCompromise
+    
+    // AML.CS0052
+    
+    AdversarialCapability [capabilityForRepositoryResearch] * <--GuidesRepositoryResearch--> * [repositoryResearch] AIResearchMaterial
+    
+    AIResearchMaterial [repositoryResearchSource] * <--DiscoversAgentCallChainsIn--> * [callChainConfiguration] AIAgentConfiguration
+    
+    AITool [invokedExecutionTool] * <--ExecutesOnAIServiceHost--> * [executionHostOS] AIServiceOS
+    
+    AIServiceOS [compromisedHost] * <--CommunicatesThrough--> * [c2] AICyberCommunication
     
     
     //Scenario 1 associations
