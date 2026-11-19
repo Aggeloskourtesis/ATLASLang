@@ -2679,6 +2679,97 @@ CASE_STUDIES = {
             "CS0050GatewayHost:"
             "commandAndScriptingInterpreter",
     },
+        
+    # ========================================================
+    # AML.CS0051
+    # OpenClaw Command & Control via Prompt Injection
+    # ========================================================
+
+    "AML.CS0051": {
+
+        "attacker_name":
+            "AML_CS0051_Attacker",
+
+        # S00 - AML.T0095.000
+        "entry_point":
+            "CS0051RepositoryResearch:"
+            "codeRepositories",
+
+        "path": [
+
+            # S01 - AML.T0002.002
+            "CS0051PublicAgentConfiguration:"
+            "aiAgentConfiguration",
+
+            # S02 - AML.T0069.000
+            "CS0051TargetApplication:"
+            "specialCharacterSets",
+
+            # S03 - AML.T0069.001
+            "CS0051TargetApplication:"
+            "systemInstructionKeywords",
+
+            # S04 - AML.T0065
+            "CS0051ExecutionPrompt:"
+            "llmPromptCrafting",
+
+            # S05 - AML.T0065
+            "CS0051PersistentTaskPrompt:"
+            "llmPromptCrafting",
+
+            # S06 - AML.T0008
+            "CS0051Infrastructure:"
+            "acquireInfrastructure",
+
+            # S07 - AML.T0079
+            "CS0051StagedCapabilities:"
+            "stageCapabilities",
+
+            # S08 - AML.T0074
+            "CS0051Infrastructure:"
+            "masquerading",
+
+            # S09 - AML.T0078
+            "CS0051DriveByBrowser:"
+            "driveByCompromise",
+
+            # S10 - AML.T0051.001
+            "CS0051Conversation:"
+            "indirectPromptInjection",
+
+            # S11 - AML.T0054
+            "CS0051Conversation:"
+            "llmJailbreak",
+
+            # S12 - AML.T0053
+            "CS0051BashTool:"
+            "aiAgentToolInvocation",
+
+            # S13 - AML.T0081
+            "CS0051AgentConfiguration:"
+            "modifyAIAgentConfiguration",
+
+            # S14 - AML.T0051.000
+            "CS0051Agent:"
+            "directPromptInjection",
+
+            # S15 - AML.T0080.001
+            "CS0051AgentContext:"
+            "contextPoisoningThread",
+
+            # S16 - AML.T0108
+            "CS0051Agent:"
+            "aiAgentCommandAndControl",
+
+            # S17 - AML.T0112.000
+            "CS0051MachineCompromise:"
+            "localAIAgent",
+        ],
+
+        "goal":
+            "CS0051MachineCompromise:"
+            "localAIAgent",
+    },
 
 }
 
@@ -6564,6 +6655,176 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     cs0050_gateway_host.add_associated_assets(
         "agentConfiguration",
         {cs0050_agent_configuration}
+    )
+    
+    # ========================================================
+    # AML.CS0051
+    # OpenClaw Command & Control via Prompt Injection
+    # ========================================================
+
+    cs0051_repository_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0051RepositoryResearch"
+    )
+
+    cs0051_public_agent_configuration = model.add_asset(
+        "PublicAIArtifacts",
+        "CS0051PublicAgentConfiguration"
+    )
+
+    cs0051_target_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0051TargetApplication"
+    )
+
+    cs0051_execution_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0051ExecutionPrompt"
+    )
+
+    cs0051_persistent_task_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0051PersistentTaskPrompt"
+    )
+
+    cs0051_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "CS0051Infrastructure"
+    )
+
+    cs0051_staged_capabilities = model.add_asset(
+        "LLMStagedCapability",
+        "CS0051StagedCapabilities"
+    )
+
+    cs0051_drive_by_browser = model.add_asset(
+        "LLMDriveByBrowser",
+        "CS0051DriveByBrowser"
+    )
+
+    cs0051_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0051Conversation"
+    )
+
+    cs0051_bash_tool = model.add_asset(
+        "AITool",
+        "CS0051BashTool"
+    )
+
+    cs0051_agent_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0051AgentConfiguration"
+    )
+
+    cs0051_agent = model.add_asset(
+        "AIAgent",
+        "CS0051Agent"
+    )
+
+    cs0051_agent_context = model.add_asset(
+        "AIAgentContext",
+        "CS0051AgentContext"
+    )
+
+    cs0051_machine_compromise = model.add_asset(
+        "AIMachineCompromise",
+        "CS0051MachineCompromise"
+    )
+    
+    # --------------------------------------------------------
+    # CS0051 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0095.000 -> AML.T0002.002
+    cs0051_repository_research.add_associated_assets(
+        "publicArtifacts",
+        {cs0051_public_agent_configuration}
+    )
+
+    # S01 -> S02
+    # AML.T0002.002 -> AML.T0069.000
+    cs0051_public_agent_configuration.add_associated_assets(
+        "targetApplication",
+        {cs0051_target_application}
+    )
+
+    # S03 -> S04
+    # AML.T0069.001 -> AML.T0065
+    cs0051_target_application.add_associated_assets(
+        "craftedPayload",
+        {cs0051_execution_prompt}
+    )
+
+    # S04 -> S05
+    # AML.T0065 -> AML.T0065
+    cs0051_execution_prompt.add_associated_assets(
+        "nextCraftedPrompt",
+        {cs0051_persistent_task_prompt}
+    )
+
+    # S05 -> S06
+    # AML.T0065 -> AML.T0008
+    cs0051_persistent_task_prompt.add_associated_assets(
+        "infrastructure",
+        {cs0051_infrastructure}
+    )
+
+    # S06 -> S07
+    # AML.T0008 -> AML.T0079
+    cs0051_infrastructure.add_associated_assets(
+        "stagedCapability",
+        {cs0051_staged_capabilities}
+    )
+
+    # S08 -> S09
+    # AML.T0074 -> AML.T0078
+    cs0051_infrastructure.add_associated_assets(
+        "browser",
+        {cs0051_drive_by_browser}
+    )
+
+    # S09 -> S10
+    # AML.T0078 -> AML.T0051.001
+    cs0051_drive_by_browser.add_associated_assets(
+        "indirectConversation",
+        {cs0051_conversation}
+    )
+
+    # S11 -> S12
+    # AML.T0054 -> AML.T0053
+    cs0051_conversation.add_associated_assets(
+        "tool",
+        {cs0051_bash_tool}
+    )
+
+    # S12 -> S13
+    # AML.T0053 -> AML.T0081
+    cs0051_bash_tool.add_associated_assets(
+        "agentConfiguration",
+        {cs0051_agent_configuration}
+    )
+
+    # S13 -> S14
+    # AML.T0081 -> AML.T0051.000
+    cs0051_agent_configuration.add_associated_assets(
+        "targetAgent",
+        {cs0051_agent}
+    )
+
+    # S14 -> S15
+    # AML.T0051.000 -> AML.T0080.001
+    cs0051_agent.add_associated_assets(
+        "agentContext",
+        {cs0051_agent_context}
+    )
+
+    # S16 -> S17
+    # AML.T0108 -> AML.T0112.000
+    cs0051_agent.add_associated_assets(
+        "machineCompromise",
+        {cs0051_machine_compromise}
     )
 
 

@@ -21,7 +21,12 @@ category AI {
         
         | acquireInfrastructure
         user info: "AML.T0008 - Acquire Infrastructure"
-        -> capability.developCapabilities
+        -> capability.developCapabilities,
+        stagedCapability.stageCapabilities
+        
+        | masquerading
+        user info: "AML.T0074 - Masquerading"
+        -> browser.driveByCompromise
     }
     
     
@@ -328,6 +333,10 @@ category AI {
         | searchOpenWebsitesDomains
         user info: "AML.T0095 - Search Open Websites/Domains"
         -> craftedPrompt.llmPromptCrafting
+        
+        | codeRepositories
+        user info: "AML.T0095.000 - Search Open Websites/Domains: Code Repositories"
+        -> publicArtifacts.aiAgentConfiguration
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -350,7 +359,8 @@ category AI {
         user info: "AML.M0039 - AI Honeypots"
         -> searchOpenTechnicalDatabases,
         searchOpenWebsitesDomains,
-        scanDatabases
+        scanDatabases,
+        codeRepositories
     }
     
     
@@ -749,6 +759,10 @@ category AI {
             developmentWorkspace.aiDevelopmentWorkspaces,
             fullAccessTarget.fullAIModelAccess,
             poisonTarget.poisonAIModel
+            
+        | aiAgentConfiguration
+            user info: "AML.T0002.002 - Acquire Public AI Artifacts: AI Agent Configuration"
+            -> targetApplication.specialCharacterSets
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -1378,6 +1392,17 @@ category AI {
         -> compromisedSoftware.aiSupplyChainCompromiseSoftware
     }
     
+    asset AIMachineCompromise {
+        
+        | localAIAgent
+        user info: "AML.T0112.000 - Machine Compromise: Local AI Agent"
+        
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> localAIAgent
+    }
+    
     asset AIMalwareDetector {
         
         | evadeAIModel
@@ -1496,7 +1521,8 @@ category AI {
         
         | systemInstructionKeywords
         user info: "AML.T0069.001 - Discover LLM System Information: System Instruction Keywords"
-        -> craftedPayload.retrievalContentCrafting
+        -> craftedPayload.retrievalContentCrafting,
+        craftedPayload.llmPromptCrafting
         
         | systemPrompt
         user info: "AML.T0069.002 - Discover LLM System Information: System Prompt"
@@ -1574,20 +1600,30 @@ category AI {
         user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
         -> tool.aiAgentToolInvocation,
         conversation.llmJailbreak,
-        tool.dataDestructionViaAIAgentToolInvocation
+        tool.dataDestructionViaAIAgentToolInvocation,
+        agentContext.contextPoisoningThread
         
         | deployAIAgent
         user info: "AML.T0103 - Deploy AI Agent"
         -> directPromptInjection
         
+        | aiAgentCommandAndControl
+        user info: "AML.T0108 - AI Agent"
+        -> machineCompromise.localAIAgent
+        
         # m0013CodeSigning [Disabled]
         user info: "AML.M0013 - Code Signing"
         -> deployAIAgent
         
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> aiAgentCommandAndControl
+        
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
         -> aiEnabledProductOrService,
-        directPromptInjection
+        directPromptInjection,
+        aiAgentCommandAndControl
         
         # m0033InputOutputValidationAgentComponents [Disabled]
         user info: "AML.M0033 - Input and Output Validation for AI Agent Components"
@@ -1603,7 +1639,8 @@ category AI {
         | modifyAIAgentConfiguration
         user info: "AML.T0081 - Modify AI Agent Configuration"
         -> propagation.llmPromptPropagation,
-        agentServiceHost.escapeToHost
+        agentServiceHost.escapeToHost,
+        targetAgent.directPromptInjection
         
         | credentialsFromAIAgentConfiguration
         user info: "AML.T0083 - Credentials from AI Agent Configuration"
@@ -1645,7 +1682,8 @@ category AI {
         | contextPoisoningThread
         user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
         -> externalHarm.userHarm,
-        contextPoisoningMemory
+        contextPoisoningMemory,
+        contextAwareAgent.aiAgentCommandAndControl
         
         # m0031MemoryHardening [Disabled]
         user info: "AML.M0031 - Memory Hardening"
@@ -1710,7 +1748,8 @@ category AI {
             llmPromptObfuscation,
             malwareCapability.developCapabilities,
             credentialHost.unsecuredCredentials,
-            poisonedToolArtifact.publishPoisonedAIAgentTools
+            poisonedToolArtifact.publishPoisonedAIAgentTools,
+            nextCraftedPrompt.llmPromptCrafting
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1814,7 +1853,8 @@ category AI {
         -> selfReplicatingPrompt.llmPromptSelfReplication,
         ragData.ragDatabases,
         renderedResponse.trustedOutputComponentsManipulation,
-        obfuscatedPrompt.llmPromptObfuscation
+        obfuscatedPrompt.llmPromptObfuscation,
+        tool.aiAgentToolInvocation
         
         | manipulateUserLLMChatHistory
         user info: "AML.T0092 - Manipulate User LLM Chat History"
@@ -1877,7 +1917,8 @@ category AI {
         -> browser.driveByCompromise,
         craftedPrompt.llmPromptCrafting,
         obfuscatedPrompt.llmPromptObfuscation,
-        userExecution.maliciousLink
+        userExecution.maliciousLink,
+        stagingInfrastructure.masquerading
     }
     
     asset SocialEngineeringLLM {
@@ -1936,7 +1977,8 @@ category AI {
             obfuscatedPrompt.llmPromptObfuscation,
             dataDestructionViaAIAgentToolInvocation,
             conversation.manipulateUserLLMChatHistory,
-            externalHarm.externalHarms
+            externalHarm.externalHarms,
+            agentConfiguration.modifyAIAgentConfiguration
             
         | aiAgentTools
             user info: "AML.T0085.001 - Data from AI Services: AI Agent Tools"
@@ -2792,6 +2834,25 @@ associations {
     AIUserExecution [maliciousLinkExecution] * <--TargetsAIBackendService--> * [targetService] AIBackendService
     
     AIServiceOS [agentServiceHost] * <--StoresAgentConfiguration--> * [agentConfiguration] AIAgentConfiguration
+    
+    
+    // AML.CS0051
+    
+    PublicAIArtifacts [agentConfigurationArtifact] * <--DescribesAgentApplication--> * [targetApplication] PublicFacingLLMApplication
+    
+    LLMPrompt [previousCraftedPrompt] * <--RefinesIntoNextPrompt--> * [nextCraftedPrompt] LLMPrompt
+    
+    AIInfrastructure [stagingInfrastructure] * <--StagesCapability--> * [stagedCapability] LLMStagedCapability
+    
+    AIInfrastructure [masqueradingInfrastructure] * <--DeliversDriveByContentThrough--> * [browser] LLMDriveByBrowser
+    
+    AITool [configurationModificationTool] * <--ModifiesAgentConfiguration--> * [agentConfiguration] AIAgentConfiguration
+    
+    AIAgentConfiguration [modifiedConfiguration] * <--ConfiguresAIAgent--> * [targetAgent] AIAgent
+    
+    AIAgent [contextAwareAgent] * <--UsesAgentContext--> * [agentContext] AIAgentContext
+    
+    AIAgent [commandControlAgent] * <--CompromisesLocalMachine--> * [machineCompromise] AIMachineCompromise
     
     
     //Scenario 1 associations
