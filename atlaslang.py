@@ -2276,6 +2276,409 @@ CASE_STUDIES = {
             "CS0043Exfiltration:"
             "exfiltrationViaCyberMeans",
     },
+        
+    # ========================================================
+    # AML.CS0044
+    # LAMEHUG: Malware Leveraging Dynamic
+    # AI-Generated Commands
+    # ========================================================
+
+    "AML.CS0044": {
+
+        "attacker_name":
+            "AML_CS0044_Attacker",
+
+        # S00 - AML.T0012
+        "entry_point":
+            "CS0044CompromisedEmailService:"
+            "validAccounts",
+
+        "path": [
+
+            # S01 - AML.T0052
+            "CS0044PhishingCampaign:"
+            "phishing",
+
+            # S02 - AML.T0073
+            "CS0044ImpersonatedIdentity:"
+            "impersonation",
+
+            # S03 - AML.T0074
+            "CS0044LAMEHUGHost:"
+            "masquerading",
+
+            # S04 - AML.T0011
+            "CS0044UserExecution:"
+            "userExecution",
+
+            # S05 - AML.T0102
+            "CS0044LAMEHUGTool:"
+            "generateMaliciousCommands",
+
+            # S06 - AML.T0037
+            "CS0044LAMEHUGHost:"
+            "dataFromLocalSystem",
+
+            # S07 - AML.T0025
+            "CS0044Exfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0044Exfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+    
+    # ========================================================
+    # AML.CS0045
+    # Data Exfiltration via an MCP Server used by Cursor
+    # ========================================================
+
+    "AML.CS0045": {
+
+        "attacker_name":
+            "AML_CS0045_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0045CraftedPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0079
+            "CS0045MaliciousWebsite:"
+            "stageCapabilities",
+
+            # S02 - AML.T0068
+            "CS0045ObfuscatedWebPrompt:"
+            "llmPromptObfuscation",
+
+            # S03 - AML.T0079
+            "CS0045ExfiltrationServer:"
+            "stageCapabilities",
+
+            # S04 - AML.T0078
+            "CS0045DriveByBrowser:"
+            "driveByCompromise",
+
+            # S05 - AML.T0051.001
+            "CS0045CursorConversation:"
+            "indirectPromptInjection",
+
+            # S06 - AML.T0053
+            "CS0045TerminalInvocationTool:"
+            "aiAgentToolInvocation",
+
+            # S07 - AML.T0068
+            "CS0045EncodedCommand:"
+            "llmPromptObfuscation",
+
+            # S08 - AML.T0083
+            "CS0045CursorConfiguration:"
+            "credentialsFromAIAgentConfiguration",
+
+            # S09 - AML.T0086
+            "CS0045TerminalExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # S10 - AML.T0048.000
+            "CS0045FinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "CS0045FinancialImpact:"
+            "financialHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0046
+    # Data Destruction via Indirect Prompt Injection
+    # Targeting Claude Computer-Use
+    # ========================================================
+
+    "AML.CS0046": {
+
+        "attacker_name":
+            "AML_CS0046_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0046DestructivePrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0093
+            "CS0046PromptDelivery:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S02 - AML.T0051.001
+            "CS0046ClaudeConversation:"
+            "indirectPromptInjection",
+
+            # S03 - AML.T0054
+            "CS0046ClaudeConversation:"
+            "llmJailbreak",
+
+            # S04 - AML.T0068
+            "CS0046ObfuscatedCommand:"
+            "llmPromptObfuscation",
+
+            # S05 - AML.T0053
+            "CS0046BashTool:"
+            "aiAgentToolInvocation",
+
+            # S06 - AML.T0101
+            "CS0046BashTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0046BashTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+    },
+    
+    # ========================================================
+    # AML.CS0047
+    # Code to Deploy Destructive AI Agent Discovered
+    # in Amazon Q VS Code Extension
+    # ========================================================
+
+    "AML.CS0047": {
+
+        "attacker_name":
+            "AML_CS0047_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0047DestructivePrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0055
+            "CS0047SupplyChainHost:"
+            "unsecuredCredentials",
+
+            # S02 - AML.T0010.001
+            "CS0047CompromisedExtension:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # S03 - AML.T0011.001
+            "CS0047ExtensionExecution:"
+            "maliciousPackage",
+
+            # S04 - AML.T0103
+            "CS0047DeployedAgent:"
+            "deployAIAgent",
+
+            # S05 - AML.T0051.000
+            "CS0047DeployedAgent:"
+            "directPromptInjection",
+
+            # S06 - AML.T0101
+            "CS0047DestructiveTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0047DestructiveTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+    },
+        
+    # ========================================================
+    # AML.CS0048
+    # Exposed ClawdBot Control Interfaces Leads to
+    # Credential Access and Execution
+    # ========================================================
+
+    "AML.CS0048": {
+
+        "attacker_name":
+            "AML_CS0048_Attacker",
+
+        # S00 - AML.T0000.003
+        "entry_point":
+            "CS0048Recon:"
+            "scanDatabases",
+
+        "path": [
+
+            # S01 - AML.T0132
+            "CS0048ExposedAgentService:"
+            "misconfiguredOrPubliclyExposedAIServices",
+
+            # S02 - AML.T0083
+            "CS0048AgentConfiguration:"
+            "credentialsFromAIAgentConfiguration",
+
+            # S03 - AML.T0051.001
+            "CS0048Conversation:"
+            "indirectPromptInjection",
+
+            # S04 - AML.T0069.002
+            "CS0048ExposedAgentService:"
+            "systemPrompt",
+
+            # S05 - AML.T0098
+            "CS0048BashTool:"
+            "aiAgentToolCredentialHarvesting",
+
+            # S06 - AML.T0053
+            "CS0048BashTool:"
+            "aiAgentToolInvocation",
+
+            # S07 - AML.T0092
+            "CS0048Conversation:"
+            "manipulateUserLLMChatHistory",
+
+            # S08 - AML.T0025
+            "CS0048Exfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S09 - AML.T0048.003
+            "CS0048UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0048UserImpact:"
+            "userHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0049
+    # Supply Chain Compromise via Poisoned ClawdBot Skill
+    # ========================================================
+
+    "AML.CS0049": {
+
+        "attacker_name":
+            "AML_CS0049_Attacker",
+
+        # S00 - AML.T0017
+        "entry_point":
+            "CS0049Capability:"
+            "developCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0008.002
+            "CS0049DomainInfrastructure:"
+            "domains",
+
+            # S02 - AML.T0065
+            "CS0049PoisonedSkillPrompt:"
+            "llmPromptCrafting",
+
+            # S03 - AML.T0115.002
+            "CS0049PoisonedSkillArtifact:"
+            "publishPoisonedAIAgentTools",
+
+            # S04 - AML.T0111
+            "CS0049PoisonedSkillArtifact:"
+            "aiSupplyChainReputationInflation",
+
+            # S05 - AML.T0010.005
+            "CS0049PoisonedSkillArtifact:"
+            "aiAgentToolSupplyChainCompromise",
+
+            # S06 - AML.T0110.000
+            "CS0049PoisonedSkillArtifact:"
+            "definitionAndInstructions",
+
+            # S07 - AML.T0011.002
+            "CS0049SkillExecution:"
+            "poisonedAIAgentTool",
+
+            # S08 - AML.T0051.001
+            "CS0049AgentConversation:"
+            "indirectPromptInjection",
+
+            # S09 - AML.T0074
+            "CS0049DomainInfrastructure:"
+            "masquerading",
+
+            # S10 - AML.T0053
+            "CS0049ShellTool:"
+            "aiAgentToolInvocation",
+
+            # S11 - AML.T0048
+            "CS0049ExternalImpact:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "CS0049ExternalImpact:"
+            "externalHarms",
+    },
+    
+    # ========================================================
+    # AML.CS0050
+    # OpenClaw 1-Click Remote Code Execution
+    # ========================================================
+
+    "AML.CS0050": {
+
+        "attacker_name":
+            "AML_CS0050_Attacker",
+
+        # S00 - AML.T0017
+        "entry_point":
+            "CS0050RCECapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0079
+            "CS0050StagedScript:"
+            "stageCapabilities",
+
+            # S02 - AML.T0011.003
+            "CS0050MaliciousLinkExecution:"
+            "maliciousLink",
+
+            # Internal EnterpriseLang bridge
+            # Not an ATLAS case-study step
+            "CS0050GatewayService:"
+            "attemptExploitationForCredentialAccess",
+
+            # S03 - AML.T0106
+            "CS0050GatewayService:"
+            "exploitationForCredentialAccess",
+
+            # Internal EnterpriseLang bridge
+            # Not an ATLAS case-study step
+            "CS0050GatewayService:"
+            "attemptExploitationForDefenseEvasion",
+
+            # S04 - AML.T0107
+            "CS0050GatewayService:"
+            "exploitationForDefenseEvasion",
+
+            # S05 - AML.T0012
+            "CS0050GatewayHost:"
+            "validAccounts",
+
+            # S06 - AML.T0081
+            "CS0050AgentConfiguration:"
+            "modifyAIAgentConfiguration",
+
+            # S07 - AML.T0105
+            "CS0050GatewayHost:"
+            "escapeToHost",
+
+            # S08 - AML.T0050
+            "CS0050GatewayHost:"
+            "commandAndScriptingInterpreter",
+        ],
+
+        "goal":
+            "CS0050GatewayHost:"
+            "commandAndScriptingInterpreter",
+    },
 
 }
 
@@ -5512,6 +5915,655 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     cs0043_skynet_host.add_associated_assets(
         "exfiltration",
         {cs0043_exfiltration}
+    )
+    
+    # ========================================================
+    # AML.CS0044
+    # LAMEHUG: Malware Leveraging Dynamic
+    # AI-Generated Commands
+    # ========================================================
+
+    cs0044_compromised_email_service = model.add_asset(
+        "CompromisedServiceOS",
+        "CS0044CompromisedEmailService"
+    )
+
+    cs0044_phishing_campaign = model.add_asset(
+        "PhishingBrowser",
+        "CS0044PhishingCampaign"
+    )
+
+    cs0044_impersonated_identity = model.add_asset(
+        "FraudulentAccount",
+        "CS0044ImpersonatedIdentity"
+    )
+
+    cs0044_lamehug_host = model.add_asset(
+        "MalwareHostOS",
+        "CS0044LAMEHUGHost"
+    )
+
+    cs0044_user_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0044UserExecution"
+    )
+
+    cs0044_lamehug_tool = model.add_asset(
+        "AIAttackSoftwareTool",
+        "CS0044LAMEHUGTool"
+    )
+
+    cs0044_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0044Exfiltration"
+    )
+    
+    # --------------------------------------------------------
+    # CS0044 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0012 -> AML.T0052
+    cs0044_compromised_email_service.add_associated_assets(
+        "phishingCampaign",
+        {cs0044_phishing_campaign}
+    )
+
+    # S01 -> S02
+    # AML.T0052 -> AML.T0073
+    cs0044_phishing_campaign.add_associated_assets(
+        "impersonatedIdentity",
+        {cs0044_impersonated_identity}
+    )
+
+    # S02 -> S03
+    # AML.T0073 -> AML.T0074
+    cs0044_impersonated_identity.add_associated_assets(
+        "malwareHost",
+        {cs0044_lamehug_host}
+    )
+
+    # S03 -> S04
+    # AML.T0074 -> AML.T0011
+    cs0044_lamehug_host.add_associated_assets(
+        "userExecution",
+        {cs0044_user_execution}
+    )
+
+    # S04 -> S05
+    # AML.T0011 -> AML.T0102
+    cs0044_user_execution.add_associated_assets(
+        "commandTool",
+        {cs0044_lamehug_tool}
+    )
+
+    # S05 -> S06
+    # AML.T0102 -> AML.T0037
+    cs0044_lamehug_tool.add_associated_assets(
+        "hostOS",
+        {cs0044_lamehug_host}
+    )
+
+    # S06 -> S07
+    # AML.T0037 -> AML.T0025
+    cs0044_lamehug_host.add_associated_assets(
+        "exfiltration",
+        {cs0044_exfiltration}
+    )
+    
+    # ========================================================
+    # AML.CS0045
+    # Data Exfiltration via an MCP Server used by Cursor
+    # ========================================================
+
+    cs0045_crafted_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0045CraftedPrompt"
+    )
+
+    cs0045_malicious_website = model.add_asset(
+        "LLMStagedCapability",
+        "CS0045MaliciousWebsite"
+    )
+
+    cs0045_obfuscated_web_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0045ObfuscatedWebPrompt"
+    )
+
+    cs0045_exfiltration_server = model.add_asset(
+        "LLMStagedCapability",
+        "CS0045ExfiltrationServer"
+    )
+
+    cs0045_drive_by_browser = model.add_asset(
+        "LLMDriveByBrowser",
+        "CS0045DriveByBrowser"
+    )
+
+    cs0045_cursor_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0045CursorConversation"
+    )
+
+    cs0045_terminal_invocation_tool = model.add_asset(
+        "AITool",
+        "CS0045TerminalInvocationTool"
+    )
+
+    cs0045_encoded_command = model.add_asset(
+        "LLMPrompt",
+        "CS0045EncodedCommand"
+    )
+
+    cs0045_cursor_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0045CursorConfiguration"
+    )
+
+    cs0045_terminal_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0045TerminalExfiltrationTool"
+    )
+
+    cs0045_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0045FinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0045 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0079
+    cs0045_crafted_prompt.add_associated_assets(
+        "stagedCapability",
+        {cs0045_malicious_website}
+    )
+
+    # S01 -> S02
+    # AML.T0079 -> AML.T0068
+    cs0045_malicious_website.add_associated_assets(
+        "obfuscatedPrompt",
+        {cs0045_obfuscated_web_prompt}
+    )
+
+    # S02 -> S03
+    # AML.T0068 -> AML.T0079
+    cs0045_obfuscated_web_prompt.add_associated_assets(
+        "stagedCapability",
+        {cs0045_exfiltration_server}
+    )
+
+    # S03 -> S04
+    # AML.T0079 -> AML.T0078
+    cs0045_exfiltration_server.add_associated_assets(
+        "browser",
+        {cs0045_drive_by_browser}
+    )
+
+    # S04 -> S05
+    # AML.T0078 -> AML.T0051.001
+    cs0045_drive_by_browser.add_associated_assets(
+        "indirectConversation",
+        {cs0045_cursor_conversation}
+    )
+
+    # S05 -> S06
+    # AML.T0051.001 -> AML.T0053
+    cs0045_cursor_conversation.add_associated_assets(
+        "tool",
+        {cs0045_terminal_invocation_tool}
+    )
+
+    # S06 -> S07
+    # AML.T0053 -> AML.T0068
+    cs0045_terminal_invocation_tool.add_associated_assets(
+        "obfuscatedPrompt",
+        {cs0045_encoded_command}
+    )
+
+    # S07 -> S08
+    # AML.T0068 -> AML.T0083
+    cs0045_encoded_command.add_associated_assets(
+        "agentConfiguration",
+        {cs0045_cursor_configuration}
+    )
+
+    # S08 -> S09
+    # AML.T0083 -> AML.T0086
+    cs0045_cursor_configuration.add_associated_assets(
+        "exfiltrationTool",
+        {cs0045_terminal_exfiltration_tool}
+    )
+
+    # S09 -> S10
+    # AML.T0086 -> AML.T0048.000
+    cs0045_terminal_exfiltration_tool.add_associated_assets(
+        "impact",
+        {cs0045_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0046
+    # Data Destruction via Indirect Prompt Injection
+    # Targeting Claude Computer-Use
+    # ========================================================
+
+    cs0046_destructive_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0046DestructivePrompt"
+    )
+
+    cs0046_prompt_delivery = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0046PromptDelivery"
+    )
+
+    cs0046_claude_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0046ClaudeConversation"
+    )
+
+    cs0046_obfuscated_command = model.add_asset(
+        "LLMPrompt",
+        "CS0046ObfuscatedCommand"
+    )
+
+    cs0046_bash_tool = model.add_asset(
+        "AITool",
+        "CS0046BashTool"
+    )
+    
+    # --------------------------------------------------------
+    # CS0046 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0093
+    cs0046_destructive_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0046_prompt_delivery}
+    )
+
+    # S01 -> S02
+    # AML.T0093 -> AML.T0051.001
+    cs0046_prompt_delivery.add_associated_assets(
+        "indirectConversation",
+        {cs0046_claude_conversation}
+    )
+
+    # S03 -> S04
+    # AML.T0054 -> AML.T0068
+    cs0046_claude_conversation.add_associated_assets(
+        "obfuscatedPrompt",
+        {cs0046_obfuscated_command}
+    )
+
+    # S04 -> S05
+    # AML.T0068 -> AML.T0053
+    cs0046_obfuscated_command.add_associated_assets(
+        "invokedTool",
+        {cs0046_bash_tool}
+    )
+    
+    # ========================================================
+    # AML.CS0047
+    # Code to Deploy Destructive AI Agent Discovered
+    # in Amazon Q VS Code Extension
+    # ========================================================
+
+    cs0047_destructive_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0047DestructivePrompt"
+    )
+
+    cs0047_supply_chain_host = model.add_asset(
+        "AISupplyChainHostOS",
+        "CS0047SupplyChainHost"
+    )
+
+    cs0047_compromised_extension = model.add_asset(
+        "AISupplyChainSoftware",
+        "CS0047CompromisedExtension"
+    )
+
+    cs0047_extension_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0047ExtensionExecution"
+    )
+
+    cs0047_deployed_agent = model.add_asset(
+        "AIAgent",
+        "CS0047DeployedAgent"
+    )
+
+    cs0047_destructive_tool = model.add_asset(
+        "AITool",
+        "CS0047DestructiveTool"
+    )
+    
+    # --------------------------------------------------------
+    # CS0047 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0055
+    cs0047_destructive_prompt.add_associated_assets(
+        "credentialHost",
+        {cs0047_supply_chain_host}
+    )
+
+    # S01 -> S02
+    # AML.T0055 -> AML.T0010.001
+    cs0047_supply_chain_host.add_associated_assets(
+        "compromisedSoftware",
+        {cs0047_compromised_extension}
+    )
+
+    # S02 -> S03
+    # AML.T0010.001 -> AML.T0011.001
+    cs0047_compromised_extension.add_associated_assets(
+        "userExecution",
+        {cs0047_extension_execution}
+    )
+
+    # S03 -> S04
+    # AML.T0011.001 -> AML.T0103
+    cs0047_extension_execution.add_associated_assets(
+        "deployedAgent",
+        {cs0047_deployed_agent}
+    )
+
+    # S05 -> S06
+    # AML.T0051.000 -> AML.T0101
+    cs0047_deployed_agent.add_associated_assets(
+        "tool",
+        {cs0047_destructive_tool}
+    )
+    
+    # ========================================================
+    # AML.CS0048
+    # Exposed ClawdBot Control Interfaces Leads to
+    # Credential Access and Execution
+    # ========================================================
+
+    cs0048_recon = model.add_asset(
+        "AIResearchMaterial",
+        "CS0048Recon"
+    )
+
+    cs0048_exposed_agent_service = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0048ExposedAgentService"
+    )
+
+    cs0048_agent_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0048AgentConfiguration"
+    )
+
+    cs0048_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0048Conversation"
+    )
+
+    cs0048_bash_tool = model.add_asset(
+        "AITool",
+        "CS0048BashTool"
+    )
+
+    cs0048_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0048Exfiltration"
+    )
+
+    cs0048_user_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0048UserImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0048 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0000.003 -> AML.T0132
+    cs0048_recon.add_associated_assets(
+        "publicLLMApp",
+        {cs0048_exposed_agent_service}
+    )
+
+    # S01 -> S02
+    # AML.T0132 -> AML.T0083
+    cs0048_exposed_agent_service.add_associated_assets(
+        "agentConfiguration",
+        {cs0048_agent_configuration}
+    )
+
+    # S02 -> S03
+    # AML.T0083 -> AML.T0051.001
+    cs0048_agent_configuration.add_associated_assets(
+        "promptConversation",
+        {cs0048_conversation}
+    )
+
+    # S03 -> S04
+    # AML.T0051.001 -> AML.T0069.002
+    cs0048_conversation.add_associated_assets(
+        "aiApplication",
+        {cs0048_exposed_agent_service}
+    )
+
+    # S04 -> S05
+    # AML.T0069.002 -> AML.T0098
+    cs0048_exposed_agent_service.add_associated_assets(
+        "tool",
+        {cs0048_bash_tool}
+    )
+
+    # S06 -> S07
+    # AML.T0053 -> AML.T0092
+    cs0048_bash_tool.add_associated_assets(
+        "conversation",
+        {cs0048_conversation}
+    )
+
+    # S07 -> S08
+    # AML.T0092 -> AML.T0025
+    cs0048_conversation.add_associated_assets(
+        "exfiltration",
+        {cs0048_exfiltration}
+    )
+
+    # S08 -> S09
+    # AML.T0025 -> AML.T0048.003
+    cs0048_exfiltration.add_associated_assets(
+        "impact",
+        {cs0048_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0049
+    # Supply Chain Compromise via Poisoned ClawdBot Skill
+    # ========================================================
+
+    cs0049_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0049Capability"
+    )
+
+    cs0049_domain_infrastructure = model.add_asset(
+        "AIDomainInfrastructure",
+        "CS0049DomainInfrastructure"
+    )
+
+    cs0049_poisoned_skill_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0049PoisonedSkillPrompt"
+    )
+
+    cs0049_poisoned_skill_artifact = model.add_asset(
+        "AIAgentToolArtifact",
+        "CS0049PoisonedSkillArtifact"
+    )
+
+    cs0049_skill_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0049SkillExecution"
+    )
+
+    cs0049_agent_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0049AgentConversation"
+    )
+
+    cs0049_shell_tool = model.add_asset(
+        "AITool",
+        "CS0049ShellTool"
+    )
+
+    cs0049_external_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0049ExternalImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0049 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0017 -> AML.T0008.002
+    cs0049_capability.add_associated_assets(
+        "domainInfrastructure",
+        {cs0049_domain_infrastructure}
+    )
+
+    # S01 -> S02
+    # AML.T0008.002 -> AML.T0065
+    cs0049_domain_infrastructure.add_associated_assets(
+        "craftedPrompt",
+        {cs0049_poisoned_skill_prompt}
+    )
+
+    # S02 -> S03
+    # AML.T0065 -> AML.T0115.002
+    cs0049_poisoned_skill_prompt.add_associated_assets(
+        "poisonedToolArtifact",
+        {cs0049_poisoned_skill_artifact}
+    )
+
+    # S06 -> S07
+    # AML.T0110.000 -> AML.T0011.002
+    cs0049_poisoned_skill_artifact.add_associated_assets(
+        "userExecution",
+        {cs0049_skill_execution}
+    )
+
+    # S07 -> S08
+    # AML.T0011.002 -> AML.T0051.001
+    cs0049_skill_execution.add_associated_assets(
+        "conversation",
+        {cs0049_agent_conversation}
+    )
+
+    # S08 -> S09
+    # AML.T0051.001 -> AML.T0074
+    cs0049_agent_conversation.add_associated_assets(
+        "masqueradingDomain",
+        {cs0049_domain_infrastructure}
+    )
+
+    # S09 -> S10
+    # AML.T0074 -> AML.T0053
+    cs0049_domain_infrastructure.add_associated_assets(
+        "tool",
+        {cs0049_shell_tool}
+    )
+
+    # S10 -> S11
+    # AML.T0053 -> AML.T0048
+    cs0049_shell_tool.add_associated_assets(
+        "externalHarm",
+        {cs0049_external_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0050
+    # OpenClaw 1-Click Remote Code Execution
+    # ========================================================
+
+    cs0050_rce_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0050RCECapability"
+    )
+
+    cs0050_staged_script = model.add_asset(
+        "LLMStagedCapability",
+        "CS0050StagedScript"
+    )
+
+    cs0050_malicious_link_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0050MaliciousLinkExecution"
+    )
+
+    cs0050_gateway_service = model.add_asset(
+        "AIBackendService",
+        "CS0050GatewayService"
+    )
+
+    cs0050_gateway_host = model.add_asset(
+        "AIServiceOS",
+        "CS0050GatewayHost"
+    )
+
+    cs0050_agent_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0050AgentConfiguration"
+    )
+    
+    # --------------------------------------------------------
+    # CS0050 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0017 -> AML.T0079
+    cs0050_rce_capability.add_associated_assets(
+        "stagedCapability",
+        {cs0050_staged_script}
+    )
+
+    # S01 -> S02
+    # AML.T0079 -> AML.T0011.003
+    cs0050_staged_script.add_associated_assets(
+        "userExecution",
+        {cs0050_malicious_link_execution}
+    )
+
+    # S02 -> S03
+    # AML.T0011.003 -> AML.T0106
+    cs0050_malicious_link_execution.add_associated_assets(
+        "targetService",
+        {cs0050_gateway_service}
+    )
+
+    # S04 -> S05
+    # AML.T0107 -> AML.T0012
+    #
+    # Reuse the inherited EnterpriseLang
+    # Service <-> OS association.
+    cs0050_gateway_service.add_associated_assets(
+        "os",
+        {cs0050_gateway_host}
+    )
+
+    # S05 -> S06
+    # AML.T0012 -> AML.T0081
+    cs0050_gateway_host.add_associated_assets(
+        "agentConfiguration",
+        {cs0050_agent_configuration}
     )
 
 
