@@ -24,9 +24,17 @@ category AI {
         -> capability.developCapabilities,
         stagedCapability.stageCapabilities
         
+        | aiServiceProxies
+        user info: "AML.T0008.005 - Acquire Infrastructure: AI Service Proxies"
+        -> accountHost.validAccounts
+        
         | masquerading
         user info: "AML.T0074 - Masquerading"
         -> browser.driveByCompromise
+        
+        | centralizedAIServiceRequestRouting
+        user info: "AML.T0140 - Centralized AI Service Request Routing"
+        -> inferenceService.exfiltrationViaAIInferenceAPI
     }
     
     
@@ -105,7 +113,8 @@ category AI {
         | impersonation
         user info: "AML.T0073 - Impersonation"
         -> impact.financialHarm,
-        malwareHost.masquerading
+        malwareHost.masquerading,
+        capability.developCapabilities
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -197,7 +206,8 @@ category AI {
         
         | poisonedAIAgentTool
         user info: "AML.T0011.002 - User Execution: Poisoned AI Agent Tool"
-        -> conversation.indirectPromptInjection
+        -> conversation.indirectPromptInjection,
+        exfiltrationTool.exfiltrationViaAIAgentToolInvocation
         
         | maliciousLink
         user info: "AML.T0011.003 - User Execution: Malicious Link"
@@ -259,6 +269,9 @@ category AI {
             
         | reputationalHarm
             user info: "AML.T0048.001 - External Harms: Reputational Harm"
+        
+        | societalHarm
+            user info: "AML.T0048.002 - External Harms: Societal Harm"
         
         | userHarm
             user info: "AML.T0048.003 - External Harms: User Harm"
@@ -467,7 +480,8 @@ category AI {
         | generativeAI
         user info: "AML.T0016.002 - Obtain Capabilities: Generative AI"
         -> softwareTool.softwareTools,
-        deepfake.generateDeepfakes
+        deepfake.generateDeepfakes,
+        developedCapability.developCapabilities
         
         
         # m0001LimitModelArtifactRelease [Disabled]
@@ -600,7 +614,8 @@ category AI {
         inferenceService.aiModelInferenceAPIAccess,
         userExecution.userExecution,
         publicLLMApp.aiEnabledProductOrService,
-        agentConfiguration.modifyAIAgentConfiguration
+        agentConfiguration.modifyAIAgentConfiguration,
+        craftedPrompt.llmPromptCrafting
         
         & commandAndScriptingInterpreter
         +> escapeToHost
@@ -666,6 +681,8 @@ category AI {
         | trainProxyViaReplication
             user info: "AML.T0005.001 - Train Proxy via Replication"
             -> externalHarm.aiIntellectualPropertyTheft,
+               externalHarm.societalHarm,
+               externalHarm.userHarm,
                adversarialSample.blackBoxTransfer
         
         # m0000LimitPublicReleaseOfInformation [Disabled]
@@ -805,7 +822,8 @@ category AI {
         targetDetector.directPromptInjection,
         domainInfrastructure.domains,
         stagedCapability.stageCapabilities,
-        repositoryResearch.searchApplicationRepositories
+        repositoryResearch.searchApplicationRepositories,
+        poisonedToolArtifact.publishPoisonedAIAgentTools
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -1138,6 +1156,10 @@ category AI {
         user info: "AML.T0013 - Discover AI Model Ontology"
         -> ontologyData.datasets
         
+        | exfiltrationViaAIInferenceAPI
+        user info: "AML.T0024 - Exfiltration via AI Inference API"
+        -> outputsFromAIModels
+        
         | discoverLLMHallucinations
         user info: "AML.T0062 - Discover LLM Hallucinations"
         -> hallucinatedPublisher.publishHallucinatedEntities
@@ -1146,6 +1168,10 @@ category AI {
         user info: "AML.T0042 - Verify Attack"
         -> evadeAIModel,
         infiltrationTarget.promptInfiltrationViaPublicFacingApplication
+        
+        | outputsFromAIModels
+        user info: "AML.T0135 - Outputs from AI Models"
+        -> proxyModel.trainProxyViaReplication
         
         
         # m0019ControlAccessInProduction [Disabled]
@@ -1720,21 +1746,32 @@ category AI {
         
         | publishPoisonedAIAgentTools
         user info: "AML.T0115.002 - Publish Poisoned AI Artifacts: AI Agent Tools"
-        -> aiSupplyChainReputationInflation
+        -> aiSupplyChainReputationInflation,
+        aiSupplyChainRugPull,
+        aiAgentToolSupplyChainCompromise
         
         
         | aiSupplyChainReputationInflation
         user info: "AML.T0111 - AI Supply Chain Reputation Inflation"
         -> aiAgentToolSupplyChainCompromise
         
+        | aiSupplyChainRugPull
+        user info: "AML.T0109 - AI Supply Chain Rug Pull"
+        -> aiAgentToolSupplyChainCompromise
+        
         
         | aiAgentToolSupplyChainCompromise
         user info: "AML.T0010.005 - Supply Chain Compromise: AI Agent Tool"
-        -> definitionAndInstructions
+        -> definitionAndInstructions,
+        implementation
         
         
         | definitionAndInstructions
         user info: "AML.T0110.000 - AI Agent Tool Poisoning: Definition and Instructions"
+        -> userExecution.poisonedAIAgentTool
+        
+        | implementation
+        user info: "AML.T0110.001 - AI Agent Tool Poisoning: Implementation"
         -> userExecution.poisonedAIAgentTool
         
         
@@ -1771,7 +1808,8 @@ category AI {
             malwareCapability.developCapabilities,
             credentialHost.unsecuredCredentials,
             poisonedToolArtifact.publishPoisonedAIAgentTools,
-            nextCraftedPrompt.llmPromptCrafting
+            nextCraftedPrompt.llmPromptCrafting,
+            routingInfrastructure.centralizedAIServiceRequestRouting
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1977,7 +2015,12 @@ category AI {
     asset LLMDriveByBrowser extends Browser {
         
         & driveByCompromise
-        +> indirectConversation.indirectPromptInjection
+        +> indirectConversation.indirectPromptInjection,
+        aiAgentClickbait
+        
+        | aiAgentClickbait
+        user info: "AML.T0100 - AI Agent Clickbait"
+        -> indirectConversation.indirectPromptInjection
         
         
         # m0020GenerativeAIGuardrails [Disabled]
@@ -2001,7 +2044,9 @@ category AI {
             conversation.manipulateUserLLMChatHistory,
             externalHarm.externalHarms,
             agentConfiguration.modifyAIAgentConfiguration,
-            executionHostOS.escapeToHost
+            executionHostOS.escapeToHost,
+            credentialHost.unsecuredCredentials,
+            machineCompromise.localAIAgent
             
         | aiAgentTools
             user info: "AML.T0085.001 - Data from AI Services: AI Agent Tools"
@@ -2010,11 +2055,14 @@ category AI {
             
         | exfiltrationViaAIAgentToolInvocation
             user info: "AML.T0086 - Exfiltration via AI Agent Tool Invocation"
-            -> impact.financialHarm
+            -> impact.financialHarm,
+            externalHarm.externalHarms,
+            externalHarm.userHarm
             
         | aiAgentToolCredentialHarvesting
             user info: "AML.T0098 - AI Agent Tool Credential Harvesting"
-            -> aiAgentToolInvocation
+            -> aiAgentToolInvocation,
+            exfiltrationTool.exfiltrationViaAIAgentToolInvocation
         
         | dataDestructionViaAIAgentToolInvocation
             user info: "AML.T0101 - Data Destruction via AI Agent Tool Invocation"
@@ -2144,6 +2192,8 @@ category AI {
         user info: "AML.T0090 - OS Credential Dumping"
         +> backendService.applicationAccessToken
         
+        | unsecuredCredentials
+        +> credentialHarvestingTool.aiAgentToolCredentialHarvesting
         
         # m0011RestrictLibraryLoading [Disabled]
         user info: "AML.M0011 - Restrict Library Loading"
@@ -2877,6 +2927,7 @@ associations {
     
     AIAgent [commandControlAgent] * <--CompromisesLocalMachine--> * [machineCompromise] AIMachineCompromise
     
+    
     // AML.CS0052
     
     AdversarialCapability [capabilityForRepositoryResearch] * <--GuidesRepositoryResearch--> * [repositoryResearch] AIResearchMaterial
@@ -2886,6 +2937,38 @@ associations {
     AITool [invokedExecutionTool] * <--ExecutesOnAIServiceHost--> * [executionHostOS] AIServiceOS
     
     AIServiceOS [compromisedHost] * <--CommunicatesThrough--> * [c2] AICyberCommunication
+    
+    
+    // AML.CS0053
+    
+    FraudulentAccount [impersonatedPublisher] * <--DevelopsMaliciousCapability--> * [capability] AdversarialCapability
+    
+    AdversarialCapability [developedToolCapability] * <--PublishesPoisonedAgentTool--> * [poisonedToolArtifact] AIAgentToolArtifact
+    
+    AIUserExecution [poisonedToolExecutionForExfiltration] * <--ExfiltratesThroughPoisonedAgentTool--> * [exfiltrationTool] AITool
+    
+    
+    // AML.CS0054
+    
+    AITool [credentialHarvestingTool] * <--ReadsCredentialsFrom--> * [credentialHost] AIClientOS
+    
+    
+    // AML.CS0055
+    
+    GenerativeAICapability [generativeAISource] * <--EnablesCapabilityDevelopment--> * [developedCapability] AdversarialCapability
+    
+    AITool [computerUseTool] * <--CompromisesLocalMachineViaTool--> * [machineCompromise] AIMachineCompromise
+    
+    
+    // AML.CS0056
+    
+    AIInfrastructure [proxyInfrastructure] * <--ProvidesProxyAccountAccess--> * [accountHost] AIServiceOS
+    
+    LLMPrompt [routedPrompt] * <--RoutesThroughAIServiceInfrastructure--> * [routingInfrastructure] AIInfrastructure
+    
+    AIInfrastructure [requestRouter] * <--RoutesRequestsToInferenceService--> * [inferenceService] AIInferenceService
+    
+    AIInferenceService [modelOutputSource] * <--FeedsModelReplication--> * [proxyModel] ProxyAIModel
     
     
     //Scenario 1 associations

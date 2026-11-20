@@ -2837,6 +2837,228 @@ CASE_STUDIES = {
             "CS0052LLMApplicationHost:"
             "localAIAgent",
     },
+    
+    # ========================================================
+    # AML.CS0053
+    # Poisoned Postmark MCP Server Email Exfiltration
+    # ========================================================
+
+    "AML.CS0053": {
+
+        "attacker_name":
+            "AML_CS0053_Attacker",
+
+        # S00 - AML.T0073
+        "entry_point":
+            "CS0053PostmarkImpersonation:"
+            "impersonation",
+
+        "path": [
+
+            # S01 - AML.T0017
+            "CS0053MaliciousToolCapability:"
+            "developCapabilities",
+
+            # S02 - AML.T0115.002
+            "CS0053PoisonedMCPTool:"
+            "publishPoisonedAIAgentTools",
+
+            # S03 - AML.T0109
+            "CS0053PoisonedMCPTool:"
+            "aiSupplyChainRugPull",
+
+            # S04 - AML.T0010.005
+            "CS0053PoisonedMCPTool:"
+            "aiAgentToolSupplyChainCompromise",
+
+            # S05 - AML.T0110.001
+            "CS0053PoisonedMCPTool:"
+            "implementation",
+
+            # S06 - AML.T0011.002
+            "CS0053PoisonedToolExecution:"
+            "poisonedAIAgentTool",
+
+            # S07 - AML.T0086
+            "CS0053EmailExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # S08 - AML.T0048
+            "CS0053ExternalImpact:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "CS0053ExternalImpact:"
+            "externalHarms",
+    },
+    
+    # ========================================================
+    # AML.CS0054
+    # Data Exfiltration via Remote Poisoned MCP Tool
+    # ========================================================
+
+    "AML.CS0054": {
+
+        "attacker_name":
+            "AML_CS0054_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0054MaliciousToolPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0115.002
+            "CS0054PoisonedMCPArtifact:"
+            "publishPoisonedAIAgentTools",
+
+            # S02 - AML.T0010.005
+            "CS0054PoisonedMCPArtifact:"
+            "aiAgentToolSupplyChainCompromise",
+
+            # S03 - AML.T0110.000
+            "CS0054PoisonedMCPArtifact:"
+            "definitionAndInstructions",
+
+            # S04 - AML.T0011.002
+            "CS0054PoisonedToolExecution:"
+            "poisonedAIAgentTool",
+
+            # S05 - AML.T0051.001
+            "CS0054Conversation:"
+            "indirectPromptInjection",
+
+            # S06 - AML.T0053
+            "CS0054CredentialReadTool:"
+            "aiAgentToolInvocation",
+
+            # S07 - AML.T0055
+            "CS0054VictimAIClient:"
+            "unsecuredCredentials",
+
+            # S08 - AML.T0098
+            "CS0054CredentialReadTool:"
+            "aiAgentToolCredentialHarvesting",
+
+            # S09 - AML.T0086
+            "CS0054RemoteMCPTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # S10 - AML.T0048.003
+            "CS0054UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0054UserImpact:"
+            "userHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0055
+    # AI ClickFix: Hijacking Computer-Use Agents
+    # Using ClickFix
+    # ========================================================
+
+    "AML.CS0055": {
+
+        "attacker_name":
+            "AML_CS0055_Attacker",
+
+        # S00 - AML.T0016.002
+        "entry_point":
+            "CS0055GenerativeAI:"
+            "generativeAI",
+
+        "path": [
+
+            # S01 - AML.T0017
+            "CS0055ClickFixCapability:"
+            "developCapabilities",
+
+            # S02 - AML.T0079
+            "CS0055StagedWebsite:"
+            "stageCapabilities",
+
+            # S03 - AML.T0078
+            "CS0055MaliciousWebsite:"
+            "driveByCompromise",
+
+            # S04 - AML.T0100
+            "CS0055MaliciousWebsite:"
+            "aiAgentClickbait",
+
+            # S05 - AML.T0051.001
+            "CS0055ComputerUseConversation:"
+            "indirectPromptInjection",
+
+            # S06 - AML.T0053
+            "CS0055ComputerUseTool:"
+            "aiAgentToolInvocation",
+
+            # S07 - AML.T0112.000
+            "CS0055MachineCompromise:"
+            "localAIAgent",
+        ],
+
+        "goal":
+            "CS0055MachineCompromise:"
+            "localAIAgent",
+    },
+    
+    # ========================================================
+    # AML.CS0056
+    # Model Distillation Campaigns Targeting Anthropic Claude
+    # ========================================================
+
+    "AML.CS0056": {
+
+        "attacker_name":
+            "AML_CS0056_Attacker",
+
+        # S00 - AML.T0008.005
+        "entry_point":
+            "CS0056ProxyInfrastructure:"
+            "aiServiceProxies",
+
+        "path": [
+
+            # S01 - AML.T0012
+            "CS0056ServiceAccount:"
+            "validAccounts",
+
+            # S02 - AML.T0065
+            "CS0056DistillationPrompt:"
+            "llmPromptCrafting",
+
+            # S03 - AML.T0140
+            "CS0056ProxyInfrastructure:"
+            "centralizedAIServiceRequestRouting",
+
+            # S04 - AML.T0024
+            "CS0056ClaudeInference:"
+            "exfiltrationViaAIInferenceAPI",
+
+            # S05 - AML.T0135
+            "CS0056ClaudeInference:"
+            "outputsFromAIModels",
+
+            # S06 - AML.T0005.001
+            "CS0056ReplicaModel:"
+            "trainProxyViaReplication",
+
+            # Impact - AML.T0048.004
+            "CS0056ExternalImpact:"
+            "aiIntellectualPropertyTheft",
+        ],
+
+        "goal":
+            "CS0056ExternalImpact:"
+            "aiIntellectualPropertyTheft",
+    },
+    
 
 }
 
@@ -7018,6 +7240,369 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     # AML.T0072 -> AML.T0112.000
     # Inverse "compromisedHost" role on the same association
     # points back to CS0052LLMApplicationHost automatically.
+    
+    # ========================================================
+    # AML.CS0053
+    # Poisoned Postmark MCP Server Email Exfiltration
+    # ========================================================
+
+    cs0053_postmark_impersonation = model.add_asset(
+        "FraudulentAccount",
+        "CS0053PostmarkImpersonation"
+    )
+
+    cs0053_malicious_tool_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0053MaliciousToolCapability"
+    )
+
+    cs0053_poisoned_mcp_tool = model.add_asset(
+        "AIAgentToolArtifact",
+        "CS0053PoisonedMCPTool"
+    )
+
+    cs0053_poisoned_tool_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0053PoisonedToolExecution"
+    )
+
+    cs0053_email_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0053EmailExfiltrationTool"
+    )
+
+    cs0053_external_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0053ExternalImpact"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0053 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0073 -> AML.T0017
+    cs0053_postmark_impersonation.add_associated_assets(
+        "capability",
+        {cs0053_malicious_tool_capability}
+    )
+
+    # S01 -> S02
+    # AML.T0017 -> AML.T0115.002
+    cs0053_malicious_tool_capability.add_associated_assets(
+        "poisonedToolArtifact",
+        {cs0053_poisoned_mcp_tool}
+    )
+
+    # S02 -> S03 -> S04 -> S05
+    # All within same AIAgentToolArtifact instance — no new associations needed.
+
+    # S05 -> S06
+    # AML.T0110.001 -> AML.T0011.002
+    cs0053_poisoned_mcp_tool.add_associated_assets(
+        "userExecution",
+        {cs0053_poisoned_tool_execution}
+    )
+
+    # S06 -> S07
+    # AML.T0011.002 -> AML.T0086
+    cs0053_poisoned_tool_execution.add_associated_assets(
+        "exfiltrationTool",
+        {cs0053_email_exfiltration_tool}
+    )
+
+    # S07 -> S08
+    # AML.T0086 -> AML.T0048
+    # Reuses existing AITool [harmfulTool] <--CausesExternalHarm--> [externalHarm]
+    # association from CS0049 — no new association needed.
+    cs0053_email_exfiltration_tool.add_associated_assets(
+        "externalHarm",
+        {cs0053_external_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0054
+    # Data Exfiltration via Remote Poisoned MCP Tool
+    # ========================================================
+
+    cs0054_malicious_tool_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0054MaliciousToolPrompt"
+    )
+
+    cs0054_poisoned_mcp_artifact = model.add_asset(
+        "AIAgentToolArtifact",
+        "CS0054PoisonedMCPArtifact"
+    )
+
+    cs0054_poisoned_tool_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0054PoisonedToolExecution"
+    )
+
+    cs0054_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0054Conversation"
+    )
+
+    cs0054_credential_read_tool = model.add_asset(
+        "AITool",
+        "CS0054CredentialReadTool"
+    )
+
+    cs0054_victim_ai_client = model.add_asset(
+        "AIClientOS",
+        "CS0054VictimAIClient"
+    )
+
+    cs0054_remote_mcp_tool = model.add_asset(
+        "AITool",
+        "CS0054RemoteMCPTool"
+    )
+
+    cs0054_user_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0054UserImpact"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0054 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0065 -> AML.T0115.002
+    cs0054_malicious_tool_prompt.add_associated_assets(
+        "poisonedToolArtifact",
+        {cs0054_poisoned_mcp_artifact}
+    )
+
+    # S01 -> S02 -> S03
+    # All within same AIAgentToolArtifact instance — no new associations needed.
+
+    # S03 -> S04
+    # AML.T0110.000 -> AML.T0011.002
+    cs0054_poisoned_mcp_artifact.add_associated_assets(
+        "userExecution",
+        {cs0054_poisoned_tool_execution}
+    )
+
+    # S04 -> S05
+    # AML.T0011.002 -> AML.T0051.001
+    cs0054_poisoned_tool_execution.add_associated_assets(
+        "conversation",
+        {cs0054_conversation}
+    )
+
+    # S05 -> S06
+    # AML.T0051.001 -> AML.T0053
+    cs0054_conversation.add_associated_assets(
+        "tool",
+        {cs0054_credential_read_tool}
+    )
+
+    # S06 -> S07
+    # AML.T0053 -> AML.T0055
+    cs0054_credential_read_tool.add_associated_assets(
+        "credentialHost",
+        {cs0054_victim_ai_client}
+    )
+
+    # S07 -> S08
+    # AML.T0055 -> AML.T0098
+    # Inverse "credentialHarvestingTool" role from the association
+    # above points back to CS0054CredentialReadTool automatically.
+
+    # S08 -> S09
+    # AML.T0098 -> AML.T0086
+    cs0054_credential_read_tool.add_associated_assets(
+        "exfiltrationTool",
+        {cs0054_remote_mcp_tool}
+    )
+
+    # S09 -> S10
+    # AML.T0086 -> AML.T0048.003
+    cs0054_remote_mcp_tool.add_associated_assets(
+        "externalHarm",
+        {cs0054_user_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0055
+    # AI ClickFix: Hijacking Computer-Use Agents
+    # Using ClickFix
+    # ========================================================
+
+    cs0055_generative_ai = model.add_asset(
+        "GenerativeAICapability",
+        "CS0055GenerativeAI"
+    )
+
+    cs0055_clickfix_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0055ClickFixCapability"
+    )
+
+    cs0055_staged_website = model.add_asset(
+        "LLMStagedCapability",
+        "CS0055StagedWebsite"
+    )
+
+    cs0055_malicious_website = model.add_asset(
+        "LLMDriveByBrowser",
+        "CS0055MaliciousWebsite"
+    )
+
+    cs0055_computer_use_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0055ComputerUseConversation"
+    )
+
+    cs0055_computer_use_tool = model.add_asset(
+        "AITool",
+        "CS0055ComputerUseTool"
+    )
+
+    cs0055_machine_compromise = model.add_asset(
+        "AIMachineCompromise",
+        "CS0055MachineCompromise"
+    )
+    
+    # --------------------------------------------------------
+    # CS0055 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0016.002 -> AML.T0017
+    cs0055_generative_ai.add_associated_assets(
+        "developedCapability",
+        {cs0055_clickfix_capability}
+    )
+
+    # S01 -> S02
+    # AML.T0017 -> AML.T0079
+    cs0055_clickfix_capability.add_associated_assets(
+        "stagedCapability",
+        {cs0055_staged_website}
+    )
+
+    # S02 -> S03
+    # AML.T0079 -> AML.T0078
+    cs0055_staged_website.add_associated_assets(
+        "browser",
+        {cs0055_malicious_website}
+    )
+
+    # S03 -> S04
+    # AML.T0078 -> AML.T0100
+    # Same LLMDriveByBrowser instance.
+
+    # S04 -> S05
+    # AML.T0100 -> AML.T0051.001
+    cs0055_malicious_website.add_associated_assets(
+        "indirectConversation",
+        {cs0055_computer_use_conversation}
+    )
+
+    # S05 -> S06
+    # AML.T0051.001 -> AML.T0053
+    cs0055_computer_use_conversation.add_associated_assets(
+        "tool",
+        {cs0055_computer_use_tool}
+    )
+
+    # S06 -> S07
+    # AML.T0053 -> AML.T0112.000
+    cs0055_computer_use_tool.add_associated_assets(
+        "machineCompromise",
+        {cs0055_machine_compromise}
+    )
+    
+    # ========================================================
+    # AML.CS0056
+    # Model Distillation Campaigns Targeting Anthropic Claude
+    # ========================================================
+
+    cs0056_proxy_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "CS0056ProxyInfrastructure"
+    )
+
+    cs0056_service_account = model.add_asset(
+        "AIServiceOS",
+        "CS0056ServiceAccount"
+    )
+
+    cs0056_distillation_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0056DistillationPrompt"
+    )
+
+    cs0056_claude_inference = model.add_asset(
+        "AIInferenceService",
+        "CS0056ClaudeInference"
+    )
+
+    cs0056_replica_model = model.add_asset(
+        "ProxyAIModel",
+        "CS0056ReplicaModel"
+    )
+
+    cs0056_external_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0056ExternalImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0056 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0008.005 -> AML.T0012
+    cs0056_proxy_infrastructure.add_associated_assets(
+        "accountHost",
+        {cs0056_service_account}
+    )
+
+    # S01 -> S02
+    # AML.T0012 -> AML.T0065
+    cs0056_service_account.add_associated_assets(
+        "craftedPrompt",
+        {cs0056_distillation_prompt}
+    )
+
+    # S02 -> S03
+    # AML.T0065 -> AML.T0140
+    cs0056_distillation_prompt.add_associated_assets(
+        "routingInfrastructure",
+        {cs0056_proxy_infrastructure}
+    )
+
+    # S03 -> S04
+    # AML.T0140 -> AML.T0024
+    cs0056_proxy_infrastructure.add_associated_assets(
+        "inferenceService",
+        {cs0056_claude_inference}
+    )
+
+    # S04 -> S05
+    # AML.T0024 -> AML.T0135
+    # Same AIInferenceService instance.
+
+    # S05 -> S06
+    # AML.T0135 -> AML.T0005.001
+    cs0056_claude_inference.add_associated_assets(
+        "proxyModel",
+        {cs0056_replica_model}
+    )
+
+    # S06 -> Impact branches
+    # AML.T0005.001 -> AML.T0048.004 / AML.T0048.002 / AML.T0048.003
+    cs0056_replica_model.add_associated_assets(
+        "externalHarm",
+        {cs0056_external_impact}
+    )
 
 
     return model
