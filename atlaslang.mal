@@ -445,7 +445,8 @@ category AI {
         | generateDeepfakes
         user info: "AML.T0088 - Generate Deepfakes"
         -> account.establishAccounts,
-        relatedDeepfake.generateDeepfakes
+        relatedDeepfake.generateDeepfakes,
+        societalImpact.societalHarm
         
         
         # m0009PredictiveAIMultiSensorFusion [Disabled]
@@ -530,7 +531,8 @@ category AI {
         | ragDatabases
         user info: "AML.T0085.000 - Data from AI Services: RAG Databases"
         -> exfiltration.exfiltrationViaCyberMeans,
-        agentTool.aiAgentTools
+        agentTool.aiAgentTools,
+        renderedResponse.trustedOutputComponentsManipulation
         
         
         // AML.T0070 defenses
@@ -718,7 +720,8 @@ category AI {
         | discoverAIArtifacts
         user info: "AML.T0007 - Discover AI Artifacts"
         -> attackImplementation.obtainAdversarialAIAttackImplementation,
-        discoveredModel.fullAIModelAccess
+        discoveredModel.fullAIModelAccess,
+        artifactCollection.aiArtifactCollection
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -763,7 +766,9 @@ category AI {
         impact.aiIntellectualPropertyTheft,
         modelSupplyChain.aiSupplyChainCompromiseModel,
         impact.userHarm,
-        artifactDiscovery.discoverAIArtifacts
+        artifactDiscovery.discoverAIArtifacts,
+        extractedModel.fullAIModelAccess,
+        impact.externalHarms
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -823,7 +828,8 @@ category AI {
         domainInfrastructure.domains,
         stagedCapability.stageCapabilities,
         repositoryResearch.searchApplicationRepositories,
-        poisonedToolArtifact.publishPoisonedAIAgentTools
+        poisonedToolArtifact.publishPoisonedAIAgentTools,
+        infrastructure.acquireInfrastructure
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -875,7 +881,8 @@ category AI {
         | whiteBoxOptimization
         user info: "AML.T0043.000 - Craft Adversarial Data: White-Box Optimization"
         -> inferenceTarget.aiModelInferenceAPIAccess,
-        physicalCountermeasure.physicalCountermeasures
+        physicalCountermeasure.physicalCountermeasures,
+        whiteBoxEvasionTarget.evadeAIModel
         
         | blackBoxOptimization
             user info: "AML.T0043.001 - Craft Adversarial Data: Black-Box Optimization"
@@ -1077,7 +1084,8 @@ category AI {
         | evadeAIModel
         user info: "AML.T0015 - Evade AI Model"
         -> externalHarm.financialHarm,
-        externalHarm.userHarm
+        externalHarm.userHarm,
+        externalHarm.aiIntellectualPropertyTheft
         
         # m0003PredictiveAIModelHardening [Disabled]
         user info: "AML.M0003 - Predictive AI Model Hardening"
@@ -1150,7 +1158,9 @@ category AI {
         blackBoxSample.blackBoxOptimization,
         discoverAIModelOntology,
         discoverLLMHallucinations,
-        craftedPrompt.llmPromptCrafting
+        craftedPrompt.llmPromptCrafting,
+        jailbreakConversation.llmJailbreak,
+        financialImpact.financialHarm
         
         | discoverAIModelOntology
         user info: "AML.T0013 - Discover AI Model Ontology"
@@ -1292,7 +1302,8 @@ category AI {
         
         | fullAIModelAccess
         user info: "AML.T0044 - Full AI Model Access"
-        -> impact.aiIntellectualPropertyTheft
+        -> impact.aiIntellectualPropertyTheft,
+        whiteBoxSample.whiteBoxOptimization
         
         | corruptAIModel
         user info: "AML.T0076 - Corrupt AI Model"
@@ -1906,7 +1917,8 @@ category AI {
         | triggeredPromptInjection
         user info: "AML.T0051.002 - LLM Prompt Injection: Triggered"
         -> llmJailbreak,
-        agentConfig.activationTriggers
+        agentConfig.activationTriggers,
+        ragData.ragDatabases
         
         | llmJailbreak
         user info: "AML.T0054 - LLM Jailbreak"
@@ -1914,7 +1926,8 @@ category AI {
         ragData.ragDatabases,
         renderedResponse.trustedOutputComponentsManipulation,
         obfuscatedPrompt.llmPromptObfuscation,
-        tool.aiAgentToolInvocation
+        tool.aiAgentToolInvocation,
+        deepfake.generateDeepfakes
         
         | manipulateUserLLMChatHistory
         user info: "AML.T0092 - Manipulate User LLM Chat History"
@@ -1978,7 +1991,9 @@ category AI {
         craftedPrompt.llmPromptCrafting,
         obfuscatedPrompt.llmPromptObfuscation,
         userExecution.maliciousLink,
-        stagingInfrastructure.masquerading
+        stagingInfrastructure.masquerading,
+        accountHost.validAccounts,
+        infiltrationApplication.promptInfiltrationViaPublicFacingApplication
     }
     
     asset SocialEngineeringLLM {
@@ -2001,7 +2016,8 @@ category AI {
         
         | trustedOutputComponentsManipulation
         user info: "AML.T0067 - LLM Trusted Output Components Manipulation"
-        -> externalHarm.userHarm
+        -> externalHarm.userHarm,
+        llmResponseRendering
         
         | citations
         user info: "AML.T0067.000 - Citations"
@@ -2009,7 +2025,8 @@ category AI {
         
         | llmResponseRendering
         user info: "AML.T0077 - LLM Response Rendering"
-        -> externalHarm.userHarm
+        -> externalHarm.userHarm,
+        cyberExfiltration.exfiltrationViaCyberMeans
     }
     
     asset LLMDriveByBrowser extends Browser {
@@ -2969,6 +2986,37 @@ associations {
     AIInfrastructure [requestRouter] * <--RoutesRequestsToInferenceService--> * [inferenceService] AIInferenceService
     
     AIInferenceService [modelOutputSource] * <--FeedsModelReplication--> * [proxyModel] ProxyAIModel
+    
+    
+    // AML.CS0057
+    
+    AdversarialCapability [capabilityForInfrastructure] * <--AcquiresInfrastructureForCapability--> * [infrastructure] AIInfrastructure
+    
+    LLMStagedCapability [stagedAccountAccess] * <--EnablesValidAccountUseOn--> * [accountHost] AIServiceOS
+    
+    AIInferenceService [inferenceServiceForJailbreak] * <--SupportsJailbreakConversation--> * [jailbreakConversation] LLMConversation
+    
+    LLMConversation [jailbreakConversationForDeepfake] * <--EnablesDeepfakeGeneration--> * [deepfake] DeepfakeMedia
+    
+    DeepfakeMedia [harmfulDeepfake] * <--CausesSocietalHarm--> * [societalImpact] ExternalHarm
+    
+    AIInferenceService [abusedInferenceService] * <--CausesFinancialHarm--> * [financialImpact] ExternalHarm
+    
+    
+    // AML.CS0058
+    
+    AIArtifactDiscovery [artifactDiscoverySource] * <--EnablesArtifactCollection--> * [artifactCollection] AIArtifactCollection
+    
+    AIExfiltration [modelExfiltration] * <--ProvidesFullModelAccessTo--> * [extractedModel] PoisonableAIModel
+    
+    PoisonableAIModel [whiteBoxEvasionTarget] * <--EnablesWhiteBoxSampleAgainst--> * [whiteBoxSample] AdversarialSample
+    
+    
+    // AML.CS0059
+    
+    LLMStagedCapability [stagedPromptPayload] * <--DeliveredToPublicApplication--> * [infiltrationApplication] PublicFacingLLMApplication
+    
+    LLMRenderedResponse [renderedExfiltrationSource] * <--ExfiltratesThroughCyberMeans--> * [cyberExfiltration] AIExfiltration
     
     
     //Scenario 1 associations

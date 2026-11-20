@@ -3059,6 +3059,210 @@ CASE_STUDIES = {
             "aiIntellectualPropertyTheft",
     },
     
+    # ========================================================
+    # AML.CS0057
+    # Storm-2139 Azure OpenAI Guardrail Bypass
+    # ========================================================
+
+    "AML.CS0057": {
+
+        "attacker_name":
+            "AML_CS0057_Attacker",
+
+        # S00 - AML.T0017
+        "entry_point":
+            "CS0057JailbreakCapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0008
+            "CS0057ProxyInfrastructure:"
+            "acquireInfrastructure",
+
+            # S02 - AML.T0079
+            "CS0057StagedProxyService:"
+            "stageCapabilities",
+
+            # S03 - AML.T0012
+            "CS0057CompromisedServiceAccount:"
+            "validAccounts",
+
+            # S04 - AML.T0040
+            "CS0057AzureOpenAIService:"
+            "aiModelInferenceAPIAccess",
+
+            # S05 - AML.T0054
+            "CS0057JailbreakConversation:"
+            "llmJailbreak",
+
+            # S06 - AML.T0088
+            "CS0057GeneratedDeepfakeMedia:"
+            "generateDeepfakes",
+
+            # S07 - AML.T0048.002
+            "CS0057SocietalImpact:"
+            "societalHarm",
+        ],
+
+        "goal":
+            "CS0057SocietalImpact:"
+            "societalHarm",
+    },
+    
+    "AML.CS0057-FINANCIAL": {
+
+        "attacker_name":
+            "AML_CS0057_FINANCIAL_Attacker",
+
+        # S00 - AML.T0017
+        "entry_point":
+            "CS0057JailbreakCapability:"
+            "developCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0008
+            "CS0057ProxyInfrastructure:"
+            "acquireInfrastructure",
+
+            # S02 - AML.T0079
+            "CS0057StagedProxyService:"
+            "stageCapabilities",
+
+            # S03 - AML.T0012
+            "CS0057CompromisedServiceAccount:"
+            "validAccounts",
+
+            # S04 - AML.T0040
+            "CS0057AzureOpenAIService:"
+            "aiModelInferenceAPIAccess",
+
+            # S08 - AML.T0048.000
+            "CS0057FinancialImpact:"
+            "financialHarm",
+        ],
+
+        "goal":
+            "CS0057FinancialImpact:"
+            "financialHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0058
+    # Google Photos AI Model Extraction
+    # ========================================================
+
+    "AML.CS0058": {
+
+        "attacker_name":
+            "AML_CS0058_Attacker",
+
+        # S00 - AML.T0007
+        "entry_point":
+            "CS0058ArtifactDiscovery:"
+            "discoverAIArtifacts",
+
+        "path": [
+
+            # S01 - AML.T0035
+            "CS0058ArtifactCollection:"
+            "aiArtifactCollection",
+
+            # S02 - AML.T0025
+            "CS0058ModelExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S03 - AML.T0044
+            "CS0058ExtractedModel:"
+            "fullAIModelAccess",
+
+            # S04 - AML.T0043.000
+            "CS0058WhiteBoxSample:"
+            "whiteBoxOptimization",
+
+            # S05 - AML.T0015
+            "CS0058ExtractedModel:"
+            "evadeAIModel",
+
+            # S06 - AML.T0048.004
+            "CS0058ModelIPTheft:"
+            "aiIntellectualPropertyTheft",
+        ],
+
+        "goal":
+            "CS0058ModelIPTheft:"
+            "aiIntellectualPropertyTheft",
+    },
+    
+    # ========================================================
+    # AML.CS0059
+    # EchoLeak: Zero-Click Prompt Injection Targeting
+    # M365 Copilot for Data Exfiltration
+    # ========================================================
+
+    "AML.CS0059": {
+
+        "attacker_name":
+            "AML_CS0059_Attacker",
+
+        # S00 - AML.T0066
+        "entry_point":
+            "CS0059MaliciousEmail:"
+            "retrievalContentCrafting",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "CS0059MaliciousEmail:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0079
+            "CS0059StagedEmail:"
+            "stageCapabilities",
+
+            # S03 - AML.T0093
+            "CS0059M365Copilot:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0068
+            "CS0059MaliciousEmail:"
+            "llmPromptObfuscation",
+
+            # S05 - AML.T0070
+            "CS0059CopilotRAG:"
+            "ragPoisoning",
+
+            # S06 - AML.T0051.002
+            "CS0059TriggeredConversation:"
+            "triggeredPromptInjection",
+
+            # S07 - AML.T0085.000
+            "CS0059CopilotRAG:"
+            "ragDatabases",
+
+            # S08 - AML.T0067
+            "CS0059RenderedResponse:"
+            "trustedOutputComponentsManipulation",
+
+            # S09 - AML.T0077
+            "CS0059RenderedResponse:"
+            "llmResponseRendering",
+
+            # S10 - AML.T0025
+            "CS0059CyberExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S11 - AML.T0048
+            "CS0059ExternalImpact:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "CS0059ExternalImpact:"
+            "externalHarms",
+    },
+    
 
 }
 
@@ -7602,6 +7806,327 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     cs0056_replica_model.add_associated_assets(
         "externalHarm",
         {cs0056_external_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0057
+    # Storm-2139 Azure OpenAI Guardrail Bypass
+    # ========================================================
+
+    cs0057_jailbreak_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0057JailbreakCapability"
+    )
+
+    cs0057_proxy_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "CS0057ProxyInfrastructure"
+    )
+
+    cs0057_staged_proxy = model.add_asset(
+        "LLMStagedCapability",
+        "CS0057StagedProxyService"
+    )
+
+    cs0057_service_account = model.add_asset(
+        "AIServiceOS",
+        "CS0057CompromisedServiceAccount"
+    )
+
+    cs0057_inference_service = model.add_asset(
+        "AIInferenceService",
+        "CS0057AzureOpenAIService"
+    )
+
+    cs0057_jailbreak_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0057JailbreakConversation"
+    )
+
+    cs0057_deepfake_media = model.add_asset(
+        "DeepfakeMedia",
+        "CS0057GeneratedDeepfakeMedia"
+    )
+
+    cs0057_societal_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0057SocietalImpact"
+    )
+
+    cs0057_financial_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0057FinancialImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0057 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0017 -> AML.T0008
+    cs0057_jailbreak_capability.add_associated_assets(
+        "infrastructure",
+        {cs0057_proxy_infrastructure}
+    )
+
+    # S01 -> S02
+    # AML.T0008 -> AML.T0079
+    cs0057_proxy_infrastructure.add_associated_assets(
+        "stagedCapability",
+        {cs0057_staged_proxy}
+    )
+
+    # S02 -> S03
+    # AML.T0079 -> AML.T0012
+    cs0057_staged_proxy.add_associated_assets(
+        "accountHost",
+        {cs0057_service_account}
+    )
+
+    # S03 -> S04
+    # AML.T0012 -> AML.T0040
+    cs0057_service_account.add_associated_assets(
+        "inferenceService",
+        {cs0057_inference_service}
+    )
+
+    # S04 -> S05
+    # AML.T0040 -> AML.T0054
+    cs0057_inference_service.add_associated_assets(
+        "jailbreakConversation",
+        {cs0057_jailbreak_conversation}
+    )
+
+    # S05 -> S06
+    # AML.T0054 -> AML.T0088
+    cs0057_jailbreak_conversation.add_associated_assets(
+        "deepfake",
+        {cs0057_deepfake_media}
+    )
+
+    # S06 -> S07
+    # AML.T0088 -> AML.T0048.002
+    cs0057_deepfake_media.add_associated_assets(
+        "societalImpact",
+        {cs0057_societal_impact}
+    )
+
+    # S04 -> S08
+    # AML.T0040 -> AML.T0048.000
+    #
+    # Separate financial-impact branch.
+    cs0057_inference_service.add_associated_assets(
+        "financialImpact",
+        {cs0057_financial_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0058
+    # Google Photos AI Model Extraction
+    # ========================================================
+
+    cs0058_artifact_discovery = model.add_asset(
+        "AIArtifactDiscovery",
+        "CS0058ArtifactDiscovery"
+    )
+
+    cs0058_artifact_collection = model.add_asset(
+        "AIArtifactCollection",
+        "CS0058ArtifactCollection"
+    )
+
+    cs0058_model_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0058ModelExfiltration"
+    )
+
+    cs0058_extracted_model = model.add_asset(
+        "PoisonableAIModel",
+        "CS0058ExtractedModel"
+    )
+
+    cs0058_white_box_sample = model.add_asset(
+        "AdversarialSample",
+        "CS0058WhiteBoxSample"
+    )
+
+    cs0058_model_ip_theft = model.add_asset(
+        "ExternalHarm",
+        "CS0058ModelIPTheft"
+    )
+    
+    # --------------------------------------------------------
+    # CS0058 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0007 -> AML.T0035
+    cs0058_artifact_discovery.add_associated_assets(
+        "artifactCollection",
+        {cs0058_artifact_collection}
+    )
+
+    # S01 -> S02
+    # AML.T0035 -> AML.T0025
+    cs0058_artifact_collection.add_associated_assets(
+        "exfiltration",
+        {cs0058_model_exfiltration}
+    )
+
+    # S02 -> S03
+    # AML.T0025 -> AML.T0044
+    cs0058_model_exfiltration.add_associated_assets(
+        "extractedModel",
+        {cs0058_extracted_model}
+    )
+
+    # S03 -> S04
+    # AML.T0044 -> AML.T0043.000
+    cs0058_extracted_model.add_associated_assets(
+        "whiteBoxSample",
+        {cs0058_white_box_sample}
+    )
+
+    # S04 -> S05
+    # AML.T0043.000 -> AML.T0015
+    #
+    # The inverse "evasionTarget" role from the same
+    # PoisonableAIModel <-> AdversarialSample association
+    # points back to CS0058ExtractedModel automatically.
+
+    # S05 -> S06
+    # AML.T0015 -> AML.T0048.004
+    #
+    # Reuse inherited PredictiveAIModel <-> ExternalHarm.
+    cs0058_extracted_model.add_associated_assets(
+        "externalHarm",
+        {cs0058_model_ip_theft}
+    )
+    
+    # ========================================================
+    # AML.CS0059
+    # EchoLeak: Zero-Click Prompt Injection Targeting
+    # M365 Copilot for Data Exfiltration
+    # ========================================================
+
+    cs0059_malicious_email = model.add_asset(
+        "LLMPrompt",
+        "CS0059MaliciousEmail"
+    )
+
+    cs0059_staged_email = model.add_asset(
+        "LLMStagedCapability",
+        "CS0059StagedEmail"
+    )
+
+    cs0059_m365_copilot = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0059M365Copilot"
+    )
+
+    cs0059_copilot_rag = model.add_asset(
+        "RAGKnowledgeBase",
+        "CS0059CopilotRAG"
+    )
+
+    cs0059_triggered_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0059TriggeredConversation"
+    )
+
+    cs0059_rendered_response = model.add_asset(
+        "LLMRenderedResponse",
+        "CS0059RenderedResponse"
+    )
+
+    cs0059_cyber_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0059CyberExfiltration"
+    )
+
+    cs0059_external_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0059ExternalImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0059 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0066 -> AML.T0065
+    # Same LLMPrompt instance.
+
+    # S01 -> S02
+    # AML.T0065 -> AML.T0079
+    cs0059_malicious_email.add_associated_assets(
+        "stagedCapability",
+        {cs0059_staged_email}
+    )
+
+    # S02 -> S03
+    # AML.T0079 -> AML.T0093
+    cs0059_staged_email.add_associated_assets(
+        "infiltrationApplication",
+        {cs0059_m365_copilot}
+    )
+
+    # Supports S03 -> S04
+    # AML.T0093 -> AML.T0068
+    #
+    # PublicFacingLLMApplication receives the inverse
+    # "craftedPayload" role.
+    cs0059_malicious_email.add_associated_assets(
+        "targetApplication",
+        {cs0059_m365_copilot}
+    )
+
+    # S04 -> S05
+    # AML.T0068 -> AML.T0070
+    cs0059_malicious_email.add_associated_assets(
+        "ragStore",
+        {cs0059_copilot_rag}
+    )
+
+    # S05 -> S06
+    # AML.T0070 -> AML.T0051.002
+    cs0059_copilot_rag.add_associated_assets(
+        "triggeredConversation",
+        {cs0059_triggered_conversation}
+    )
+
+    # S06 -> S07
+    # AML.T0051.002 -> AML.T0085.000
+    #
+    # Same RAGKnowledgeBase <-> LLMConversation association.
+    # Its inverse role gives:
+    #
+    # CS0059TriggeredConversation.ragData
+    #     -> CS0059CopilotRAG
+
+    # S07 -> S08
+    # AML.T0085.000 -> AML.T0067
+    cs0059_copilot_rag.add_associated_assets(
+        "renderedResponse",
+        {cs0059_rendered_response}
+    )
+
+    # S08 -> S09
+    # AML.T0067 -> AML.T0077
+    # Same LLMRenderedResponse instance.
+
+    # S09 -> S10
+    # AML.T0077 -> AML.T0025
+    cs0059_rendered_response.add_associated_assets(
+        "cyberExfiltration",
+        {cs0059_cyber_exfiltration}
+    )
+
+    # S10 -> S11
+    # AML.T0025 -> AML.T0048
+    cs0059_cyber_exfiltration.add_associated_assets(
+        "impact",
+        {cs0059_external_impact}
     )
 
 
