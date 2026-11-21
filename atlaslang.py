@@ -3263,6 +3263,133 @@ CASE_STUDIES = {
             "externalHarms",
     },
     
+    
+    # ========================================================
+    # AML.CS0060
+    # Cross-Site Scripting via Prompt Manipulation
+    # in Lenovo AI Chatbot
+    # ========================================================
+
+    "AML.CS0060": {
+
+        "attacker_name":
+            "AML_CS0060_Attacker",
+
+        # S00 - AML.T0008
+        "entry_point":
+            "CS0060ExfiltrationInfrastructure:"
+            "acquireInfrastructure",
+
+        "path": [
+
+            # S01 - AML.T0065
+            "CS0060MaliciousPrompt:"
+            "llmPromptCrafting",
+
+            # S02 - AML.T0047
+            "CS0060LenaApplication:"
+            "aiEnabledProductOrService",
+
+            # S03 - AML.T0093
+            "CS0060LenaApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0051.000
+            "CS0060LenaApplication:"
+            "directPromptInjection",
+
+            # S05 - AML.T0011
+            "CS0060HumanAgentExecution:"
+            "userExecution",
+
+            # S06 - AML.T0050
+            "CS0060SupportAgentHost:"
+            "commandAndScriptingInterpreter",
+
+            # S07 - AML.T0113
+            "CS0060SupportSession:"
+            "stealWebSessionCookie",
+
+            # S08 - AML.T0077
+            "CS0060RenderedPayload:"
+            "llmResponseRendering",
+
+            # S09 - AML.T0091.001
+            "CS0060SupportSession:"
+            "webSessionCookie",
+
+            # S10 - AML.T0048
+            "CS0060ExternalImpact:"
+            "externalHarms",
+        ],
+
+        "goal":
+            "CS0060ExternalImpact:"
+            "externalHarms",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0061
+    # AI in the Middle:
+    # Web-Based AI Services as C2 Relays
+    # ========================================================
+
+    "AML.CS0061": {
+
+        "attacker_name":
+            "AML_CS0061_Attacker",
+
+        # S00 - AML.T0095
+        "entry_point":
+            "CS0061RelayResearch:"
+            "searchOpenWebsitesDomains",
+
+        "path": [
+
+            # S01 - AML.T0008.002
+            "CS0061RelayDomain:"
+            "domains",
+
+            # S02 - AML.T0079
+            "CS0061StagedCapability:"
+            "stageCapabilities",
+
+            # S03 - AML.T0047
+            "CS0061PublicAIService:"
+            "aiEnabledProductOrService",
+
+            # S04 - AML.T0065
+            "CS0061RelayPrompt:"
+            "llmPromptCrafting",
+
+            # S05 - AML.T0068
+            "CS0061RelayPrompt:"
+            "llmPromptObfuscation",
+
+            # S06 - AML.T0037
+            "CS0061CompromisedHost:"
+            "dataFromLocalSystem",
+
+            # S07 - AML.T0114
+            "CS0061AIWebInterface:"
+            "aiServiceWebInterface",
+
+            # S08 - AML.T0086
+            "CS0061ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # S09 - AML.T0050
+            "CS0061CompromisedHost:"
+            "commandAndScriptingInterpreter",
+        ],
+
+        "goal":
+            "CS0061CompromisedHost:"
+            "commandAndScriptingInterpreter",
+    },
+
+    
 
 }
 
@@ -8128,6 +8255,244 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "impact",
         {cs0059_external_impact}
     )
+    
+    # ========================================================
+    # AML.CS0060
+    # Cross-Site Scripting via Prompt Manipulation
+    # in Lenovo AI Chatbot
+    # ========================================================
+
+    cs0060_exfiltration_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "CS0060ExfiltrationInfrastructure"
+    )
+
+    cs0060_malicious_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0060MaliciousPrompt"
+    )
+
+    cs0060_lena_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0060LenaApplication"
+    )
+
+    cs0060_human_agent_execution = model.add_asset(
+        "AIUserExecution",
+        "CS0060HumanAgentExecution"
+    )
+
+    cs0060_support_agent_host = model.add_asset(
+        "AIClientOS",
+        "CS0060SupportAgentHost"
+    )
+
+    cs0060_support_session = model.add_asset(
+        "WebSessionCredential",
+        "CS0060SupportSession"
+    )
+
+    cs0060_rendered_payload = model.add_asset(
+        "LLMRenderedResponse",
+        "CS0060RenderedPayload"
+    )
+
+    cs0060_external_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0060ExternalImpact"
+    )
+    
+    # --------------------------------------------------------
+    # CS0060 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0008 -> AML.T0065
+    cs0060_exfiltration_infrastructure.add_associated_assets(
+        "infrastructurePrompt",
+        {cs0060_malicious_prompt}
+    )
+
+    # S01 -> S02
+    # AML.T0065 -> AML.T0047
+    #
+    # Reuse existing LLMPrompt <-> PublicFacingLLMApplication.
+    cs0060_malicious_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0060_lena_application}
+    )
+
+    # S02 -> S03
+    # AML.T0047 -> AML.T0093
+    # Same PublicFacingLLMApplication instance.
+
+    # S03 -> S04
+    # AML.T0093 -> AML.T0051.000
+    # Same PublicFacingLLMApplication instance.
+
+    # S04 -> S05
+    # AML.T0051.000 -> AML.T0011
+    cs0060_lena_application.add_associated_assets(
+        "userExecution",
+        {cs0060_human_agent_execution}
+    )
+
+    # S05 -> S06
+    # AML.T0011 -> AML.T0050
+    cs0060_human_agent_execution.add_associated_assets(
+        "executionHost",
+        {cs0060_support_agent_host}
+    )
+
+    # S06 -> S07
+    # AML.T0050 -> AML.T0113
+    cs0060_support_agent_host.add_associated_assets(
+        "webSession",
+        {cs0060_support_session}
+    )
+
+    # S07 -> S08
+    # AML.T0113 -> AML.T0077
+    cs0060_support_session.add_associated_assets(
+        "renderedResponse",
+        {cs0060_rendered_payload}
+    )
+
+    # S08 -> S09
+    # AML.T0077 -> AML.T0091.001
+    #
+    # The inverse "stolenSession" role from the same
+    # WebSessionCredential <-> LLMRenderedResponse association
+    # points back to CS0060SupportSession.
+
+    # S09 -> S10
+    # AML.T0091.001 -> AML.T0048
+    cs0060_support_session.add_associated_assets(
+        "impact",
+        {cs0060_external_impact}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0061
+    # AI in the Middle:
+    # Web-Based AI Services as C2 Relays
+    # ========================================================
+
+    cs0061_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0061RelayResearch"
+    )
+
+    cs0061_domain = model.add_asset(
+        "AIDomainInfrastructure",
+        "CS0061RelayDomain"
+    )
+
+    cs0061_staged_capability = model.add_asset(
+        "LLMStagedCapability",
+        "CS0061StagedCapability"
+    )
+
+    cs0061_ai_service = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0061PublicAIService"
+    )
+
+    cs0061_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0061RelayPrompt"
+    )
+
+    cs0061_host = model.add_asset(
+        "AIClientOS",
+        "CS0061CompromisedHost"
+    )
+
+    cs0061_web_interface = model.add_asset(
+        "AIServiceWebInterface",
+        "CS0061AIWebInterface"
+    )
+
+    cs0061_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0061ExfiltrationTool"
+    )
+
+    # --------------------------------------------------------
+    # CS0061 associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0095 -> AML.T0008.002
+
+    cs0061_research.add_associated_assets(
+        "relayDomain",
+        {cs0061_domain}
+    )
+
+    # S01 -> S02
+    # AML.T0008.002 -> AML.T0079
+
+    cs0061_domain.add_associated_assets(
+        "stagedCapability",
+        {cs0061_staged_capability}
+    )
+
+    # S02 -> S03
+    # AML.T0079 -> AML.T0047
+
+    cs0061_staged_capability.add_associated_assets(
+        "targetAIService",
+        {cs0061_ai_service}
+    )
+
+    # S03 -> S04
+    # AML.T0047 -> AML.T0065
+
+    cs0061_ai_service.add_associated_assets(
+        "craftedRelayPrompt",
+        {cs0061_prompt}
+    )
+
+    # S04 -> S05
+    # AML.T0065 -> AML.T0068
+    #
+    # Same LLMPrompt asset instance.
+    # No additional association required.
+
+    # S05 -> S06
+    # AML.T0068 -> AML.T0037
+
+    cs0061_prompt.add_associated_assets(
+        "relayHost",
+        {cs0061_host}
+    )
+
+    # S06 -> S07
+    # AML.T0037 -> AML.T0114
+
+    cs0061_host.add_associated_assets(
+        "aiWebInterface",
+        {cs0061_web_interface}
+    )
+
+    # S07 -> S08
+    # AML.T0114 -> AML.T0086
+
+    cs0061_web_interface.add_associated_assets(
+        "exfiltrationTool",
+        {cs0061_exfiltration_tool}
+    )
+
+    # S08 -> S09
+    # AML.T0086 -> AML.T0050
+
+    cs0061_exfiltration_tool.add_associated_assets(
+        "executionHost",
+        {cs0061_host}
+    )
+
 
 
     return model
