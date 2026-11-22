@@ -3933,9 +3933,893 @@ CASE_STUDIES = {
             "CS0068RepositoryExfiltration:"
             "exfiltrationViaCyberMeans",
     },
+    
+    
+    # ========================================================
+    # AML.CS0069
+    # GTG-1002 Claude Code Espionage Campaign
+    # ========================================================
+
+    "AML.CS0069": {
+
+        "attacker_name":
+            "AML_CS0069_Attacker",
+
+        # S01 - AML.T0040
+        "entry_point":
+            "CS0069ClaudeInferenceService:"
+            "aiModelInferenceAPIAccess",
+
+        "path": [
+
+            # S02 - AML.T0051.000
+            "CS0069ClaudeAgent:"
+            "directPromptInjection",
+
+            # S03 - AML.T0054
+            "CS0069JailbrokenConversation:"
+            "llmJailbreak",
+
+            # S04 - AML.T0016.001
+            "CS0069AttackTools:"
+            "softwareTools",
+
+            # S05 - AML.T0128
+            "CS0069IntrusionInfrastructure:"
+            "compromiseInfrastructure",
+
+            # S06 - AML.T0103
+            "CS0069ClaudeAgent:"
+            "deployAIAgent",
+
+            # S07 - AML.T0117
+            "CS0069AutonomousPlanner:"
+            "autonomousAttackPathAdaptation",
+
+            # S08 - AML.T0116
+            "CS0069ReconnaissanceAgent:"
+            "autonomousReconnaissance",
+
+            # S09 - AML.T0006
+            "CS0069TargetScanning:"
+            "activeScanning",
+
+            # S10 - AML.T0017.001
+            "CS0069AutonomousExploit:"
+            "autonomousExploitDevelopment",
+
+            # S11 - AML.T0049
+            "CS0069TargetApplication:"
+            "exploitPublicFacingApplication",
+
+            # S12 - AML.T0075
+            "CS0069EnterpriseDiscovery:"
+            "enterpriseResourceDiscovery",
+
+            # S13 - AML.T0089
+            "CS0069CompromisedEnterprise:"
+            "enterpriseEnvironmentDiscovery",
+
+            # S14 - AML.T0055
+            "CS0069CompromisedEnterprise:"
+            "unsecuredCredentials",
+
+            # S15 - AML.T0012
+            "CS0069CompromisedEnterprise:"
+            "validAccounts",
+
+            # S16 - AML.T0125
+            "CS0069CompromisedEnterprise:"
+            "createAccount",
+
+            # S17 - AML.T0036
+            "CS0069CompromisedEnterprise:"
+            "dataFromInformationRepositories",
+
+            # S18 - AML.T0037
+            "CS0069CompromisedEnterprise:"
+            "dataFromLocalSystem",
+
+            # S19 - AML.T0126
+            "CS0069CollectedData:"
+            "automatedCollection",
+
+            # S20 - AML.T0127
+            "CS0069CollectedData:"
+            "dataStaged",
+
+            # S21 - AML.T0025
+            "CS0069Exfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0069Exfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0070
+    # DeepSeek-Powered Hermes Agent:
+    # Langflow and n8n Exploitation Attempts
+    # ========================================================
+
+    "AML.CS0070": {
+
+        "attacker_name":
+            "AML_CS0070_Attacker",
+
+        # S00 - AML.T0016.002
+        "entry_point":
+            "CS0070DeepSeekCapability:"
+            "generativeAI",
+
+        "path": [
+
+            # S01 - AML.T0016.001
+            "CS0070HermesSoftware:"
+            "softwareTools",
+
+            # S02 - AML.T0016.004
+            "CS0070HermesAgentTools:"
+            "aiAgentTools",
+
+            # S03 - AML.T0017.002
+            "CS0070HermesDevelopedTools:"
+            "developAIAgentTools",
+
+            # S04 - AML.T0040
+            "CS0070DeepSeekInference:"
+            "aiModelInferenceAPIAccess",
+
+            # S05 - AML.T0117
+            "CS0070AutonomousPlanner:"
+            "autonomousAttackPathAdaptation",
+
+            # S06 - AML.T0102
+            "CS0070GeneratedCommands:"
+            "generateMaliciousCommands",
+
+            # S07 - AML.T0116
+            "CS0070LangflowReconAgent:"
+            "autonomousReconnaissance",
+
+            # S08 - AML.T0000.003
+            "CS0070LangflowExposureResearch:"
+            "scanDatabases",
+
+            # S09 - AML.T0016.003
+            "CS0070LangflowExploit:"
+            "exploits",
+
+            # S10 - AML.T0006
+            "CS0070LangflowScanning:"
+            "activeScanning",
+
+            # S11 - AML.T0049
+            "CS0070LangflowTarget:"
+            "exploitPublicFacingApplication",
+
+            # S12 - AML.T0116
+            "CS0070AutonomousPivot:"
+            "autonomousReconnaissance",
+
+            # S13 - AML.T0095.000
+            "CS0070GitHubExploitResearch:"
+            "codeRepositories",
+
+            # S14 - AML.T0016.003
+            "CS0070N8NExploit:"
+            "exploits",
+
+            # S15 - AML.T0000
+            "CS0070N8NTechnicalResearch:"
+            "searchOpenTechnicalDatabases",
+
+            # S16 - AML.T0006
+            "CS0070N8NScanning:"
+            "activeScanning",
+
+            # S17 - AML.T0049
+            "CS0070N8NTarget:"
+            "exploitPublicFacingApplication",
+        ],
+
+        "goal":
+            "CS0070N8NTarget:"
+            "exploitPublicFacingApplication",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0071
+    # Multi-Agent Framework Compromises Taiwanese
+    # Government Systems
+    # ========================================================
+
+    "AML.CS0071": {
+
+        "attacker_name":
+            "AML_CS0071_Attacker",
+
+        # S01 - AML.T0124
+        "entry_point":
+            "CS0071AgentOrchestrator:"
+            "autonomousAttackOrchestration",
+
+        "path": [
+
+            # S02 - AML.T0117
+            "CS0071AttackPlanner:"
+            "autonomousAttackPathAdaptation",
+
+            # S03 - AML.T0118.001
+            "CS0071AgentCommunication:"
+            "directAgentCommunication",
+
+            # S04 - AML.T0116
+            "CS0071ReconnaissanceAgent:"
+            "autonomousReconnaissance",
+
+            # S05 - AML.T0006
+            "CS0071GovernmentPortalScanning:"
+            "activeScanning",
+
+            # S06 - AML.T0036
+            "CS0071ExposedPersonnelRepository:"
+            "dataFromInformationRepositories",
+
+            # S07 - AML.T0012
+            "CS0071OfficeAutomationAccount:"
+            "validAccounts",
+
+            # S08 - AML.T0012
+            "CS0071FederatedSSOAccount:"
+            "validAccounts",
+
+            # S09 - AML.T0049
+            "CS0071ExposedDebugEndpoint:"
+            "exploitPublicFacingApplication",
+
+            # S10 - AML.T0049
+            "CS0071UnsignedJWTEndpoint:"
+            "exploitPublicFacingApplication",
+
+            # S11 - AML.T0126
+            "CS0071AutomatedDataCollection:"
+            "automatedCollection",
+
+            # S12 - AML.T0025
+            "CS0071GovernmentDataExfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0071GovernmentDataExfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0072
+    # AI Recommendation Poisoning via Crafted AI Assistant Links
+    # ========================================================
+
+    "AML.CS0072": {
+
+        "attacker_name":
+            "AML_CS0072_Attacker",
+
+        # S00 - AML.T0016
+        "entry_point":
+            "CS0072LinkGenerationCapability:"
+            "obtainCapabilities",
+
+        "path": [
+
+            # S01 - AML.T0079
+            "CS0072StagedAssistantLink:"
+            "stageCapabilities",
+
+            # S02 - AML.T0131
+            "CS0072CraftedAssistantLink:"
+            "craftedAIAssistantLinks",
+
+            # S03 - AML.T0068
+            "CS0072ObfuscatedMemoryPrompt:"
+            "llmPromptObfuscation",
+
+            # S04 - AML.T0080.000
+            "CS0072PoisonedAssistantMemory:"
+            "contextPoisoningMemory",
+
+            # S05 - AML.T0130
+            "CS0072RecommendationBias:"
+            "aiAgentResponseBiasing",
+        ],
+
+        "goal":
+            "CS0072RecommendationBias:"
+            "aiAgentResponseBiasing",
+    },
+        
+    
+    # ========================================================
+    # AML.CS0073-A
+    # Claude Opus 4.7 - Real Target Substitution
+    # ========================================================
+
+    "AML.CS0073-A": {
+
+        "attacker_name":
+            "AML_CS0073_A_Attacker",
+
+        # S01 - AML.T0117
+        "entry_point":
+            "CS0073OpusPlanner:"
+            "autonomousAttackPathAdaptation",
+
+        "path": [
+
+            # S02 - AML.T0116
+            "CS0073OpusRecon:"
+            "autonomousReconnaissance",
+
+            # S03 - AML.T0049
+            "CS0073OpusRealCompany:"
+            "exploitPublicFacingApplication",
+
+            # S04 - AML.T0106
+            "CS0073OpusRealCompany:"
+            "exploitationForCredentialAccess",
+        ],
+
+        "goal":
+            "CS0073OpusRealCompany:"
+            "exploitationForCredentialAccess",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0073-B1
+    # Mythos 5 - Malware Development Path
+    # ========================================================
+
+    "AML.CS0073-B1": {
+
+        "attacker_name":
+            "AML_CS0073_B1_Attacker",
+
+        # S10 - AML.T0117
+        "entry_point":
+            "CS0073MythosPlanner:"
+            "autonomousAttackPathAdaptation",
+
+        "path": [
+
+            # S11 - AML.T0017.003
+            "CS0073MaliciousPythonPackage:malware",
+
+            # S13 - AML.T0079
+            "CS0073PyPIPackageStaging:stageCapabilities",
+
+            # S14 - AML.T0010.001
+            "CS0073PyPISupplyChain:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # S15 - AML.T0050
+            "CS0073SecurityScanner:"
+            "commandAndScriptingInterpreter",
+
+            # S16 - AML.T0025
+            "CS0073ScannerCredentialExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S17 - AML.T0012
+            "CS0073SecurityCompanyAccess:"
+            "validAccounts",
+        ],
+
+        "goal":
+            "CS0073SecurityCompanyAccess:"
+            "validAccounts",
+    },
+
+
+    # ========================================================
+    # AML.CS0073-B2
+    # Mythos 5 - Account Registration Path
+    # ========================================================
+
+    "AML.CS0073-B2": {
+
+        "attacker_name":
+            "AML_CS0073_B2_Attacker",
+
+        # S10 - AML.T0117
+        "entry_point":
+            "CS0073MythosPlanner:"
+            "autonomousAttackPathAdaptation",
+
+        "path": [
+
+            # S12 - AML.T0021
+            "CS0073PyPIAccount:establishAccounts",
+
+            # S13 - AML.T0079
+            "CS0073PyPIPackageStaging:stageCapabilities",
+
+            # S14 - AML.T0010.001
+            "CS0073PyPISupplyChain:"
+            "aiSupplyChainCompromiseSoftware",
+
+            # S15 - AML.T0050
+            "CS0073SecurityScanner:"
+            "commandAndScriptingInterpreter",
+
+            # S16 - AML.T0025
+            "CS0073ScannerCredentialExfiltration:"
+            "exfiltrationViaCyberMeans",
+
+            # S17 - AML.T0012
+            "CS0073SecurityCompanyAccess:"
+            "validAccounts",
+        ],
+
+        "goal":
+            "CS0073SecurityCompanyAccess:"
+            "validAccounts",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0073-C1
+    # Internal Research Model - Exposed Credentials
+    # ========================================================
+
+    "AML.CS0073-C1": {
+
+        "attacker_name":
+            "AML_CS0073_C1_Attacker",
+
+        # S20 - AML.T0117
+        "entry_point":
+            "CS0073InternalPlanner:"
+            "autonomousAttackPathAdaptation",
+
+        "path": [
+
+            # S21 - AML.T0116
+            "CS0073InternalRecon:"
+            "autonomousReconnaissance",
+
+            # S22 - AML.T0006
+            "CS0073PublicInternetScanning:"
+            "activeScanning",
+
+            # S23 - AML.T0055
+            "CS0073ExposedDebugPage:"
+            "unsecuredCredentials",
+        ],
+
+        "goal":
+            "CS0073ExposedDebugPage:"
+            "unsecuredCredentials",
+    },
+
+
+    # ========================================================
+    # AML.CS0073-C2
+    # Internal Research Model - SQL Injection
+    # ========================================================
+
+    "AML.CS0073-C2": {
+
+        "attacker_name":
+            "AML_CS0073_C2_Attacker",
+
+        # S20 - AML.T0117
+        "entry_point":
+            "CS0073InternalPlanner:"
+            "autonomousAttackPathAdaptation",
+
+        "path": [
+
+            # S21 - AML.T0116
+            "CS0073InternalRecon:"
+            "autonomousReconnaissance",
+
+            # S22 - AML.T0006
+            "CS0073PublicInternetScanning:"
+            "activeScanning",
+
+            # S24 - AML.T0049
+            "CS0073SQLInjectionTarget:"
+            "exploitPublicFacingApplication",
+        ],
+
+        "goal":
+            "CS0073SQLInjectionTarget:"
+            "exploitPublicFacingApplication",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0075-A
+    # Google AI Model Distillation - Compromised Accounts
+    # ========================================================
+
+    "AML.CS0075-A": {
+
+        "attacker_name": "AML_CS0075_A_Attacker",
+
+        # S01 - AML.T0139
+        "entry_point":
+            "CS0075CompromisedGoogleAccount:compromiseAccounts",
+
+        "path": [
+
+            # S03 - AML.T0008.005
+            "CS0075GoogleProxyInfrastructure:aiServiceProxies",
+
+            # S04 - AML.T0012
+            "CS0075GoogleServiceAccess:validAccounts",
+
+            # S05 - AML.T0140
+            "CS0075GoogleProxyInfrastructure:"
+            "centralizedAIServiceRequestRouting",
+
+            # S06 - AML.T0065
+            "CS0075DistillationPrompt:llmPromptCrafting",
+
+            # S07 - AML.T0024
+            "CS0075GoogleInferenceService:"
+            "exfiltrationViaAIInferenceAPI",
+
+            # S08 - AML.T0135
+            "CS0075GoogleInferenceService:outputsFromAIModels",
+
+            # S09 - AML.T0005.001
+            "CS0075DistilledModel:trainProxyViaReplication",
+
+            # S10 - AML.T0048.004
+            "CS0075ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+
+        "goal":
+            "CS0075ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0075-B
+    # Google AI Model Distillation - Fraudulent Accounts
+    # ========================================================
+
+    "AML.CS0075-B": {
+
+        "attacker_name": "AML_CS0075_B_Attacker",
+
+        # S02 - AML.T0021
+        "entry_point":
+            "CS0075FraudulentGoogleAccount:establishAccounts",
+
+        "path": [
+
+            # S03 - AML.T0008.005
+            "CS0075GoogleProxyInfrastructure:aiServiceProxies",
+
+            # S04 - AML.T0012
+            "CS0075GoogleServiceAccess:validAccounts",
+
+            # S05 - AML.T0140
+            "CS0075GoogleProxyInfrastructure:"
+            "centralizedAIServiceRequestRouting",
+
+            # S06 - AML.T0065
+            "CS0075DistillationPrompt:llmPromptCrafting",
+
+            # S07 - AML.T0024
+            "CS0075GoogleInferenceService:"
+            "exfiltrationViaAIInferenceAPI",
+
+            # S08 - AML.T0135
+            "CS0075GoogleInferenceService:outputsFromAIModels",
+
+            # S09 - AML.T0005.001
+            "CS0075DistilledModel:trainProxyViaReplication",
+
+            # S10 - AML.T0048.004
+            "CS0075ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+
+        "goal":
+            "CS0075ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0076-A
+    # Fraudulent Accounts + Jailbreak Route
+    # ========================================================
+
+    "AML.CS0076-A": {
+        "attacker_name": "AML_CS0076_A_Attacker",
+        "entry_point": "CS0076FraudulentAccounts:establishAccounts",
+        "path": [
+            "CS0076TransferStation:aiServiceProxies",
+            "CS0076ServiceAccount:validAccounts",
+            "CS0076TransferStation:centralizedAIServiceRequestRouting",
+            "CS0076TransferStation:aiServiceRequestMetadataSanitization",
+            "CS0076TargetInferenceService:discoverAIModelOutputs",
+            "CS0076DistillationPrompts:llmPromptCrafting",
+            "CS0076TargetAIApplication:directPromptInjection",
+            "CS0076JailbreakConversation:llmJailbreak",
+            "CS0076TargetInferenceService:exfiltrationViaAIInferenceAPI",
+            "CS0076TargetInferenceService:outputsFromAIModels",
+            "CS0076TargetInferenceService:verifyAttack",
+            "CS0076DistilledModel:trainProxyViaReplication",
+            "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+        "goal": "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+
+    # ========================================================
+    # AML.CS0076-B
+    # Fraudulent Accounts + Direct Injection Route
+    # ========================================================
+
+    "AML.CS0076-B": {
+        "attacker_name": "AML_CS0076_B_Attacker",
+        "entry_point": "CS0076FraudulentAccounts:establishAccounts",
+        "path": [
+            "CS0076TransferStation:aiServiceProxies",
+            "CS0076ServiceAccount:validAccounts",
+            "CS0076TransferStation:centralizedAIServiceRequestRouting",
+            "CS0076TransferStation:aiServiceRequestMetadataSanitization",
+            "CS0076TargetInferenceService:discoverAIModelOutputs",
+            "CS0076DistillationPrompts:llmPromptCrafting",
+            "CS0076TargetAIApplication:directPromptInjection",
+            "CS0076TargetInferenceService:exfiltrationViaAIInferenceAPI",
+            "CS0076TargetInferenceService:outputsFromAIModels",
+            "CS0076TargetInferenceService:verifyAttack",
+            "CS0076DistilledModel:trainProxyViaReplication",
+            "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+        "goal": "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+
+    # ========================================================
+    # AML.CS0076-C
+    # Proxy Infrastructure + Jailbreak Route
+    # ========================================================
+
+    "AML.CS0076-C": {
+        "attacker_name": "AML_CS0076_C_Attacker",
+        "entry_point": "CS0076TransferStation:aiServiceProxies",
+        "path": [
+            "CS0076ServiceAccount:validAccounts",
+            "CS0076TransferStation:centralizedAIServiceRequestRouting",
+            "CS0076TransferStation:aiServiceRequestMetadataSanitization",
+            "CS0076TargetInferenceService:discoverAIModelOutputs",
+            "CS0076DistillationPrompts:llmPromptCrafting",
+            "CS0076TargetAIApplication:directPromptInjection",
+            "CS0076JailbreakConversation:llmJailbreak",
+            "CS0076TargetInferenceService:exfiltrationViaAIInferenceAPI",
+            "CS0076TargetInferenceService:outputsFromAIModels",
+            "CS0076TargetInferenceService:verifyAttack",
+            "CS0076DistilledModel:trainProxyViaReplication",
+            "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+        "goal": "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+
+    # ========================================================
+    # AML.CS0076-D
+    # Proxy Infrastructure + Direct Injection Route
+    # ========================================================
+
+    "AML.CS0076-D": {
+        "attacker_name": "AML_CS0076_D_Attacker",
+        "entry_point": "CS0076TransferStation:aiServiceProxies",
+        "path": [
+            "CS0076ServiceAccount:validAccounts",
+            "CS0076TransferStation:centralizedAIServiceRequestRouting",
+            "CS0076TransferStation:aiServiceRequestMetadataSanitization",
+            "CS0076TargetInferenceService:discoverAIModelOutputs",
+            "CS0076DistillationPrompts:llmPromptCrafting",
+            "CS0076TargetAIApplication:directPromptInjection",
+            "CS0076TargetInferenceService:exfiltrationViaAIInferenceAPI",
+            "CS0076TargetInferenceService:outputsFromAIModels",
+            "CS0076TargetInferenceService:verifyAttack",
+            "CS0076DistilledModel:trainProxyViaReplication",
+            "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+        ],
+        "goal": "CS0076ModelIPTheft:aiIntellectualPropertyTheft",
+    },
+    
 
 
 
+}
+        
+# ============================================================
+# AML.CS0074 - Procedure definitions
+# (MAL asset type, MAL attack step)
+# ============================================================
+
+CS0074_NODES = [
+    ("AutonomousAIAgent", "autonomousAttackPathAdaptation"),       # S00
+    ("AutonomousAIAgent", "autonomousReconnaissance"),              # S01
+    ("AIResearchMaterial", "codeRepositories"),                    # S02
+    ("VictimIdentityInformation", "gatherVictimIdentityInformation"), # S03
+    ("FraudulentAccount", "establishAccounts"),                     # S04
+    ("AIInfrastructure", "acquireInfrastructure"),                 # S05
+    ("AIAttackSoftwareTool", "generateMaliciousCommands"),         # S06
+    ("AdversarialCapability", "developCapabilities"),              # S07
+    ("LLMStagedCapability", "stageCapabilities"),                   # S08
+    ("AIInfrastructure", "masquerading"),                           # S09
+    ("SharedAgentArtifact", "obfuscatedFilesOrInformation"),        # S10
+    ("AISupplyChainModel", "aiSupplyChainCompromise"),              # S11
+    ("SocialEngineeringLLM", "spearphishingViaSocialEngineeringLLM"), # S12
+    ("LLMPrompt", "llmPromptObfuscation"),                          # S13
+    ("PublicFacingLLMApplication", "promptInfiltrationViaPublicFacingApplication"), # S14
+    ("LLMConversation", "indirectPromptInjection"),                 # S15
+    ("AIUserExecution", "userExecution"),                           # S16
+    ("AICyberCommunication", "cyberCommunicationChannel"),         # S17
+    ("SoftwareExecutionHost", "commandAndScriptingInterpreter"),   # S18
+    ("EnterpriseResourceDiscovery", "enterpriseResourceDiscovery"), # S19
+    ("EnterpriseCompromiseTarget", "enterpriseEnvironmentDiscovery"), # S20
+    ("AIExfiltration", "exfiltrationViaCyberMeans"),                # S21
+    ("SoftwareExecutionHost", "commandAndScriptingInterpreter"),   # S22
+    ("SoftwareExecutionHost", "eventTriggeredExecution"),          # S23
+    ("FraudulentAccount", "impersonation"),                         # S24
+    ("EnterpriseCompromiseTarget", "unsecuredCredentials"),        # S25
+    ("AIArtifactRepository", "indicatorRemoval"),                  # S26
+    ("FraudulentAccount", "establishAccounts"),                     # S27
+    ("AIAttackSoftwareTool", "generateMaliciousCommands"),         # S28
+    ("AdversarialCapability", "developCapabilities"),              # S29
+    ("LLMStagedCapability", "stageCapabilities"),                   # S30
+    ("EnterpriseCompromiseTarget", "unsecuredCredentials"),        # S31
+    ("EnterpriseCompromiseTarget", "validAccounts"),               # S32
+    ("LLMStagedCapability", "stageCapabilities"),                   # S33
+    ("SoftwareExecutionHost", "commandAndScriptingInterpreter"),   # S34
+    ("AICyberCommunication", "cyberCommunicationChannel"),         # S35
+    ("SharedAgentArtifact", "communicationViaSharedArtifacts"),    # S36
+    ("EnterpriseCompromiseTarget", "unsecuredCredentials"),        # S37
+    ("EnterpriseCompromiseTarget", "validAccounts"),               # S38
+    ("LLMStagedCapability", "stageCapabilities"),                   # S39
+    ("EnterpriseCompromiseTarget", "unsecuredCredentials"),        # S40
+    ("EnterpriseCompromiseTarget", "validAccounts"),               # S41
+]
+
+# ============================================================
+# AML.CS0074 - Directed procedure relationships
+# ============================================================
+
+CS0074_EDGES = [
+    (0, 1), (0, 6),
+    (1, 2),
+    (2, 3),
+    (3, 11), (3, 12), (3, 14),
+    (4, 8), (4, 12), (4, 14),
+    (5, 8),
+    (6, 7),
+    (7, 8), (7, 9), (7, 10),
+    (8, 11), (8, 12), (8, 14),
+    (9, 11),
+    (10, 11),
+    (11, 12),
+    (13, 14),
+    (14, 15), (14, 16),
+    (16, 17), (16, 26),
+    (17, 18),
+    (18, 19), (18, 20),
+    (19, 21),
+    (20, 21),
+    (21, 22),
+    (22, 23), (22, 25),
+    (23, 24),
+    (27, 30),
+    (28, 29),
+    (29, 30),
+    (30, 31), (30, 34), (30, 37), (30, 40),
+    (31, 32),
+    (32, 33),
+    (33, 34), (33, 36),
+    (34, 35),
+    (37, 38),
+    (38, 39),
+    (40, 41),
+]
+
+assert len(CS0074_NODES) == 42
+assert len(CS0074_EDGES) == 50
+
+# ============================================================
+# AML.CS0074 - Fixed paths for the existing DecisionAgent
+# ============================================================
+
+CS0074_PATHS = {
+    "AML.CS0074-01": [
+        0, 1, 2, 3, 14, 16, 17, 18, 19, 21, 22, 23, 24
+    ],
+
+    "AML.CS0074-02": [
+        28, 29, 30, 31, 32, 33, 34, 35
+    ],
+
+    "AML.CS0074-03": [
+        0, 6, 7, 8, 11, 12
+    ],
+
+    "AML.CS0074-04": [
+        27, 30, 37, 38, 39
+    ],
+
+    "AML.CS0074-05": [
+        4, 8, 14, 16, 17, 18, 20, 21, 22, 25
+    ],
+
+    "AML.CS0074-06": [
+        5, 8, 14, 15
+    ],
+
+    "AML.CS0074-07": [
+        13, 14, 16, 26
+    ],
+
+    "AML.CS0074-08": [
+        27, 30, 40, 41
+    ],
+
+    "AML.CS0074-09": [
+        0, 6, 7, 9, 11, 12
+    ],
+
+    "AML.CS0074-10": [
+        0, 6, 7, 10, 11, 12
+    ],
+
+    "AML.CS0074-11": [
+        27, 30, 31, 32, 33, 36
+    ],
+}
+
+# Register the paths in the existing CASE_STUDIES dictionary.
+for case_id, sequence in CS0074_PATHS.items():
+
+    full_path = [
+        f"CS0074S{index:02d}:{CS0074_NODES[index][1]}"
+        for index in sequence
+    ]
+
+    CASE_STUDIES[case_id] = {
+        "attacker_name": (
+            case_id.replace(".", "_").replace("-", "_") + "_Attacker"
+        ),
+
+        "entry_point": full_path[0],
+
+        "path": full_path[1:],
+
+        "goal": full_path[-1],
+    }
+
+# Validate that all path edges exist in the case-study graph.
+edge_set = set(CS0074_EDGES)
+
+for sequence in CS0074_PATHS.values():
+    for source, target in zip(sequence, sequence[1:]):
+        assert (source, target) in edge_set, (
+            f"Missing CS0074 relationship: S{source:02d} -> S{target:02d}"
+        )
+
+assert set(range(42)) == {
+    index
+    for sequence in CS0074_PATHS.values()
+    for index in sequence
 }
 
 
@@ -9655,7 +10539,7 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     cs0068_exploit_a = model.add_asset(
-        "AutonomousExploitCapability",
+        "AdversarialCapability",
         "CS0068ExploitCapabilityA"
     )
 
@@ -9731,7 +10615,7 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     )
 
     cs0068_exploit_b = model.add_asset(
-        "AutonomousExploitCapability",
+        "AdversarialCapability",
         "CS0068ExploitCapabilityB"
     )
 
@@ -9805,7 +10689,1072 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "exfiltration",
         {cs0068_exfiltration_c}
     )
+    
+    
+    # ========================================================
+    # AML.CS0069
+    # GTG-1002 Claude Code Espionage Campaign
+    # ========================================================
 
+    cs0069_inference = model.add_asset(
+        "AIInferenceService",
+        "CS0069ClaudeInferenceService"
+    )
+
+    cs0069_agent = model.add_asset(
+        "AIAgent",
+        "CS0069ClaudeAgent"
+    )
+
+    cs0069_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0069JailbrokenConversation"
+    )
+
+    cs0069_tools = model.add_asset(
+        "AIAttackSoftwareTool",
+        "CS0069AttackTools"
+    )
+
+    cs0069_infrastructure = model.add_asset(
+        "AIInfrastructure",
+        "CS0069IntrusionInfrastructure"
+    )
+
+    cs0069_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0069AutonomousPlanner"
+    )
+
+    cs0069_recon_agent = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0069ReconnaissanceAgent"
+    )
+
+    cs0069_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0069TargetScanning"
+    )
+
+    cs0069_exploit = model.add_asset(
+        "AdversarialCapability",
+        "CS0069AutonomousExploit"
+    )
+
+    cs0069_target_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0069TargetApplication"
+    )
+
+    cs0069_discovery = model.add_asset(
+        "EnterpriseResourceDiscovery",
+        "CS0069EnterpriseDiscovery"
+    )
+
+    cs0069_enterprise = model.add_asset(
+        "EnterpriseCompromiseTarget",
+        "CS0069CompromisedEnterprise"
+    )
+
+    cs0069_collection = model.add_asset(
+        "AutonomousDataCollection",
+        "CS0069CollectedData"
+    )
+
+    cs0069_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0069Exfiltration"
+    )
+
+
+    # S01 -> S02
+    cs0069_inference.add_associated_assets(
+        "campaignAgentAccess",
+        {cs0069_agent}
+    )
+    # S02 -> S03
+    cs0069_agent.add_associated_assets(
+        "conversation",
+        {cs0069_conversation}
+    )
+    # S03 -> S04
+    cs0069_conversation.add_associated_assets(
+        "campaignTools",
+        {cs0069_tools}
+    )
+    # S04 -> S05
+    cs0069_tools.add_associated_assets(
+        "campaignInfrastructure",
+        {cs0069_infrastructure}
+    )
+    # S05 -> S06
+    cs0069_infrastructure.add_associated_assets(
+        "deployedAgent",
+        {cs0069_agent}
+    )
+    # S06 -> S07
+    cs0069_agent.add_associated_assets(
+        "campaignAutonomousAgent",
+        {cs0069_planner}
+    )
+    # S07 -> S08
+    cs0069_planner.add_associated_assets(
+        "reconAgent",
+        {cs0069_recon_agent}
+    )
+    # S08 -> S09
+    cs0069_recon_agent.add_associated_assets(
+        "scanResearch",
+        {cs0069_research}
+    )
+    # S09 -> S10
+    cs0069_research.add_associated_assets(
+        "campaignExploitCapability",
+        {cs0069_exploit}
+    )
+    # S10 -> S11
+    cs0069_exploit.add_associated_assets(
+        "publicTarget",
+        {cs0069_target_application}
+    )
+    # S11 -> S12
+    cs0069_target_application.add_associated_assets(
+        "resourceDiscovery",
+        {cs0069_discovery}
+    )
+    # S12 -> S13
+    cs0069_discovery.add_associated_assets(
+        "enterpriseTarget",
+        {cs0069_enterprise}
+    )
+    # S13-S18
+    # S18 -> S19
+    cs0069_enterprise.add_associated_assets(
+        "collector",
+        {cs0069_collection}
+    )
+    # S19 -> S20
+    # S20 -> S21
+    cs0069_collection.add_associated_assets(
+        "exfiltration",
+        {cs0069_exfiltration}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0070
+    # DeepSeek-Powered Hermes Agent:
+    # Langflow and n8n Exploitation Attempts
+    # ========================================================
+
+    cs0070_generative_ai = model.add_asset(
+        "GenerativeAICapability",
+        "CS0070DeepSeekCapability"
+    )
+
+    cs0070_hermes_software = model.add_asset(
+        "AIAttackSoftwareTool",
+        "CS0070HermesSoftware"
+    )
+
+    cs0070_agent_tools = model.add_asset(
+        "AIObtainedCapability",
+        "CS0070HermesAgentTools"
+    )
+
+    cs0070_inference = model.add_asset(
+        "AIInferenceService",
+        "CS0070DeepSeekInference"
+    )
+
+    cs0070_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0070AutonomousPlanner"
+    )
+
+    cs0070_commands = model.add_asset(
+        "AIAttackSoftwareTool",
+        "CS0070GeneratedCommands"
+    )
+
+    cs0070_recon = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0070LangflowReconAgent"
+    )
+
+    cs0070_exposure = model.add_asset(
+        "AIResearchMaterial",
+        "CS0070LangflowExposureResearch"
+    )
+
+    cs0070_langflow_exploit = model.add_asset(
+        "AIObtainedCapability",
+        "CS0070LangflowExploit"
+    )
+
+    cs0070_langflow_scan = model.add_asset(
+        "AIResearchMaterial",
+        "CS0070LangflowScanning"
+    )
+
+    cs0070_langflow_target = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0070LangflowTarget"
+    )
+
+    cs0070_pivot = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0070AutonomousPivot"
+    )
+
+    cs0070_repository_search = model.add_asset(
+        "AIResearchMaterial",
+        "CS0070GitHubExploitResearch"
+    )
+
+    cs0070_n8n_exploit = model.add_asset(
+        "AIObtainedCapability",
+        "CS0070N8NExploit"
+    )
+
+    cs0070_technical_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0070N8NTechnicalResearch"
+    )
+
+    cs0070_n8n_scan = model.add_asset(
+        "AIResearchMaterial",
+        "CS0070N8NScanning"
+    )
+
+    cs0070_n8n_target = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0070N8NTarget"
+    )
+    
+    cs0070_developed_tools = model.add_asset(
+        "AdversarialCapability",
+        "CS0070HermesDevelopedTools"
+    )
+
+    # --------------------------------------------------------
+    # S00 -> S01
+    # Obtain Generative AI -> Software Tools
+    # Existing association
+    # --------------------------------------------------------
+
+    cs0070_generative_ai.add_associated_assets(
+        "softwareTool",
+        {cs0070_hermes_software}
+    )
+    # S01 -> S02
+    cs0070_hermes_software.add_associated_assets(
+        "hermesAgentTools",
+        {cs0070_agent_tools}
+    )
+
+    # S02 -> S03
+    cs0070_agent_tools.add_associated_assets(
+        "developedCapability",
+        {cs0070_developed_tools}
+    )
+    # S03 -> S04
+    cs0070_developed_tools.add_associated_assets(
+        "reasoningService",
+        {cs0070_inference}
+    )
+    # S04 -> S05
+    cs0070_inference.add_associated_assets(
+        "hermesPlanner",
+        {cs0070_planner}
+    )
+    # S05 -> S06
+    cs0070_planner.add_associated_assets(
+        "commandTool",
+        {cs0070_commands}
+    )
+    # S06 -> S07
+    cs0070_commands.add_associated_assets(
+        "hermesReconAgent",
+        {cs0070_recon}
+    )
+    # S07 -> S08
+    cs0070_recon.add_associated_assets(
+        "exposureResearch",
+        {cs0070_exposure}
+    )
+    # S08 -> S09
+    cs0070_exposure.add_associated_assets(
+        "publicExploit",
+        {cs0070_langflow_exploit}
+    )
+    # S09 -> S10
+    cs0070_langflow_exploit.add_associated_assets(
+        "scanResearch",
+        {cs0070_langflow_scan}
+    )
+    # S10 -> S11
+    cs0070_langflow_scan.add_associated_assets(
+        "scanTarget",
+        {cs0070_langflow_target}
+    )
+    # S11 -> S12
+
+    cs0070_langflow_target.add_associated_assets(
+        "pivotAgent",
+        {cs0070_pivot}
+    )
+    # S12 -> S13
+    cs0070_pivot.add_associated_assets(
+        "repoResearch",
+        {cs0070_repository_search}
+    )
+    # S13 -> S14
+    cs0070_repository_search.add_associated_assets(
+        "publicExploit",
+        {cs0070_n8n_exploit}
+    )
+    # S14 -> S15
+    cs0070_n8n_exploit.add_associated_assets(
+        "technicalResearch",
+        {cs0070_technical_research}
+    )
+    # S15 -> S16
+    cs0070_technical_research.add_associated_assets(
+        "activeScanResearch",
+        {cs0070_n8n_scan}
+    )
+    # S16 -> S17
+    cs0070_n8n_scan.add_associated_assets(
+        "scanTarget",
+        {cs0070_n8n_target}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0071
+    # Multi-Agent Framework Compromises
+    # Taiwanese Government Systems
+    # ========================================================
+
+    cs0071_orchestrator = model.add_asset(
+        "MultiAgentOrchestrator",
+        "CS0071AgentOrchestrator"
+    )
+
+    cs0071_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0071AttackPlanner"
+    )
+
+    cs0071_communication = model.add_asset(
+        "DirectAgentCommunication",
+        "CS0071AgentCommunication"
+    )
+
+    cs0071_recon = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0071ReconnaissanceAgent"
+    )
+
+    cs0071_scanner = model.add_asset(
+        "AIResearchMaterial",
+        "CS0071GovernmentPortalScanning"
+    )
+
+    cs0071_repository = model.add_asset(
+        "AIRepositoryOS",
+        "CS0071ExposedPersonnelRepository"
+    )
+
+    cs0071_office_account = model.add_asset(
+        "EnterpriseCompromiseTarget",
+        "CS0071OfficeAutomationAccount"
+    )
+
+    cs0071_sso_account = model.add_asset(
+        "EnterpriseCompromiseTarget",
+        "CS0071FederatedSSOAccount"
+    )
+
+    cs0071_debug_target = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0071ExposedDebugEndpoint"
+    )
+
+    cs0071_jwt_target = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0071UnsignedJWTEndpoint"
+    )
+
+    cs0071_collection = model.add_asset(
+        "AutonomousDataCollection",
+        "CS0071AutomatedDataCollection"
+    )
+
+    cs0071_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0071GovernmentDataExfiltration"
+    )
+
+    # --------------------------------------------------------
+    # S01 -> S02
+    # AML.T0124 -> AML.T0117
+    # --------------------------------------------------------
+
+    cs0071_orchestrator.add_associated_assets(
+        "planner",
+        {cs0071_planner}
+    )
+
+    # --------------------------------------------------------
+    # S02 -> S03
+    # AML.T0117 -> AML.T0118.001
+    # --------------------------------------------------------
+
+    cs0071_planner.add_associated_assets(
+        "coordination",
+        {cs0071_communication}
+    )
+
+    # --------------------------------------------------------
+    # S03 -> S04
+    # AML.T0118.001 -> AML.T0116
+    # --------------------------------------------------------
+
+    cs0071_communication.add_associated_assets(
+        "reconAgent",
+        {cs0071_recon}
+    )
+
+    # --------------------------------------------------------
+    # S04 -> S05
+    # AML.T0116 -> AML.T0006
+    # --------------------------------------------------------
+
+    cs0071_recon.add_associated_assets(
+        "targetScanner",
+        {cs0071_scanner}
+    )
+
+    # --------------------------------------------------------
+    # S05 -> S06
+    # AML.T0006 -> AML.T0036
+    # --------------------------------------------------------
+
+    cs0071_scanner.add_associated_assets(
+        "exposedRepository",
+        {cs0071_repository}
+    )
+
+    # --------------------------------------------------------
+    # S06 -> S07
+    # AML.T0036 -> AML.T0012
+    # --------------------------------------------------------
+
+    cs0071_repository.add_associated_assets(
+        "firstAccount",
+        {cs0071_office_account}
+    )
+
+    # --------------------------------------------------------
+    # S07 -> S08
+    # AML.T0012 -> AML.T0012
+    # --------------------------------------------------------
+
+    cs0071_office_account.add_associated_assets(
+        "federatedAccount",
+        {cs0071_sso_account}
+    )
+
+    # --------------------------------------------------------
+    # S08 -> S09
+    # AML.T0012 -> AML.T0049
+    # --------------------------------------------------------
+
+    cs0071_sso_account.add_associated_assets(
+        "exploitedApplication",
+        {cs0071_debug_target}
+    )
+
+    # --------------------------------------------------------
+    # S09 -> S10
+    # AML.T0049 -> AML.T0049
+    # --------------------------------------------------------
+
+    cs0071_debug_target.add_associated_assets(
+        "additionalApplication",
+        {cs0071_jwt_target}
+    )
+
+    # --------------------------------------------------------
+    # S10 -> S11
+    # AML.T0049 -> AML.T0126
+    # --------------------------------------------------------
+
+    cs0071_jwt_target.add_associated_assets(
+        "automatedCollector",
+        {cs0071_collection}
+    )
+
+    # --------------------------------------------------------
+    # S11 -> S12
+    # AML.T0126 -> AML.T0025
+    # Reuse existing association
+    # --------------------------------------------------------
+
+    cs0071_collection.add_associated_assets(
+        "exfiltration",
+        {cs0071_exfiltration}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0072
+    # AI Recommendation Poisoning via Crafted AI Assistant Links
+    # ========================================================
+
+    cs0072_capability = model.add_asset(
+        "AIObtainedCapability",
+        "CS0072LinkGenerationCapability"
+    )
+
+    cs0072_staging = model.add_asset(
+        "LLMStagedCapability",
+        "CS0072StagedAssistantLink"
+    )
+
+    cs0072_link = model.add_asset(
+        "CraftedAIAssistantLink",
+        "CS0072CraftedAssistantLink"
+    )
+
+    cs0072_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0072ObfuscatedMemoryPrompt"
+    )
+
+    cs0072_memory = model.add_asset(
+        "AIAgentContext",
+        "CS0072PoisonedAssistantMemory"
+    )
+
+    cs0072_bias = model.add_asset(
+        "AIAgent",
+        "CS0072RecommendationBias"
+    )
+
+    # --------------------------------------------------------
+    # S00 -> S01
+    # AML.T0016 -> AML.T0079
+    # --------------------------------------------------------
+
+    cs0072_capability.add_associated_assets(
+        "stagedCapability",
+        {cs0072_staging}
+    )
+
+    # --------------------------------------------------------
+    # S01 -> S02
+    # AML.T0079 -> AML.T0131
+    # --------------------------------------------------------
+
+    cs0072_staging.add_associated_assets(
+        "assistantLink",
+        {cs0072_link}
+    )
+
+    # --------------------------------------------------------
+    # S02 -> S03
+    # AML.T0131 -> AML.T0068
+    # --------------------------------------------------------
+
+    cs0072_link.add_associated_assets(
+        "injectedPrompt",
+        {cs0072_prompt}
+    )
+
+    # --------------------------------------------------------
+    # S03 -> S04
+    # AML.T0068 -> AML.T0080.000
+    # --------------------------------------------------------
+
+    cs0072_prompt.add_associated_assets(
+        "poisonedMemory",
+        {cs0072_memory}
+    )
+
+    # --------------------------------------------------------
+    # S04 -> S05
+    # AML.T0080.000 -> AML.T0130
+    # --------------------------------------------------------
+
+    cs0072_memory.add_associated_assets(
+        "recommendationBias",
+        {cs0072_bias}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0073
+    # Autonomous Claude Evaluation Agents
+    # ========================================================
+
+    # ========================================================
+    # Incident A - Claude Opus 4.7
+    # ========================================================
+
+    cs0073_opus_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0073OpusPlanner"
+    )
+
+    cs0073_opus_recon = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0073OpusRecon"
+    )
+
+    cs0073_opus_target = model.add_asset(
+        "ExposedApplicationTarget",
+        "CS0073OpusRealCompany"
+    )
+
+    # S01 -> S02
+    cs0073_opus_planner.add_associated_assets(
+        "reconAgent",
+        {cs0073_opus_recon}
+    )
+
+    # S02 -> S03
+    cs0073_opus_recon.add_associated_assets(
+        "exposedApplication",
+        {cs0073_opus_target}
+    )
+
+
+    # ========================================================
+    # Incident B - Claude Mythos 5
+    # ========================================================
+
+    cs0073_mythos_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0073MythosPlanner"
+    )
+
+    cs0073_malware = model.add_asset(
+        "AdversarialCapability",
+        "CS0073MaliciousPythonPackage"
+    )
+
+    cs0073_pypi_account = model.add_asset(
+        "FraudulentAccount",
+        "CS0073PyPIAccount"
+    )
+
+    cs0073_pypi_staging = model.add_asset(
+        "LLMStagedCapability",
+        "CS0073PyPIPackageStaging"
+    )
+
+    cs0073_package_supply_chain = model.add_asset(
+        "AISupplyChainSoftware",
+        "CS0073PyPISupplyChain"
+    )
+
+    cs0073_scanner_host = model.add_asset(
+        "SoftwareExecutionHost",
+        "CS0073SecurityScanner"
+    )
+
+    cs0073_exfiltration = model.add_asset(
+        "AIExfiltration",
+        "CS0073ScannerCredentialExfiltration"
+    )
+
+    cs0073_compromised_account = model.add_asset(
+        "EnterpriseCompromiseTarget",
+        "CS0073SecurityCompanyAccess"
+    )
+
+    # S10 -> S11
+    # Autonomous adaptation -> Develop malware
+    cs0073_mythos_planner.add_associated_assets(
+        "malwareCapability",
+        {cs0073_malware}
+    )
+
+    # S10 -> S12
+    # Autonomous adaptation -> Establish PyPI account
+    cs0073_mythos_planner.add_associated_assets(
+        "registrationAccount",
+        {cs0073_pypi_account}
+    )
+
+    # S11 -> S13
+    # Malware creation -> Stage package
+    cs0073_malware.add_associated_assets(
+        "packageStaging",
+        {cs0073_pypi_staging}
+    )
+
+    # S12 -> S13
+    # Account registration -> Stage package
+    cs0073_pypi_account.add_associated_assets(
+        "evalPackageStaging",
+        {cs0073_pypi_staging}
+    )
+
+    # S13 -> S14
+    # Staging -> Software supply-chain compromise
+    cs0073_pypi_staging.add_associated_assets(
+        "evalDistributedSoftware",
+        {cs0073_package_supply_chain}
+    )
+
+    # S14 -> S15
+    # Malicious package -> Code execution
+    cs0073_package_supply_chain.add_associated_assets(
+        "evalExecution",
+        {cs0073_scanner_host}
+    )
+
+    # S15 -> S16
+    # Code execution -> Credential exfiltration
+    cs0073_scanner_host.add_associated_assets(
+        "exfiltration",
+        {cs0073_exfiltration}
+    )
+
+    # S16 -> S17
+    # Exfiltrated credentials -> Account access
+    cs0073_exfiltration.add_associated_assets(
+        "evalCompromisedAccount",
+        {cs0073_compromised_account}
+    )
+
+    # ========================================================
+    # Incident C - Internal Claude Research Model
+    # ========================================================
+
+    cs0073_internal_planner = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0073InternalPlanner"
+    )
+
+    cs0073_internal_recon = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0073InternalRecon"
+    )
+
+    cs0073_internal_scanner = model.add_asset(
+        "AIResearchMaterial",
+        "CS0073PublicInternetScanning"
+    )
+
+    cs0073_debug_target = model.add_asset(
+        "ExposedApplicationTarget",
+        "CS0073ExposedDebugPage"
+    )
+
+    cs0073_sql_target = model.add_asset(
+        "ExposedApplicationTarget",
+        "CS0073SQLInjectionTarget"
+    )
+
+    # S20 -> S21
+    cs0073_internal_planner.add_associated_assets(
+        "reconAgent",
+        {cs0073_internal_recon}
+    )
+
+    # S21 -> S22
+    cs0073_internal_recon.add_associated_assets(
+        "scanResearch",
+        {cs0073_internal_scanner}
+    )
+
+    # S22 -> S23
+    # Exposed credentials
+    cs0073_internal_scanner.add_associated_assets(
+        "evaluationCredentials",
+        {cs0073_debug_target}
+    )
+
+    # S22 -> S24
+    # SQL injection against public application
+    cs0073_internal_scanner.add_associated_assets(
+        "evaluationApplication",
+        {cs0073_sql_target}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0074 - Asset instances and associations
+    # ========================================================
+
+    cs0074_assets = {}
+
+    # Create all documented procedure positions.
+    for index, (asset_type, attack_step) in enumerate(CS0074_NODES):
+        instance_name = f"CS0074S{index:02d}"
+
+        cs0074_assets[index] = model.add_asset(
+            asset_type,
+            instance_name
+        )
+
+    # Connect the instances using MAL association roles.
+    for source_index, target_index in CS0074_EDGES:
+
+        target_type, target_step = CS0074_NODES[target_index]
+
+        role_name = (
+            "next"
+            + target_step[0].upper()
+            + target_step[1:]
+            + target_type
+        )
+
+        cs0074_assets[source_index].add_associated_assets(
+            role_name,
+            {cs0074_assets[target_index]}
+        )
+    
+    
+    # ========================================================
+    # AML.CS0075
+    # Model Distillation Campaigns Targeting Google AI Services
+    # ========================================================
+
+    # S01 - AML.T0139: Compromise Accounts
+    cs0075_compromised_account = model.add_asset(
+        "EnterpriseCompromiseTarget",
+        "CS0075CompromisedGoogleAccount"
+    )
+
+    # S02 - AML.T0021: Establish Accounts
+    cs0075_fraudulent_account = model.add_asset(
+        "FraudulentAccount",
+        "CS0075FraudulentGoogleAccount"
+    )
+
+    # S03 and S05 - Proxy Infrastructure and Request Routing
+    cs0075_proxy = model.add_asset(
+        "AIInfrastructure",
+        "CS0075GoogleProxyInfrastructure"
+    )
+
+    # S04 - AML.T0012: Valid Accounts
+    cs0075_service_account = model.add_asset(
+        "AIServiceOS",
+        "CS0075GoogleServiceAccess"
+    )
+
+    # S06 - AML.T0065: LLM Prompt Crafting
+    cs0075_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0075DistillationPrompt"
+    )
+
+    # S07 and S08 - API Exfiltration and Model Outputs
+    cs0075_inference = model.add_asset(
+        "AIInferenceService",
+        "CS0075GoogleInferenceService"
+    )
+
+    # S09 - AML.T0005.001: Model Replication
+    cs0075_replica = model.add_asset(
+        "ProxyAIModel",
+        "CS0075DistilledModel"
+    )
+
+    # S10 - AML.T0048.004: AI Intellectual Property Theft
+    cs0075_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0075ModelIPTheft"
+    )
+
+    # ========================================================
+    # Associations
+    # ========================================================
+
+    # S01 -> S03: Compromised-account route
+    cs0075_compromised_account.add_associated_assets(
+        "distillationProxy",
+        {cs0075_proxy}
+    )
+
+    # S02 -> S03: Fraudulent-account route
+    cs0075_fraudulent_account.add_associated_assets(
+        "distillationProxy",
+        {cs0075_proxy}
+    )
+
+    # S03 -> S04: Proxy -> Authenticated service access
+    cs0075_proxy.add_associated_assets(
+        "accountHost",
+        {cs0075_service_account}
+    )
+
+    # S04 -> S05: Authenticated access -> Request routing
+    cs0075_service_account.add_associated_assets(
+        "distillationRouter",
+        {cs0075_proxy}
+    )
+
+    # S05 -> S06: Routing -> Crafted distillation prompts
+    cs0075_proxy.add_associated_assets(
+        "infrastructurePrompt",
+        {cs0075_prompt}
+    )
+
+    # S06 -> S07: Crafted prompts -> Inference API
+    cs0075_prompt.add_associated_assets(
+        "distillationInference",
+        {cs0075_inference}
+    )
+
+    # S08 -> S09: Outputs -> Proxy model training
+    cs0075_inference.add_associated_assets(
+        "proxyModel",
+        {cs0075_replica}
+    )
+
+    # S09 -> S10: Replication -> IP theft objective
+    cs0075_replica.add_associated_assets(
+        "externalHarm",
+        {cs0075_impact}
+    )
+    
+    # ========================================================
+    # AML.CS0076
+    # Industrial-Scale Model Distillation Campaigns
+    # ========================================================
+
+    # S01 - Fraudulent accounts
+    cs0076_accounts = model.add_asset(
+        "FraudulentAccount",
+        "CS0076FraudulentAccounts"
+    )
+
+    # S02, S04, S05 - Proxies, routing, metadata sanitization
+    cs0076_proxy = model.add_asset(
+        "AIInfrastructure",
+        "CS0076TransferStation"
+    )
+
+    # S03 - Valid accounts
+    cs0076_service_account = model.add_asset(
+        "AIServiceOS",
+        "CS0076ServiceAccount"
+    )
+
+    # S06, S10, S11, S12 - Model output discovery,
+    # inference exfiltration, collection and verification
+    cs0076_inference = model.add_asset(
+        "AIInferenceService",
+        "CS0076TargetInferenceService"
+    )
+
+    # S07 - LLM Prompt Crafting
+    cs0076_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0076DistillationPrompts"
+    )
+
+    # S08 - Direct Prompt Injection
+    cs0076_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0076TargetAIApplication"
+    )
+
+    # S09 - LLM Jailbreak
+    cs0076_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0076JailbreakConversation"
+    )
+
+    # S13 - Model replication
+    cs0076_replica = model.add_asset(
+        "ProxyAIModel",
+        "CS0076DistilledModel"
+    )
+
+    # S14 - AI intellectual property theft
+    cs0076_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0076ModelIPTheft"
+    )
+
+    # ========================================================
+    # Associations
+    # ========================================================
+    
+    # S01 -> S03, via S02 proxy infrastructure
+    cs0076_accounts.add_associated_assets(
+        "distillationProxy",
+        {cs0076_proxy}
+    )
+
+    # S02 -> S03
+    cs0076_proxy.add_associated_assets(
+        "accountHost",
+        {cs0076_service_account}
+    )
+
+    # S03 -> S04
+    cs0076_service_account.add_associated_assets(
+        "distillationRouter",
+        {cs0076_proxy}
+    )
+
+    # S05 -> S06
+    cs0076_proxy.add_associated_assets(
+        "inferenceService",
+        {cs0076_inference}
+    )
+
+    # S06 -> S07
+    cs0076_inference.add_associated_assets(
+        "distillationPrompt",
+        {cs0076_prompt}
+    )
+
+    # S07 -> S08
+    cs0076_prompt.add_associated_assets(
+        "distillationTarget",
+        {cs0076_application}
+    )
+
+    # S08 -> S09
+    cs0076_application.add_associated_assets(
+        "distillationJailbreak",
+        {cs0076_conversation}
+    )
+
+    # S08 -> S10, direct route
+    cs0076_application.add_associated_assets(
+        "distillationOutputService",
+        {cs0076_inference}
+    )
+
+    # S09 -> S10, jailbreak route
+    cs0076_conversation.add_associated_assets(
+        "distillationInference",
+        {cs0076_inference}
+    )
+
+    # S12 -> S13
+    cs0076_inference.add_associated_assets(
+        "proxyModel",
+        {cs0076_replica}
+    )
+
+    # S13 -> S14
+    cs0076_replica.add_associated_assets(
+        "externalHarm",
+        {cs0076_impact}
+    )
 
 
 

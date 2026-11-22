@@ -13,7 +13,10 @@ category AI {
         | gatherVictimIdentityInformation
         user info: "AML.T0087 - Gather Victim Identity Information"
         -> hardware.consumerHardware,
-        generativeAI.generativeAI
+        generativeAI.generativeAI,
+        nextAiSupplyChainCompromiseAISupplyChainModel.aiSupplyChainCompromise,
+        nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication.promptInfiltrationViaPublicFacingApplication,
+        nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM.spearphishingViaSocialEngineeringLLM
     }
     
     
@@ -23,7 +26,8 @@ category AI {
         user info: "AML.T0008 - Acquire Infrastructure"
         -> capability.developCapabilities,
         stagedCapability.stageCapabilities,
-        infrastructurePrompt.llmPromptCrafting
+        infrastructurePrompt.llmPromptCrafting,
+        nextStageCapabilitiesLLMStagedCapability.stageCapabilities
         
         | aiServiceProxies
         user info: "AML.T0008.005 - Acquire Infrastructure: AI Service Proxies"
@@ -31,11 +35,31 @@ category AI {
         
         | masquerading
         user info: "AML.T0074 - Masquerading"
-        -> browser.driveByCompromise
+        -> browser.driveByCompromise,
+        nextAiSupplyChainCompromiseAISupplyChainModel.aiSupplyChainCompromise
+        
+        | compromiseInfrastructure
+        user info: "AML.T0128 - Compromise Infrastructure"
+        -> deployedAgent.deployAIAgent
         
         | centralizedAIServiceRequestRouting
         user info: "AML.T0140 - Centralized AI Service Request Routing"
-        -> inferenceService.exfiltrationViaAIInferenceAPI
+        -> inferenceService.exfiltrationViaAIInferenceAPI,
+        infrastructurePrompt.llmPromptCrafting,
+        aiServiceRequestMetadataSanitization
+        
+        | aiServiceRequestMetadataSanitization
+        user info: "AML.T0141 - AI Service Request Metadata Sanitization"
+        -> inferenceService.discoverAIModelOutputs
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> compromiseInfrastructure
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> centralizedAIServiceRequestRouting
+        
     }
     
     
@@ -64,12 +88,16 @@ category AI {
         
         | generateMaliciousCommands
         user info: "AML.T0102 - Generate Malicious Commands"
-        -> hostOS.dataFromLocalSystem
+        -> hostOS.dataFromLocalSystem,
+        hermesReconAgent.autonomousReconnaissance,
+        nextDevelopCapabilitiesAdversarialCapability.developCapabilities
         
         | softwareTools
         user info: "AML.T0016.001 - Obtain Capabilities: Software Tools"
         -> account.establishAccounts,
-        obtainedCapability.obtainCapabilities
+        obtainedCapability.obtainCapabilities,
+        campaignInfrastructure.compromiseInfrastructure,
+        hermesAgentTools.aiAgentTools
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -113,7 +141,9 @@ category AI {
         
         | enterpriseResourceDiscovery
         user info: "AML.T0075 - Enterprise Resource Discovery"
-        -> proxyTool.softwareTools
+        -> proxyTool.softwareTools,
+        enterpriseTarget.enterpriseEnvironmentDiscovery,
+        nextExfiltrationViaCyberMeansAIExfiltration.exfiltrationViaCyberMeans
     }
     
     asset WebSessionCredential {
@@ -134,7 +164,12 @@ category AI {
         | establishAccounts
         user info: "AML.T0021 - Establish Accounts"
         -> targetSystem.aiEnabledProductOrService,
-        repositoryOS.dataFromInformationRepositories
+        repositoryOS.dataFromInformationRepositories,
+        evalPackageStaging.stageCapabilities,
+        nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication.promptInfiltrationViaPublicFacingApplication,
+        nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM.spearphishingViaSocialEngineeringLLM,
+        nextStageCapabilitiesLLMStagedCapability.stageCapabilities,
+        distillationProxy.aiServiceProxies
         
         | impersonation
         user info: "AML.T0073 - Impersonation"
@@ -170,7 +205,57 @@ category AI {
         
     }
     
+    asset ExposedApplicationTarget {
+        
+        | exploitPublicFacingApplication
+        user info: "AML.T0049 - Exploit Public-Facing Application"
+        -> exploitationForCredentialAccess
+        
+        | unsecuredCredentials
+        user info: "AML.T0055 - Unsecured Credentials"
+        
+        | exploitationForCredentialAccess
+        user info: "AML.T0106 - Exploitation for Credential Access"
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> exploitationForCredentialAccess
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> exploitPublicFacingApplication
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> exploitPublicFacingApplication,
+        exploitationForCredentialAccess
+        
+    }
     
+    asset SoftwareExecutionHost {
+        
+        | commandAndScriptingInterpreter
+        user info: "AML.T0050 - Command and Scripting Interpreter"
+        -> exfiltration.exfiltrationViaCyberMeans,
+        nextCyberCommunicationChannelAICyberCommunication.cyberCommunicationChannel,
+        nextEnterpriseEnvironmentDiscoveryEnterpriseCompromiseTarget.enterpriseEnvironmentDiscovery,
+        nextEnterpriseResourceDiscoveryEnterpriseResourceDiscovery.enterpriseResourceDiscovery,
+        nextEventTriggeredExecutionSoftwareExecutionHost.eventTriggeredExecution,
+        nextUnsecuredCredentialsEnterpriseCompromiseTarget.unsecuredCredentials
+        
+        | eventTriggeredExecution
+        user info: "AML.T0142 - Event Triggered Execution"
+        -> nextImpersonationFraudulentAccount.impersonation
+        
+        # m0011RestrictLibraryLoading [Disabled]
+        user info: "AML.M0011 - Restrict Library Loading"
+        -> eventTriggeredExecution
+        
+        # m0013CodeSigning [Disabled]
+        user info: "AML.M0013 - Code Signing"
+        -> eventTriggeredExecution
+        
+    }
     
     asset FacialRecognitionSystem {
         
@@ -230,7 +315,9 @@ category AI {
         user info: "AML.T0011 - User Execution"
         -> artifactCollection.aiArtifactCollection,
         commandTool.generateMaliciousCommands,
-        executionHost.commandAndScriptingInterpreter
+        executionHost.commandAndScriptingInterpreter,
+        nextCyberCommunicationChannelAICyberCommunication.cyberCommunicationChannel,
+        nextIndicatorRemovalAIArtifactRepository.indicatorRemoval
         
         | maliciousPackage
         user info: "AML.T0011.001 - User Execution: Malicious Package"
@@ -280,7 +367,8 @@ category AI {
         | cyberCommunicationChannel
         user info: "AML.T0072 - Cyber Communication Channel"
         -> credentialHost.unsecuredCredentials,
-        compromisedHost.localAIAgent
+        compromisedHost.localAIAgent,
+        nextCommandAndScriptingInterpreterSoftwareExecutionHost.commandAndScriptingInterpreter
         
         | aiServiceAPI
         user info: "AML.T0096 - AI Service API"
@@ -340,7 +428,8 @@ category AI {
         publicArtifacts.models,
         targetProduct.aiEnabledProductOrService,
         trainingData.datasets,
-        targetOS.validAccounts
+        targetOS.validAccounts,
+        activeScanResearch.activeScanning
             
         | prePrintRepositories
         user info: "AML.T0000.001 - Search Open Technical Databases: Pre-Print Repositories"
@@ -348,7 +437,8 @@ category AI {
         
         | scanDatabases
         user info: "AML.T0000.003 - Search Open Technical Databases: Scan Databases"
-        -> publicLLMApp.misconfiguredOrPubliclyExposedAIServices
+        -> publicLLMApp.misconfiguredOrPubliclyExposedAIServices,
+        publicExploit.exploits
             
         | searchOpenAIVulnerabilityAnalysis
         user info: "AML.T0001 - Search Open AI Vulnerability Analysis"
@@ -369,7 +459,12 @@ category AI {
         | activeScanning
         user info: "AML.T0006 - Active Scanning"
         -> targetCluster.exploitPublicFacingApplication,
-        geminiConfiguration.activationTriggers
+        geminiConfiguration.activationTriggers,
+        campaignExploitCapability.autonomousExploitDevelopment,
+        scanTarget.exploitPublicFacingApplication,
+        exposedRepository.dataFromInformationRepositories,
+        evaluationCredentials.unsecuredCredentials,
+        evaluationApplication.exploitPublicFacingApplication
         
         | probeAIAgentTriggerChannels
         user info: "AML.T0006.003 - Probe AI Agent Trigger Channels"
@@ -388,7 +483,9 @@ category AI {
         | codeRepositories
         user info: "AML.T0095.000 - Search Open Websites/Domains: Code Repositories"
         -> publicArtifacts.aiAgentConfiguration,
-        claudeConfiguration.toolDefinitions
+        claudeConfiguration.toolDefinitions,
+        publicExploit.exploits,
+        nextGatherVictimIdentityInformationVictimIdentityInformation.gatherVictimIdentityInformation
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -541,8 +638,17 @@ category AI {
         
         | obtainCapabilities
         user info: "AML.T0016 - Obtain Capabilities"
-        -> deepfake.generateDeepfakes
+        -> deepfake.generateDeepfakes,
+        stagedCapability.stageCapabilities
         
+        | aiAgentTools
+        user info: "AML.T0016.004 - Obtain Capabilities: AI Agent Tools"
+        -> developedCapability.developAIAgentTools
+        
+        | exploits
+        user info: "AML.T0016.003 - Obtain Capabilities: Exploits"
+        -> scanResearch.activeScanning,
+        technicalResearch.searchOpenTechnicalDatabases
         
         # m0001LimitModelArtifactRelease [Disabled]
         user info: "AML.M0001 - Limit Model Artifact Release"
@@ -655,7 +761,8 @@ category AI {
         userExecution.userExecution,
         publicLLMApp.aiEnabledProductOrService,
         agentConfiguration.modifyAIAgentConfiguration,
-        craftedPrompt.llmPromptCrafting
+        craftedPrompt.llmPromptCrafting,
+        distillationRouter.centralizedAIServiceRequestRouting
         
         & commandAndScriptingInterpreter
         +> escapeToHost
@@ -751,6 +858,15 @@ category AI {
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> createProxyAIModel,
            trainProxyViaReplication
+           
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging and Monitoring"
+        -> trainProxyViaReplication
+        
+        # m0040AdaptiveAIResponseDegradation [Disabled]
+        user info: "AML.M0040 - Adaptive AI Response Degradation"
+        -> trainProxyViaReplication
+           
     }
     
     asset AIArtifactDiscovery {
@@ -796,6 +912,27 @@ category AI {
         -> aiArtifactCollection
     }
     
+    asset AutonomousDataCollection {
+        
+        | automatedCollection
+        user info: "AML.T0126 - Automated Collection"
+        -> dataStaged,
+        exfiltration.exfiltrationViaCyberMeans
+        
+        | dataStaged
+        user info: "AML.T0127 - Data Staged"
+        -> exfiltration.exfiltrationViaCyberMeans
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> automatedCollection
+        
+        # m0043AIAgentExternalResourceLifecycleManagement [Disabled]
+        user info: "AML.M0043 - AI Agent External Resource Lifecycle Management"
+        -> dataStaged
+        
+    }
+    
     asset AIExfiltration {
         
         | exfiltrationViaCyberMeans
@@ -806,7 +943,9 @@ category AI {
         impact.userHarm,
         artifactDiscovery.discoverAIArtifacts,
         extractedModel.fullAIModelAccess,
-        impact.externalHarms
+        impact.externalHarms,
+        evalCompromisedAccount.validAccounts,
+        nextCommandAndScriptingInterpreterSoftwareExecutionHost.commandAndScriptingInterpreter
         
         
         # m0005ControlAccessAtRest [Disabled]
@@ -868,7 +1007,11 @@ category AI {
         stagedCapability.stageCapabilities,
         repositoryResearch.searchApplicationRepositories,
         poisonedToolArtifact.publishPoisonedAIAgentTools,
-        infrastructure.acquireInfrastructure
+        infrastructure.acquireInfrastructure,
+        nextMasqueradingAIInfrastructure.masquerading,
+        nextObfuscatedFilesOrInformationSharedAgentArtifact.obfuscatedFilesOrInformation,
+        nextStageCapabilitiesLLMStagedCapability.stageCapabilities
+        
         
         | adversarialAIAttacks
             user info: "AML.T0017.000 - Develop Capabilities: Adversarial AI Attacks"
@@ -878,6 +1021,25 @@ category AI {
             modifiedModel.modifyAIModelArchitecture,
             transferSample.blackBoxTransfer,
             ggufTemplate.modifyPromptConstructionLogic
+        
+        | autonomousExploitDevelopment
+        user info: "AML.T0017.001 - Autonomous Exploit Development"
+        -> remoteService.exploitationOfRemoteServices,
+        pipeline.exploitAutomatedArtifactProcessingPipeline,
+        publicTarget.exploitPublicFacingApplication
+        
+        | developAIAgentTools
+        user info: "AML.T0017.002 - Develop Capabilities: AI Agent Tools"
+        -> reasoningService.aiModelInferenceAPIAccess
+        
+        | malware
+        user info: "AML.T0017.003 - Develop Capabilities: Malware"
+        -> packageStaging.stageCapabilities
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> autonomousExploitDevelopment
+        
     }
     
     
@@ -1010,7 +1172,8 @@ category AI {
         
         | aiSupplyChainCompromise
         user info: "AML.T0010 - AI Supply Chain Compromise"
-        -> integrityTarget.unsafeAIArtifacts
+        -> integrityTarget.unsafeAIArtifacts,
+        nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM.spearphishingViaSocialEngineeringLLM
         
         | aiSupplyChainCompromiseModel
         user info: "AML.T0010.003 - AI Supply Chain Compromise: Model"
@@ -1066,7 +1229,7 @@ category AI {
         serviceOS.validAccounts,
         userExecution.maliciousPackage,
         agentConfiguration.modifyAIAgentConfiguration,
-        userExecution.maliciousPackage
+        evalExecution.commandAndScriptingInterpreter
         
         
         # m0006PredictiveAIEnsembles [Disabled]
@@ -1200,7 +1363,9 @@ category AI {
         discoverLLMHallucinations,
         craftedPrompt.llmPromptCrafting,
         jailbreakConversation.llmJailbreak,
-        financialImpact.financialHarm
+        financialImpact.financialHarm,
+        campaignAgentAccess.directPromptInjection,
+        hermesPlanner.autonomousAttackPathAdaptation
         
         | discoverAIModelOntology
         user info: "AML.T0013 - Discover AI Model Ontology"
@@ -1214,39 +1379,59 @@ category AI {
         user info: "AML.T0062 - Discover LLM Hallucinations"
         -> hallucinatedPublisher.publishHallucinatedEntities
         
+        | discoverAIModelOutputs
+        user info: "AML.T0063 - Discover AI Model Outputs"
+        -> distillationPrompt.llmPromptCrafting
+        
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
         -> evadeAIModel,
-        infiltrationTarget.promptInfiltrationViaPublicFacingApplication
+        infiltrationTarget.promptInfiltrationViaPublicFacingApplication,
+        proxyModel.trainProxyViaReplication
         
         | outputsFromAIModels
         user info: "AML.T0135 - Outputs from AI Models"
-        -> proxyModel.trainProxyViaReplication
+        -> proxyModel.trainProxyViaReplication,
+        verifyAttack
         
         
         # m0019ControlAccessInProduction [Disabled]
         user info: "AML.M0019 - Control Access to AI Models and Data in Production"
         -> aiModelInferenceAPIAccess,
-        verifyAttack
+        verifyAttack,
+        exfiltrationViaAIInferenceAPI,
+        discoverAIModelOutputs
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
-        -> aiModelInferenceAPIAccess
+        -> aiModelInferenceAPIAccess,
+        exfiltrationViaAIInferenceAPI
+        
+        # m0035DistillationRedTeam [Disabled]
+        user info: "AML.M0035 - AI Red Team"
+        -> exfiltrationViaAIInferenceAPI
         
         # m0039AIHoneypots [Disabled]
         user info: "AML.M0039 - AI Honeypots"
         -> aiModelInferenceAPIAccess
         
+        # m0040AdaptiveAIResponseDegradation [Disabled]
+        user info: "AML.M0040 - Adaptive AI Response Degradation"
+        -> outputsFromAIModels,
+        verifyAttack
+        
         # m0002PredictiveAIOutputObfuscation [Disabled]
         user info: "AML.M0002 - Predictive AI Output Obfuscation"
         -> verifyAttack,
-        discoverAIModelOntology
+        discoverAIModelOntology,
+        discoverAIModelOutputs
         
         # m0004LimitAIServiceQueryVolumeAndRate [Disabled]
         user info: "AML.M0004 - Limit AI Service Query Volume and Rate"
         -> verifyAttack,
         discoverAIModelOntology,
-        discoverLLMHallucinations
+        discoverLLMHallucinations,
+        exfiltrationViaAIInferenceAPI
         
         # m0005ControlAccessAtRest [Disabled]
         user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
@@ -1263,6 +1448,48 @@ category AI {
         # m0022GenerativeAIModelAlignment [Disabled]
         user info: "AML.M0022 - Generative AI Model Alignment"
         -> discoverLLMHallucinations
+    }
+    
+    asset EnterpriseCompromiseTarget {
+        
+        | enterpriseEnvironmentDiscovery
+        user info: "AML.T0089 - Enterprise Environment Discovery"
+        -> unsecuredCredentials,
+        nextExfiltrationViaCyberMeansAIExfiltration.exfiltrationViaCyberMeans
+        
+        | unsecuredCredentials
+        user info: "AML.T0055 - Unsecured Credentials"
+        -> validAccounts,
+        nextValidAccountsEnterpriseCompromiseTarget.validAccounts
+        
+        | validAccounts
+        user info: "AML.T0012 - Valid Accounts"
+        -> createAccount,
+        federatedAccount.validAccounts,
+        exploitedApplication.exploitPublicFacingApplication,
+        nextStageCapabilitiesLLMStagedCapability.stageCapabilities
+        
+        | createAccount
+        user info: "AML.T0125 - Create Account"
+        -> dataFromInformationRepositories
+        
+        | compromiseAccounts
+        user info: "AML.T0139 - Compromise Accounts"
+        -> distillationProxy.aiServiceProxies
+        
+        | dataFromInformationRepositories
+        user info: "AML.T0036 - Data from Information Repositories"
+        -> dataFromLocalSystem
+        
+        | dataFromLocalSystem
+        user info: "AML.T0037 - Data from Local System"
+        -> collector.automatedCollection
+        
+        # m0043AIAgentExternalResourceLifecycleManagement [Disabled]
+        user info: "AML.M0043 - AI Agent External Resource Lifecycle Management"
+        -> validAccounts,
+        createAccount
+        
     }
     
     asset MobileAIModel extends PredictiveAIModel {
@@ -1616,14 +1843,20 @@ category AI {
         
         | exploitPublicFacingApplication
         user info: "AML.T0049 - Exploit Public-Facing Application"
-        -> directPromptInjection
+        -> directPromptInjection,
+        resourceDiscovery.enterpriseResourceDiscovery,
+        pivotAgent.autonomousReconnaissance,
+        additionalApplication.exploitPublicFacingApplication,
+        automatedCollector.automatedCollection
         
         | directPromptInjection
         user info: "AML.T0051.000 - LLM Prompt Injection: Direct"
         -> verifyAttack,
         agentContext.contextPoisoningThread,
         conversation.llmJailbreak,
-        userExecution.userExecution
+        userExecution.userExecution,
+        distillationJailbreak.llmJailbreak,
+        distillationOutputService.exfiltrationViaAIInferenceAPI
         
         | specialCharacterSets
         user info: "AML.T0069.000 - Discover LLM System Information: Special Character Sets"
@@ -1646,7 +1879,9 @@ category AI {
         indirectConversation.indirectPromptInjection,
         triggeredConversation.triggeredPromptInjection,
         externalHarm.userHarm,
-        directPromptInjection
+        directPromptInjection,
+        nextIndirectPromptInjectionLLMConversation.indirectPromptInjection,
+        nextUserExecutionAIUserExecution.userExecution
         
         | misconfiguredOrPubliclyExposedAIServices
         user info: "AML.T0132 - Misconfigured or Publicly Exposed AI Services"
@@ -1716,11 +1951,15 @@ category AI {
         
         | deployAIAgent
         user info: "AML.T0103 - Deploy AI Agent"
-        -> directPromptInjection
+        -> directPromptInjection,
+        campaignAutonomousAgent.autonomousAttackPathAdaptation
         
         | aiAgentCommandAndControl
         user info: "AML.T0108 - AI Agent"
         -> machineCompromise.localAIAgent
+        
+        | aiAgentResponseBiasing
+        user info: "AML.T0130 - AI Agent Response Biasing"
         
         # m0013CodeSigning [Disabled]
         user info: "AML.M0013 - Code Signing"
@@ -1728,7 +1967,8 @@ category AI {
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
-        -> aiAgentCommandAndControl
+        -> aiAgentCommandAndControl,
+        aiAgentResponseBiasing
         
         # m0024AITelemetryLogging [Disabled]
         user info: "AML.M0024 - AI Telemetry Logging"
@@ -1743,6 +1983,55 @@ category AI {
         # m0035AIRedTeam [Disabled]
         user info: "AML.M0035 - AI Red Team"
         -> directPromptInjection
+    }
+    
+    asset AutonomousAIAgent {
+        
+        | autonomousReconnaissance
+        user info: "AML.T0116 - Autonomous Reconnaissance"
+        -> exploitCapability.autonomousExploitDevelopment,
+        scanResearch.activeScanning,
+        exposureResearch.scanDatabases,
+        repoResearch.codeRepositories,
+        targetScanner.activeScanning,
+        exposedApplication.exploitPublicFacingApplication,
+        nextCodeRepositoriesAIResearchMaterial.codeRepositories
+        
+        | autonomousAttackPathAdaptation
+        user info: "AML.T0117 - Autonomous Attack-Path Adaptation"
+        -> sharedArtifact.communicationViaSharedArtifacts,
+        reconAgent.autonomousReconnaissance,
+        commandTool.generateMaliciousCommands,
+        coordination.directAgentCommunication,
+        malwareCapability.malware,
+        registrationAccount.establishAccounts,
+        nextAutonomousReconnaissanceAutonomousAIAgent.autonomousReconnaissance,
+        nextGenerateMaliciousCommandsAIAttackSoftwareTool.generateMaliciousCommands
+        
+        # m0001LimitModelArtifactRelease [Disabled]
+        user info: "AML.M0001 - Limit Model Artifact Release"
+        -> autonomousReconnaissance
+        
+        # m0037AIAgentAuthorityExpansionControls [Disabled]
+        user info: "AML.M0037 - AI Agent Authority Expansion Controls"
+        -> autonomousReconnaissance,
+        autonomousAttackPathAdaptation
+        
+        # m0038AIAgentScopeDriftDetection [Disabled]
+        user info: "AML.M0038 - AI Agent Scope Drift Detection"
+        -> autonomousReconnaissance,
+        autonomousAttackPathAdaptation
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> autonomousReconnaissance,
+        autonomousAttackPathAdaptation
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> autonomousReconnaissance,
+        autonomousAttackPathAdaptation
+        
     }
     
     asset AIAgentConfiguration {
@@ -1796,7 +2085,8 @@ category AI {
         | contextPoisoningMemory
         user info: "AML.T0080.000 - AI Agent Context Poisoning: Memory"
         -> conversation.manipulateUserLLMChatHistory,
-        persistentApplication.promptInfiltrationViaPublicFacingApplication
+        persistentApplication.promptInfiltrationViaPublicFacingApplication,
+        recommendationBias.aiAgentResponseBiasing
         
         | contextPoisoningThread
         user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
@@ -1805,6 +2095,11 @@ category AI {
         contextAwareAgent.aiAgentCommandAndControl,
         delayedConversation.delayExecutionOfLLMInstructions,
         triggeredConversation.triggeredPromptInjection
+        
+        # m0020GenerativeAIGuardrails [Disabled]
+        user info: "AML.M0020 - Generative AI Guardrails"
+        -> contextPoisoningMemory,
+        contextPoisoningThread
         
         # m0031MemoryHardening [Disabled]
         user info: "AML.M0031 - Memory Hardening"
@@ -1858,6 +2153,70 @@ category AI {
         user info: "AML.M0035 - AI Red Team"
         -> aiAgentToolSupplyChainCompromise
     }
+    
+    asset MultiAgentOrchestrator {
+        
+        | autonomousAttackOrchestration
+        user info: "AML.T0124 - Autonomous Attack Orchestration"
+        -> planner.autonomousAttackPathAdaptation
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> autonomousAttackOrchestration
+        
+        # m0029UserConfirmationOfAIAgentToolInvocations [Disabled]
+        user info: "AML.M0029 - User Confirmation of AI Agent Tool Invocations"
+        -> autonomousAttackOrchestration
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> autonomousAttackOrchestration
+        
+        # m0036LimitAIWorkloadResourceConsumption [Disabled]
+        user info: "AML.M0036 - Limit AI Workload Resource Consumption"
+        -> autonomousAttackOrchestration
+        
+        # m0037AIAgentAuthorityExpansionControls [Disabled]
+        user info: "AML.M0037 - AI Agent Authority Expansion Controls"
+        -> autonomousAttackOrchestration
+        
+        # m0038AIAgentScopeDriftDetection [Disabled]
+        user info: "AML.M0038 - AI Agent Scope Drift Detection"
+        -> autonomousAttackOrchestration
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> autonomousAttackOrchestration
+        
+    }
+    
+    
+    asset DirectAgentCommunication {
+        
+        | directAgentCommunication
+        user info: "AML.T0118.001 - Autonomous AI Agent Communication: Direct Agent Communication"
+        -> reconAgent.autonomousReconnaissance
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> directAgentCommunication
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> directAgentCommunication
+        
+        # m0038AIAgentScopeDriftDetection [Disabled]
+        user info: "AML.M0038 - AI Agent Scope Drift Detection"
+        -> directAgentCommunication
+        
+    }
+
+    asset CraftedAIAssistantLink {
+        
+        | craftedAIAssistantLinks
+        user info: "AML.T0131 - Crafted AI Assistant Links"
+        -> injectedPrompt.llmPromptObfuscation
+    }
 
 
     asset LLMPrompt {
@@ -1884,7 +2243,9 @@ category AI {
             credentialHost.unsecuredCredentials,
             poisonedToolArtifact.publishPoisonedAIAgentTools,
             nextCraftedPrompt.llmPromptCrafting,
-            routingInfrastructure.centralizedAIServiceRequestRouting
+            routingInfrastructure.centralizedAIServiceRequestRouting,
+            distillationInference.exfiltrationViaAIInferenceAPI,
+            distillationTarget.directPromptInjection
             
         | retrievalContentCrafting
             user info: "AML.T0066 - Retrieval Content Crafting"
@@ -1899,7 +2260,9 @@ category AI {
             stagedCapability.stageCapabilities,
             agentConfiguration.credentialsFromAIAgentConfiguration,
             invokedTool.aiAgentToolInvocation,
-            relayHost.dataFromLocalSystem
+            relayHost.dataFromLocalSystem,
+            poisonedMemory.contextPoisoningMemory,
+            nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication.promptInfiltrationViaPublicFacingApplication
         
         # m0020GenerativeAIGuardrails [Disabled]
         user info: "AML.M0020 - Generative AI Guardrails"
@@ -1994,7 +2357,9 @@ category AI {
         renderedResponse.trustedOutputComponentsManipulation,
         obfuscatedPrompt.llmPromptObfuscation,
         tool.aiAgentToolInvocation,
-        deepfake.generateDeepfakes
+        deepfake.generateDeepfakes,
+        campaignTools.softwareTools,
+        distillationInference.exfiltrationViaAIInferenceAPI
         
         | manipulateUserLLMChatHistory
         user info: "AML.T0092 - Manipulate User LLM Chat History"
@@ -2061,7 +2426,15 @@ category AI {
         stagingInfrastructure.masquerading,
         accountHost.validAccounts,
         infiltrationApplication.promptInfiltrationViaPublicFacingApplication,
-        targetAIService.aiEnabledProductOrService
+        targetAIService.aiEnabledProductOrService,
+        assistantLink.craftedAIAssistantLinks,
+        evalDistributedSoftware.aiSupplyChainCompromiseSoftware,
+        nextAiSupplyChainCompromiseAISupplyChainModel.aiSupplyChainCompromise,
+        nextCommandAndScriptingInterpreterSoftwareExecutionHost.commandAndScriptingInterpreter,
+        nextCommunicationViaSharedArtifactsSharedAgentArtifact.communicationViaSharedArtifacts,
+        nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication.promptInfiltrationViaPublicFacingApplication,
+        nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM.spearphishingViaSocialEngineeringLLM,
+        nextUnsecuredCredentialsEnterpriseCompromiseTarget.unsecuredCredentials
     }
     
     asset SocialEngineeringLLM {
@@ -2123,32 +2496,25 @@ category AI {
         -> exfiltrationTool.exfiltrationViaAIAgentToolInvocation
     }
     
-    asset AutonomousAIAgent {
-        
-        | autonomousReconnaissance
-        user info: "AML.T0116 - Autonomous Reconnaissance"
-        -> exploitCapability.autonomousExploitDevelopment
-        
-        | autonomousAttackPathAdaptation
-        user info: "AML.T0117 - Autonomous Attack-Path Adaptation"
-        -> sharedArtifact.communicationViaSharedArtifacts
-    }
-    
-    
-    asset AutonomousExploitCapability {
-        
-        | autonomousExploitDevelopment
-        user info: "AML.T0017.001 - Autonomous Exploit Development"
-        -> remoteService.exploitationOfRemoteServices,
-        pipeline.exploitAutomatedArtifactProcessingPipeline
-    }
-    
     
     asset RemoteServiceTarget {
         
         | exploitationOfRemoteServices
         user info: "AML.T0122 - Exploitation of Remote Services"
         -> autonomousAgent.autonomousAttackPathAdaptation
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> exploitationOfRemoteServices
+        
+        # m0039AIHoneypots [Disabled]
+        user info: "AML.M0039 - AI Honeypots"
+        -> exploitationOfRemoteServices
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> exploitationOfRemoteServices
+        
     }
 
     asset SharedAgentArtifact {
@@ -2159,7 +2525,25 @@ category AI {
         
         | obfuscatedFilesOrInformation
         user info: "AML.T0123 - Obfuscated Files or Information"
-        -> repository.aiArtifactRepository
+        -> repository.aiArtifactRepository,
+        nextAiSupplyChainCompromiseAISupplyChainModel.aiSupplyChainCompromise
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> communicationViaSharedArtifacts
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> communicationViaSharedArtifacts
+        
+        # m0038AIAgentScopeDriftDetection [Disabled]
+        user info: "AML.M0038 - AI Agent Scope Drift Detection"
+        -> communicationViaSharedArtifacts
+        
+        # m0043AIAgentExternalResourceLifecycleManagement [Disabled]
+        user info: "AML.M0043 - AI Agent External Resource Lifecycle Management"
+        -> communicationViaSharedArtifacts
+        
     }
 
     asset AIAgentExecutionEnvironment {
@@ -2167,6 +2551,23 @@ category AI {
         | aiAgentEnvironmentReconstruction
         user info: "AML.T0121 - AI Agent Environment Reconstruction"
         -> sharedArtifact.obfuscatedFilesOrInformation
+        
+        # m0028EnforceAccessControlsForAIAgentTools [Disabled]
+        user info: "AML.M0028 - Enforce Access Controls for AI Agent Tools"
+        -> aiAgentEnvironmentReconstruction
+        
+        # m0032SegmentationOfAIAgentComponents [Disabled]
+        user info: "AML.M0032 - Segmentation of AI Agent Components"
+        -> aiAgentEnvironmentReconstruction
+        
+        # m0037AIAgentAuthorityExpansionControls [Disabled]
+        user info: "AML.M0037 - AI Agent Authority Expansion Controls"
+        -> aiAgentEnvironmentReconstruction
+        
+        # m0043AIAgentExternalResourceLifecycleManagement [Disabled]
+        user info: "AML.M0043 - AI Agent External Resource Lifecycle Management"
+        -> aiAgentEnvironmentReconstruction
+        
     }
     
     asset AutomatedArtifactProcessingPipeline {
@@ -2174,6 +2575,15 @@ category AI {
         | exploitAutomatedArtifactProcessingPipeline
         user info: "AML.T0119 - Exploit Automated Artifact Processing Pipeline"
         -> hostOS.dataFromLocalSystem
+        
+        # m0016VulnerabilityScanning [Disabled]
+        user info: "AML.M0016 - Vulnerability Scanning"
+        -> exploitAutomatedArtifactProcessingPipeline
+        
+        # m0042ThreatIntelligenceProgram [Disabled]
+        user info: "AML.M0042 - Threat Intelligence Program"
+        -> exploitAutomatedArtifactProcessingPipeline
+        
     }
     
     asset AIArtifactRepository {
@@ -2181,9 +2591,19 @@ category AI {
         | aiArtifactRepository
         user info: "AML.T0120 - AI Artifact Repository"
         -> repositoryOS.dataFromInformationRepositories
+        
+        | indicatorRemoval
+        user info: "AML.T0138 - Indicator Removal"
+        
+        # m0005ControlAccessAtRest [Disabled]
+        user info: "AML.M0005 - Control Access to AI Models and Data at Rest"
+        -> aiArtifactRepository
+        
+        # m0024AITelemetryLogging [Disabled]
+        user info: "AML.M0024 - AI Telemetry Logging and Monitoring"
+        -> aiArtifactRepository
+        
     }
-    
-    
 
 
     asset AITool {
@@ -2378,7 +2798,8 @@ category AI {
         
         | dataFromInformationRepositories
         +> publicArtifacts.acquirePublicAIArtifacts,
-        exfiltration.exfiltrationViaCyberMeans
+        exfiltration.exfiltrationViaCyberMeans,
+        firstAccount.validAccounts
     }
     
     asset RayClusterOS extends OS {
@@ -3254,9 +3675,9 @@ associations {
     
     // AML.CS0068
     
-    AutonomousAIAgent [agentCapabilities] * <--DevelopsAutonomousExploits--> * [exploitCapability] AutonomousExploitCapability
+    AutonomousAIAgent [agentCapabilities] * <--DevelopsAutonomousExploits--> * [exploitCapability] AdversarialCapability
     
-    AutonomousExploitCapability [exploitTarget] * <--ExploitsRemoteService--> * [remoteService] RemoteServiceTarget
+    AdversarialCapability [exploitTarget] * <--ExploitsRemoteService--> * [remoteService] RemoteServiceTarget
     
     RemoteServiceTarget [remotePivot] * <--EnablesAttackPathAdaptation--> * [autonomousAgent] AutonomousAIAgent
     
@@ -3268,7 +3689,7 @@ associations {
     
     SharedAgentArtifact [artifactCarrier] * <--AccessesArtifactRepository--> * [repository] AIArtifactRepository
     
-    AutonomousExploitCapability [artifactExploit] * <--TargetsAutomatedPipeline--> * [pipeline] AutomatedArtifactProcessingPipeline
+    AdversarialCapability [artifactExploit] * <--TargetsAutomatedPipeline--> * [pipeline] AutomatedArtifactProcessingPipeline
     
     AutomatedArtifactProcessingPipeline [processingHost] * <--ExposesProcessingHost--> * [hostOS] MalwareHostOS
     
@@ -3277,9 +3698,235 @@ associations {
     AIRepositoryOS [repositoryAccess] * <--ExfiltratesRepositoryData--> * [exfiltration] AIExfiltration
     
     
+    // AML.CS0069
+    
+    AIInferenceService [campaignInferenceService] * <--ProvidesAccessToAgent--> * [campaignAgentAccess] AIAgent
+    
+    LLMConversation [campaignConversation] * <--ObtainsCampaignTools--> * [campaignTools] AIAttackSoftwareTool
+    
+    AIAttackSoftwareTool [campaignToolset] * <--SupportsIntrusionInfrastructure--> * [campaignInfrastructure] AIInfrastructure
+    
+    AIInfrastructure [intrusionInfrastructure] * <--DeploysIntrusionAgent--> * [deployedAgent] AIAgent
+    
+    AIAgent [campaignAgentDeployment] * <--EnablesAutonomousOperations--> * [campaignAutonomousAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [autonomousPlanner] * <--InitiatesAutonomousReconnaissance--> * [reconAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [campaignReconnaissanceAgent] * <--InitiatesTargetScanning--> * [scanResearch] AIResearchMaterial
+    
+    AIResearchMaterial [campaignTargetScanning] * <--SupportsAutonomousExploitDevelopment--> * [campaignExploitCapability] AdversarialCapability
+    
+    AdversarialCapability [campaignExploit] * <--ExploitsTargetApplication--> * [publicTarget] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [campaignPublicTarget] * <--EnablesEnterpriseDiscovery--> * [resourceDiscovery] EnterpriseResourceDiscovery
+    
+    EnterpriseResourceDiscovery [campaignEnterpriseDiscovery] * <--DiscoversEnterpriseTarget--> * [enterpriseTarget] EnterpriseCompromiseTarget
+    
+    EnterpriseCompromiseTarget [compromisedEnterprise] * <--SupportsAutonomousDataCollection--> * [collector] AutonomousDataCollection
+    
+    AutonomousDataCollection [collectedEnterpriseData] * <--ExfiltratesCollectedData--> * [exfiltration] AIExfiltration
     
     
+    // AML.CS0070
     
+    AIAttackSoftwareTool [agentSoftware] * <--ObtainsOffensiveAIAgentTools--> * [hermesAgentTools] AIObtainedCapability
+    
+    AdversarialCapability [offensiveTooling] * <--AccessesReasoningModel--> * [reasoningService] AIInferenceService
+    
+    AIInferenceService [agentReasoningModel] * <--SupportsAutonomousPlanning--> * [hermesPlanner] AutonomousAIAgent
+    
+    AutonomousAIAgent [autonomousCommandPlanner] * <--GeneratesAgentCommands--> * [commandTool] AIAttackSoftwareTool
+    
+    AIAttackSoftwareTool [autonomousCommandExecution] * <--InitiatesAutonomousReconnaissance--> * [hermesReconAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [autonomousExposureRecon] * <--SearchesExposureDatabases--> * [exposureResearch] AIResearchMaterial
+    
+    AIResearchMaterial [exposureResearchResults] * <--ObtainsPublicExploit--> * [publicExploit] AIObtainedCapability
+    
+    AIObtainedCapability [scanningExploit] * <--InitiatesTargetScanning--> * [scanResearch] AIResearchMaterial
+    
+    AIResearchMaterial [targetScanner] * <--AttemptsExploitationOfScannedTarget--> * [scanTarget] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [attemptedExploitationTarget] * <--TriggersAutonomousTargetPivot--> * [pivotAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [autonomousRepositoryRecon] * <--SearchesPublicCodeRepositories--> * [repoResearch] AIResearchMaterial
+    
+    AIObtainedCapability [exploitResearch] * <--SearchesExploitDocumentation--> * [technicalResearch] AIResearchMaterial
+    
+    AIResearchMaterial [technicalResearchResults] * <--InitiatesFollowupScanning--> * [activeScanResearch] AIResearchMaterial
+    
+    
+    AIObtainedCapability [obtainedAgentToolCapability] * <--DevelopsAcquiredAgentTools--> * [developedCapability] AdversarialCapability
+    
+    
+    // AML.CS0071
+    
+    MultiAgentOrchestrator [orchestrationController] * <--CoordinatesAutonomousPlanning--> * [planner] AutonomousAIAgent
+    
+    AutonomousAIAgent [coordinatedPlanner] * <--CoordinatesAgentCommunication--> * [coordination] DirectAgentCommunication
+    
+    DirectAgentCommunication [agentCommunicationSource] * <--CoordinatesReconnaissanceAgent--> * [reconAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [coordinatedReconnaissance] * <--InitiatesCoordinatedScanning--> * [targetScanner] AIResearchMaterial
+    
+    AIResearchMaterial [coordinatedTargetScanning] * <--DiscoversExposedRepository--> * [exposedRepository] AIRepositoryOS
+    
+    AIRepositoryOS [exposedAccountRepository] * <--EnablesInitialAccountAccess--> * [firstAccount] EnterpriseCompromiseTarget
+    
+    EnterpriseCompromiseTarget [initialAccountAccess] * <--EnablesFederatedAccountAccess--> * [federatedAccount] EnterpriseCompromiseTarget
+    
+    EnterpriseCompromiseTarget [federatedAccountAccess] * <--EnablesApplicationExploitation--> * [exploitedApplication] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [initialExploitationTarget] * <--EnablesAdditionalApplicationExploitation--> * [additionalApplication] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [exploitedApplicationTarget] * <--EnablesAutomatedDataCollection--> * [automatedCollector] AutonomousDataCollection
+    
+
+    // AML.CS0072
+    
+    AIObtainedCapability [obtainedLinkCapability] * <--StagesAssistantLinkCapability--> * [stagedCapability] LLMStagedCapability
+    
+    LLMStagedCapability [stagedAssistantLink] * <--DistributesCraftedAssistantLink--> * [assistantLink] CraftedAIAssistantLink
+    
+    CraftedAIAssistantLink [craftedAssistantLink] * <--ContainsObfuscatedPrompt--> * [injectedPrompt] LLMPrompt
+    
+    LLMPrompt [memoryPoisoningPrompt] * <--ManipulatesPersistentAgentMemory--> * [poisonedMemory] AIAgentContext
+    
+    AIAgentContext [poisonedRecommendationContext] * <--CausesAgentRecommendationBias--> * [recommendationBias] AIAgent
+    
+    
+    // AML.CS0073
+    
+    AutonomousAIAgent [evaluationReconSource] * <--DiscoversExposedApplication--> * [exposedApplication] ExposedApplicationTarget
+    
+    AutonomousAIAgent [evaluationMalwarePlanner] * <--DevelopsMaliciousSoftware--> * [malwareCapability] AdversarialCapability
+    
+    AutonomousAIAgent [evaluationAccountPlanner] * <--EstablishesPublishingAccount--> * [registrationAccount] FraudulentAccount
+    
+    AdversarialCapability [developedMalware] * <--StagesMaliciousPackage--> * [packageStaging] LLMStagedCapability
+    
+    FraudulentAccount [maliciousPackageAccount] * <--StagesPublishedPackage--> * [evalPackageStaging] LLMStagedCapability
+    
+    LLMStagedCapability [stagedMaliciousSoftware] * <--DistributesCompromisedSoftware--> * [evalDistributedSoftware] AISupplyChainSoftware
+    
+    AISupplyChainSoftware [compromisedPackageDistribution] * <--ExecutesOnSoftwareHost--> * [evalExecution] SoftwareExecutionHost
+    
+    SoftwareExecutionHost [compromisedExecutionHost] * <--ExfiltratesExecutionData--> * [exfiltration] AIExfiltration
+    
+    AIExfiltration [exfiltratedCredentials] * <--EnablesCompromisedAccountAccess--> * [evalCompromisedAccount] EnterpriseCompromiseTarget
+    
+    AIResearchMaterial [evaluationCredentialScanner] * <--IdentifiesExposedCredentials--> * [evaluationCredentials] ExposedApplicationTarget
+    
+    AIResearchMaterial [evaluationApplicationScanner] * <--IdentifiesExploitableApplication--> * [evaluationApplication] ExposedApplicationTarget
+    
+    
+    // AML.CS0074
+    
+    AIAttackSoftwareTool [sourceNextDevelopCapabilitiesAdversarialCapabilityAIAttackSoftwareTool] * <--LinksToNextDevelopCapabilitiesAdversarialCapabilityAIAttackSoftwareTool--> * [nextDevelopCapabilitiesAdversarialCapability] AdversarialCapability
+    
+    AICyberCommunication [sourceNextCommandAndScriptingInterpreterSoftwareExecutionHostAICyberCommunication] * <--LinksToNextCommandAndScriptingInterpreterSoftwareExecutionHostAICyberCommunication--> * [nextCommandAndScriptingInterpreterSoftwareExecutionHost] SoftwareExecutionHost
+    
+    AIExfiltration [sourceNextCommandAndScriptingInterpreterSoftwareExecutionHostAIExfiltration] * <--LinksToNextCommandAndScriptingInterpreterSoftwareExecutionHostAIExfiltration--> * [nextCommandAndScriptingInterpreterSoftwareExecutionHost] SoftwareExecutionHost
+    
+    AIInfrastructure [sourceNextStageCapabilitiesLLMStagedCapabilityAIInfrastructure] * <--LinksToNextStageCapabilitiesLLMStagedCapabilityAIInfrastructure--> * [nextStageCapabilitiesLLMStagedCapability] LLMStagedCapability
+    
+    AIInfrastructure [sourceNextAiSupplyChainCompromiseAISupplyChainModelAIInfrastructure] * <--LinksToNextAiSupplyChainCompromiseAISupplyChainModelAIInfrastructure--> * [nextAiSupplyChainCompromiseAISupplyChainModel] AISupplyChainModel
+    
+    AIResearchMaterial [sourceNextGatherVictimIdentityInformationVictimIdentityInformationAIResearchMaterial] * <--LinksToNextGatherVictimIdentityInformationVictimIdentityInformationAIResearchMaterial--> * [nextGatherVictimIdentityInformationVictimIdentityInformation] VictimIdentityInformation
+    
+    AISupplyChainModel [sourceNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMAISupplyChainModel] * <--LinksToNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMAISupplyChainModel--> * [nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM] SocialEngineeringLLM
+    
+    AIUserExecution [sourceNextCyberCommunicationChannelAICyberCommunicationAIUserExecution] * <--LinksToNextCyberCommunicationChannelAICyberCommunicationAIUserExecution--> * [nextCyberCommunicationChannelAICyberCommunication] AICyberCommunication
+    
+    AIUserExecution [sourceNextIndicatorRemovalAIArtifactRepositoryAIUserExecution] * <--LinksToNextIndicatorRemovalAIArtifactRepositoryAIUserExecution--> * [nextIndicatorRemovalAIArtifactRepository] AIArtifactRepository
+    
+    AdversarialCapability [sourceNextMasqueradingAIInfrastructureAdversarialCapability] * <--LinksToNextMasqueradingAIInfrastructureAdversarialCapability--> * [nextMasqueradingAIInfrastructure] AIInfrastructure
+    
+    AdversarialCapability [sourceNextObfuscatedFilesOrInformationSharedAgentArtifactAdversarialCapability] * <--LinksToNextObfuscatedFilesOrInformationSharedAgentArtifactAdversarialCapability--> * [nextObfuscatedFilesOrInformationSharedAgentArtifact] SharedAgentArtifact
+    
+    AdversarialCapability [sourceNextStageCapabilitiesLLMStagedCapabilityAdversarialCapability] * <--LinksToNextStageCapabilitiesLLMStagedCapabilityAdversarialCapability--> * [nextStageCapabilitiesLLMStagedCapability] LLMStagedCapability
+    
+    AutonomousAIAgent [sourceNextAutonomousReconnaissanceAutonomousAIAgentAutonomousAIAgent] * <--LinksToNextAutonomousReconnaissanceAutonomousAIAgentAutonomousAIAgent--> * [nextAutonomousReconnaissanceAutonomousAIAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [sourceNextGenerateMaliciousCommandsAIAttackSoftwareToolAutonomousAIAgent] * <--LinksToNextGenerateMaliciousCommandsAIAttackSoftwareToolAutonomousAIAgent--> * [nextGenerateMaliciousCommandsAIAttackSoftwareTool] AIAttackSoftwareTool
+    
+    AutonomousAIAgent [sourceNextCodeRepositoriesAIResearchMaterialAutonomousAIAgent] * <--LinksToNextCodeRepositoriesAIResearchMaterialAutonomousAIAgent--> * [nextCodeRepositoriesAIResearchMaterial] AIResearchMaterial
+    
+    EnterpriseCompromiseTarget [sourceNextExfiltrationViaCyberMeansAIExfiltrationEnterpriseCompromiseTarget] * <--LinksToNextExfiltrationViaCyberMeansAIExfiltrationEnterpriseCompromiseTarget--> * [nextExfiltrationViaCyberMeansAIExfiltration] AIExfiltration
+    
+    EnterpriseCompromiseTarget [sourceNextValidAccountsEnterpriseCompromiseTargetEnterpriseCompromiseTarget] * <--LinksToNextValidAccountsEnterpriseCompromiseTargetEnterpriseCompromiseTarget--> * [nextValidAccountsEnterpriseCompromiseTarget] EnterpriseCompromiseTarget
+    
+    EnterpriseCompromiseTarget [sourceNextStageCapabilitiesLLMStagedCapabilityEnterpriseCompromiseTarget] * <--LinksToNextStageCapabilitiesLLMStagedCapabilityEnterpriseCompromiseTarget--> * [nextStageCapabilitiesLLMStagedCapability] LLMStagedCapability
+    
+    EnterpriseResourceDiscovery [sourceNextExfiltrationViaCyberMeansAIExfiltrationEnterpriseResourceDiscovery] * <--LinksToNextExfiltrationViaCyberMeansAIExfiltrationEnterpriseResourceDiscovery--> * [nextExfiltrationViaCyberMeansAIExfiltration] AIExfiltration
+    
+    FraudulentAccount [sourceNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationFraudulentAccount] * <--LinksToNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationFraudulentAccount--> * [nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication] PublicFacingLLMApplication
+    
+    FraudulentAccount [sourceNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMFraudulentAccount] * <--LinksToNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMFraudulentAccount--> * [nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM] SocialEngineeringLLM
+    
+    FraudulentAccount [sourceNextStageCapabilitiesLLMStagedCapabilityFraudulentAccount] * <--LinksToNextStageCapabilitiesLLMStagedCapabilityFraudulentAccount--> * [nextStageCapabilitiesLLMStagedCapability] LLMStagedCapability
+    
+    LLMPrompt [sourceNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationLLMPrompt] * <--LinksToNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationLLMPrompt--> * [nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication] PublicFacingLLMApplication
+    
+    LLMStagedCapability [sourceNextAiSupplyChainCompromiseAISupplyChainModelLLMStagedCapability] * <--LinksToNextAiSupplyChainCompromiseAISupplyChainModelLLMStagedCapability--> * [nextAiSupplyChainCompromiseAISupplyChainModel] AISupplyChainModel
+    
+    LLMStagedCapability [sourceNextCommandAndScriptingInterpreterSoftwareExecutionHostLLMStagedCapability] * <--LinksToNextCommandAndScriptingInterpreterSoftwareExecutionHostLLMStagedCapability--> * [nextCommandAndScriptingInterpreterSoftwareExecutionHost] SoftwareExecutionHost
+    
+    LLMStagedCapability [sourceNextCommunicationViaSharedArtifactsSharedAgentArtifactLLMStagedCapability] * <--LinksToNextCommunicationViaSharedArtifactsSharedAgentArtifactLLMStagedCapability--> * [nextCommunicationViaSharedArtifactsSharedAgentArtifact] SharedAgentArtifact
+    
+    LLMStagedCapability [sourceNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationLLMStagedCapability] * <--LinksToNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationLLMStagedCapability--> * [nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication] PublicFacingLLMApplication
+    
+    LLMStagedCapability [sourceNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMLLMStagedCapability] * <--LinksToNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMLLMStagedCapability--> * [nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM] SocialEngineeringLLM
+    
+    LLMStagedCapability [sourceNextUnsecuredCredentialsEnterpriseCompromiseTargetLLMStagedCapability] * <--LinksToNextUnsecuredCredentialsEnterpriseCompromiseTargetLLMStagedCapability--> * [nextUnsecuredCredentialsEnterpriseCompromiseTarget] EnterpriseCompromiseTarget
+    
+    PublicFacingLLMApplication [sourceNextIndirectPromptInjectionLLMConversationPublicFacingLLMApplication] * <--LinksToNextIndirectPromptInjectionLLMConversationPublicFacingLLMApplication--> * [nextIndirectPromptInjectionLLMConversation] LLMConversation
+    
+    PublicFacingLLMApplication [sourceNextUserExecutionAIUserExecutionPublicFacingLLMApplication] * <--LinksToNextUserExecutionAIUserExecutionPublicFacingLLMApplication--> * [nextUserExecutionAIUserExecution] AIUserExecution
+    
+    SharedAgentArtifact [sourceNextAiSupplyChainCompromiseAISupplyChainModelSharedAgentArtifact] * <--LinksToNextAiSupplyChainCompromiseAISupplyChainModelSharedAgentArtifact--> * [nextAiSupplyChainCompromiseAISupplyChainModel] AISupplyChainModel
+    
+    SoftwareExecutionHost [sourceNextCyberCommunicationChannelAICyberCommunicationSoftwareExecutionHost] * <--LinksToNextCyberCommunicationChannelAICyberCommunicationSoftwareExecutionHost--> * [nextCyberCommunicationChannelAICyberCommunication] AICyberCommunication
+    
+    SoftwareExecutionHost [sourceNextEnterpriseEnvironmentDiscoveryEnterpriseCompromiseTargetSoftwareExecutionHost] * <--LinksToNextEnterpriseEnvironmentDiscoveryEnterpriseCompromiseTargetSoftwareExecutionHost--> * [nextEnterpriseEnvironmentDiscoveryEnterpriseCompromiseTarget] EnterpriseCompromiseTarget
+    
+    SoftwareExecutionHost [sourceNextEnterpriseResourceDiscoveryEnterpriseResourceDiscoverySoftwareExecutionHost] * <--LinksToNextEnterpriseResourceDiscoveryEnterpriseResourceDiscoverySoftwareExecutionHost--> * [nextEnterpriseResourceDiscoveryEnterpriseResourceDiscovery] EnterpriseResourceDiscovery
+    
+    SoftwareExecutionHost [sourceNextEventTriggeredExecutionSoftwareExecutionHostSoftwareExecutionHost] * <--LinksToNextEventTriggeredExecutionSoftwareExecutionHostSoftwareExecutionHost--> * [nextEventTriggeredExecutionSoftwareExecutionHost] SoftwareExecutionHost
+    
+    SoftwareExecutionHost [sourceNextUnsecuredCredentialsEnterpriseCompromiseTargetSoftwareExecutionHost] * <--LinksToNextUnsecuredCredentialsEnterpriseCompromiseTargetSoftwareExecutionHost--> * [nextUnsecuredCredentialsEnterpriseCompromiseTarget] EnterpriseCompromiseTarget
+    
+    SoftwareExecutionHost [sourceNextImpersonationFraudulentAccountSoftwareExecutionHost] * <--LinksToNextImpersonationFraudulentAccountSoftwareExecutionHost--> * [nextImpersonationFraudulentAccount] FraudulentAccount
+    
+    VictimIdentityInformation [sourceNextAiSupplyChainCompromiseAISupplyChainModelVictimIdentityInformation] * <--LinksToNextAiSupplyChainCompromiseAISupplyChainModelVictimIdentityInformation--> * [nextAiSupplyChainCompromiseAISupplyChainModel] AISupplyChainModel
+    
+    VictimIdentityInformation [sourceNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationVictimIdentityInformation] * <--LinksToNextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplicationVictimIdentityInformation--> * [nextPromptInfiltrationViaPublicFacingApplicationPublicFacingLLMApplication] PublicFacingLLMApplication
+    
+    VictimIdentityInformation [sourceNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMVictimIdentityInformation] * <--LinksToNextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLMVictimIdentityInformation--> * [nextSpearphishingViaSocialEngineeringLLMSocialEngineeringLLM] SocialEngineeringLLM
+    
+    
+    // AML.CS0075
+    
+    EnterpriseCompromiseTarget [compromisedServiceAccount] * <--UsesCompromisedAccountForProxyAccess--> * [distillationProxy] AIInfrastructure
+    
+    FraudulentAccount [establishedServiceAccount] * <--UsesEstablishedAccountForProxyAccess--> * [distillationProxy] AIInfrastructure
+    
+    AIServiceOS [authenticatedServiceAccount] * <--EnablesCentralizedRequestRouting--> * [distillationRouter] AIInfrastructure
+    
+    LLMPrompt [modelDistillationPrompt] * <--QueriesTargetInferenceService--> * [distillationInference] AIInferenceService
+    
+    
+    // AML.CS0076
+
+    AIInferenceService [distillationDiscoverySource] * <--SupportsDistillationPromptCrafting--> * [distillationPrompt] LLMPrompt
+    
+    LLMPrompt [distillationCraftedPrompt] * <--TargetsAIApplicationForDistillation--> * [distillationTarget] PublicFacingLLMApplication
+    
+    PublicFacingLLMApplication [distillationInjectionTarget] * <--EnablesDistillationJailbreak--> * [distillationJailbreak] LLMConversation
+    
+    PublicFacingLLMApplication [distillationDirectQuery] * <--QueriesInferenceForDistillation--> * [distillationOutputService] AIInferenceService
+    
+    LLMConversation [distillationJailbreakSource] * <--ExfiltratesDistillationResponses--> * [distillationInference] AIInferenceService
     
     
     
