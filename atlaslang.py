@@ -28,34 +28,6 @@ LANG_FILE = Path("atlaslang.mal")
 CASE_STUDIES = {
 
     # ========================================================
-    # AML.CS0062
-    # RCE Vulnerability in Semantic Kernel Search Plugin
-    # ========================================================
-
-    "AML.CS0062": {
-
-        "attacker_name": "AML_CS0062_Attacker",
-
-        "entry_point":
-            "MaliciousPrompt:llmPromptCrafting",
-
-        "path": [
-            "SemanticKernelAgent:aiEnabledProductOrService",
-            "SemanticKernelAgent:directPromptInjection",
-            "SearchPlugin:aiAgentToolInvocation",
-            "InMemoryVectorStore:vulnerableFilterEvaluation",
-            "HostOS:commandAndScriptingInterpreter",
-            "HostOS:python",
-            "HostOS:executeCode",
-            "SemanticKernelHost:infectedComputer",
-        ],
-
-        "goal":
-            "SemanticKernelHost:infectedComputer",
-    },
-
-
-    # ========================================================
     # AML.CS0000
     # Evasion of Deep Learning Detector for Malware C&C Traffic
     # ========================================================
@@ -3388,8 +3360,581 @@ CASE_STUDIES = {
             "CS0061CompromisedHost:"
             "commandAndScriptingInterpreter",
     },
-
     
+    # ========================================================
+    # AML.CS0062
+    # RCE Vulnerability in Semantic Kernel Search Plugin
+    # ========================================================
+
+    "AML.CS0062": {
+
+        "attacker_name": "AML_CS0062_Attacker",
+
+        "entry_point":
+            "MaliciousPrompt:llmPromptCrafting",
+
+        "path": [
+            "SemanticKernelAgent:aiEnabledProductOrService",
+            "SemanticKernelAgent:directPromptInjection",
+            "SearchPlugin:aiAgentToolInvocation",
+            "InMemoryVectorStore:vulnerableFilterEvaluation",
+            "HostOS:commandAndScriptingInterpreter",
+            "HostOS:python",
+            "HostOS:executeCode",
+            "SemanticKernelHost:infectedComputer",
+        ],
+
+        "goal":
+            "SemanticKernelHost:infectedComputer",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0063-A
+    # Gemini Calendar Invitation:
+    # Delayed Data Destruction
+    # ========================================================
+
+    "AML.CS0063-A": {
+
+        "attacker_name":
+            "AML_CS0063_A_Attacker",
+
+        # AML.T0006
+        "entry_point":
+            "CS0063GeminiResearch:"
+            "activeScanning",
+
+        "path": [
+
+            # AML.T0084.002
+            "CS0063GeminiConfiguration:"
+            "activationTriggers",
+
+            # AML.T0084.001
+            "CS0063GeminiConfiguration:"
+            "toolDefinitions",
+
+            # AML.T0065
+            "CS0063CalendarInvitationPrompt:"
+            "llmPromptCrafting",
+
+            # AML.T0093
+            "CS0063GeminiApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # AML.T0051.001
+            "CS0063GeminiConversation:"
+            "indirectPromptInjection",
+
+            # AML.T0080.001
+            "CS0063PoisonedConversationContext:"
+            "contextPoisoningThread",
+
+            # AML.T0094
+            "CS0063DelayedConversation:"
+            "delayExecutionOfLLMInstructions",
+
+            # AML.T0053
+            "CS0063CalendarTool:"
+            "aiAgentToolInvocation",
+
+            # AML.T0101
+            "CS0063CalendarTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0063CalendarTool:"
+            "dataDestructionViaAIAgentToolInvocation",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0063-B
+    # Gemini Calendar Invitation:
+    # Triggered Injection and Data Exfiltration
+    # ========================================================
+
+    "AML.CS0063-B": {
+
+        "attacker_name":
+            "AML_CS0063_B_Attacker",
+
+        # AML.T0006
+        "entry_point":
+            "CS0063GeminiResearch:"
+            "activeScanning",
+
+        "path": [
+
+            # AML.T0084.002
+            "CS0063GeminiConfiguration:"
+            "activationTriggers",
+
+            # AML.T0084.001
+            "CS0063GeminiConfiguration:"
+            "toolDefinitions",
+
+            # AML.T0065
+            "CS0063CalendarInvitationPrompt:"
+            "llmPromptCrafting",
+
+            # AML.T0093
+            "CS0063GeminiApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # AML.T0051.001
+            "CS0063GeminiConversation:"
+            "indirectPromptInjection",
+
+            # AML.T0080.001
+            "CS0063PoisonedConversationContext:"
+            "contextPoisoningThread",
+
+            # AML.T0051.002
+            "CS0063TriggeredConversation:"
+            "triggeredPromptInjection",
+
+            # AML.T0054
+            "CS0063TriggeredConversation:"
+            "llmJailbreak",
+
+            # AML.T0053
+            "CS0063CalendarTool:"
+            "aiAgentToolInvocation",
+
+            # AML.T0085.001
+            "CS0063CalendarTool:"
+            "aiAgentTools",
+
+            # AML.T0086
+            "CS0063ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # AML.T0048.003
+            "CS0063UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0063UserImpact:"
+            "userHarm",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0064
+    # Poisoned GGUF Templates:
+    # Inference-Time Supply Chain Attack
+    # ========================================================
+
+    "AML.CS0064": {
+
+        "attacker_name":
+            "AML_CS0064_Attacker",
+
+        # S00 - AML.T0002.001
+        "entry_point":
+            "CS0064PublicGGUFModel:"
+            "models",
+
+        "path": [
+
+            # S01 - AML.T0017.000
+            "CS0064TemplateAttackCapability:"
+            "adversarialAIAttacks",
+
+            # S02 - AML.T0018.003
+            "CS0064PoisonedGGUFTemplate:"
+            "modifyPromptConstructionLogic",
+
+            # S03 - AML.T0074
+            "CS0064PoisonedGGUFTemplate:"
+            "masquerading",
+
+            # S04 - AML.T0115.001
+            "CS0064ModelPublisher:"
+            "publishPoisonedModels",
+
+            # S05 - AML.T0010.003
+            "CS0064ModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # S06 - AML.T0011.000
+            "CS0064VictimGGUFModel:"
+            "unsafeAIArtifacts",
+
+            # S07 - AML.T0051.002
+            "CS0064TriggeredConversation:"
+            "triggeredPromptInjection",
+
+            # S08 - AML.T0031
+            "CS0064VictimGGUFModel:"
+            "erodeAIModelIntegrity",
+
+            # S09 - AML.T0067
+            "CS0064ManipulatedResponse:"
+            "trustedOutputComponentsManipulation",
+
+            # S10 - AML.T0053
+            "CS0064AgentTool:"
+            "aiAgentToolInvocation",
+
+            # S11 - AML.T0086
+            "CS0064AgentTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+
+            # S12 - AML.T0048.003
+            "CS0064UserImpact:"
+            "userHarm",
+        ],
+
+        "goal":
+            "CS0064UserImpact:"
+            "userHarm",
+    },
+    
+    # ========================================================
+    # AML.CS0065
+    # Model Namespace Reuse Supply Chain Attack
+    # ========================================================
+
+    "AML.CS0065": {
+
+        "attacker_name":
+            "AML_CS0065_Attacker",
+
+        # S00 - AML.T0095
+        "entry_point":
+            "CS0065NamespaceResearch:"
+            "searchOpenWebsitesDomains",
+
+        "path": [
+
+            # S01 - AML.T0021
+            "CS0065ReclaimedNamespace:"
+            "establishAccounts",
+
+            # S02 - AML.T0074
+            "CS0065ReclaimedNamespace:"
+            "masquerading",
+
+            # S03 - AML.T0018.002
+            "CS0065MaliciousModel:"
+            "embedMalware",
+
+            # S04 - AML.T0115.001
+            "CS0065ModelPublisher:"
+            "publishPoisonedModels",
+
+            # S05 - AML.T0010.003
+            "CS0065ModelSupplyChain:"
+            "aiSupplyChainCompromiseModel",
+
+            # S06 - AML.T0011.000
+            "CS0065DeployedModel:"
+            "unsafeAIArtifacts",
+
+            # S07 - AML.T0072
+            "CS0065C2Channel:"
+            "cyberCommunicationChannel",
+        ],
+
+        "goal":
+            "CS0065C2Channel:"
+            "cyberCommunicationChannel",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0066-A
+    # ZombieAgent: Data Exfiltration
+    # ========================================================
+
+    "AML.CS0066-A": {
+
+        "attacker_name":
+            "AML_CS0066_A_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0066MaliciousEmailPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0079
+            "CS0066StagedPayload:"
+            "stageCapabilities",
+
+            # S02 - AML.T0068
+            "CS0066ObfuscatedPrompt:"
+            "llmPromptObfuscation",
+
+            # S03 - AML.T0093
+            "CS0066ChatGPTApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0051.001
+            "CS0066InjectedConversation:"
+            "indirectPromptInjection",
+
+            # S05 - AML.T0054
+            "CS0066InjectedConversation:"
+            "llmJailbreak",
+
+            # S06 - AML.T0053
+            "CS0066ConnectorTool:"
+            "aiAgentToolInvocation",
+
+            # S07 - AML.T0085.001
+            "CS0066ConnectorTool:"
+            "aiAgentTools",
+
+            # S08 - AML.T0086
+            "CS0066ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0066ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0066-B
+    # ZombieAgent: Persistent Memory Poisoning
+    # ========================================================
+
+    "AML.CS0066-B": {
+
+        "attacker_name":
+            "AML_CS0066_B_Attacker",
+
+        # S00 - AML.T0065
+        "entry_point":
+            "CS0066MaliciousEmailPrompt:"
+            "llmPromptCrafting",
+
+        "path": [
+
+            # S01 - AML.T0079
+            "CS0066StagedPayload:"
+            "stageCapabilities",
+
+            # S02 - AML.T0068
+            "CS0066ObfuscatedPrompt:"
+            "llmPromptObfuscation",
+
+            # S03 - AML.T0093
+            "CS0066ChatGPTApplication:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S04 - AML.T0051.001
+            "CS0066InjectedConversation:"
+            "indirectPromptInjection",
+
+            # S05 - AML.T0080.000
+            "CS0066PoisonedMemory:"
+            "contextPoisoningMemory",
+        ],
+
+        "goal":
+            "CS0066PoisonedMemory:"
+            "contextPoisoningMemory",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0067
+    # Claude Code GitHub Action Secret Exposure
+    # ========================================================
+
+    "AML.CS0067": {
+
+        "attacker_name":
+            "AML_CS0067_Attacker",
+
+        # S00 - AML.T0095.000
+        "entry_point":
+            "CS0067ClaudeRepositoryResearch:"
+            "codeRepositories",
+
+        "path": [
+
+            # S01 - AML.T0084.001
+            "CS0067ClaudeToolConfiguration:"
+            "toolDefinitions",
+
+            # S02 - AML.T0084.002
+            "CS0067ClaudeTriggerConfiguration:"
+            "activationTriggers",
+
+            # S03 - AML.T0065
+            "CS0067MaliciousGitHubPrompt:"
+            "llmPromptCrafting",
+
+            # S04 - AML.T0093
+            "CS0067ClaudeCodeAction:"
+            "promptInfiltrationViaPublicFacingApplication",
+
+            # S05 - AML.T0051.001
+            "CS0067InjectedConversation:"
+            "indirectPromptInjection",
+
+            # S06 - AML.T0054
+            "CS0067InjectedConversation:"
+            "llmJailbreak",
+
+            # S07 - AML.T0053
+            "CS0067ClaudeReadTool:"
+            "aiAgentToolInvocation",
+
+            # S08 - AML.T0098
+            "CS0067ClaudeReadTool:"
+            "aiAgentToolCredentialHarvesting",
+
+            # S09 - AML.T0057
+            "CS0067LeakedAPIKey:"
+            "llmDataLeakage",
+
+            # S10 - AML.T0086
+            "CS0067ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+        ],
+
+        "goal":
+            "CS0067ExfiltrationTool:"
+            "exfiltrationViaAIAgentToolInvocation",
+    },
+    
+    
+    # ========================================================
+    # AML.CS0068-A
+    # Autonomous Exploitation and Inter-Agent Communication
+    # ========================================================
+
+    "AML.CS0068-A": {
+
+        "attacker_name":
+            "AML_CS0068_A_Attacker",
+
+        # AML.T0116
+        "entry_point":
+            "CS0068AutonomousAgentA:"
+            "autonomousReconnaissance",
+
+        "path": [
+
+            # AML.T0017.001
+            "CS0068ExploitCapabilityA:"
+            "autonomousExploitDevelopment",
+
+            # AML.T0122
+            "CS0068RemoteService:"
+            "exploitationOfRemoteServices",
+
+            # AML.T0117
+            "CS0068AutonomousAgentA:"
+            "autonomousAttackPathAdaptation",
+
+            # AML.T0118.000
+            "CS0068SharedArtifact:"
+            "communicationViaSharedArtifacts",
+
+            # AML.T0121
+            "CS0068ReconstructedEnvironment:"
+            "aiAgentEnvironmentReconstruction",
+
+            # AML.T0123
+            "CS0068SharedArtifact:"
+            "obfuscatedFilesOrInformation",
+
+            # AML.T0120
+            "CS0068ArtifactRepositoryA:"
+            "aiArtifactRepository",
+        ],
+
+        "goal":
+            "CS0068ArtifactRepositoryA:"
+            "aiArtifactRepository",
+    },
+
+
+    # ========================================================
+    # AML.CS0068-B
+    # Automated AI Artifact Processing Pipeline Exploitation
+    # ========================================================
+
+    "AML.CS0068-B": {
+
+        "attacker_name":
+            "AML_CS0068_B_Attacker",
+
+        # AML.T0116
+        "entry_point":
+            "CS0068AutonomousAgentB:"
+            "autonomousReconnaissance",
+
+        "path": [
+
+            # AML.T0017.001
+            "CS0068ExploitCapabilityB:"
+            "autonomousExploitDevelopment",
+
+            # AML.T0119
+            "CS0068ArtifactProcessingPipeline:"
+            "exploitAutomatedArtifactProcessingPipeline",
+
+            # AML.T0037
+            "CS0068ProcessingHost:"
+            "dataFromLocalSystem",
+
+            # AML.T0025
+            "CS0068PipelineExfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0068PipelineExfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+
+
+    # ========================================================
+    # AML.CS0068-C
+    # AI Artifact Repository Data Exfiltration
+    # ========================================================
+
+    "AML.CS0068-C": {
+
+        "attacker_name":
+            "AML_CS0068_C_Attacker",
+
+        # AML.T0120
+        "entry_point":
+            "CS0068ArtifactRepositoryC:"
+            "aiArtifactRepository",
+
+        "path": [
+
+            # AML.T0036
+            "CS0068RepositoryOS:"
+            "dataFromInformationRepositories",
+
+            # AML.T0025
+            "CS0068RepositoryExfiltration:"
+            "exfiltrationViaCyberMeans",
+        ],
+
+        "goal":
+            "CS0068RepositoryExfiltration:"
+            "exfiltrationViaCyberMeans",
+    },
+
+
 
 }
 
@@ -3403,71 +3948,6 @@ def create_model(lang_graph: LanguageGraph) -> Model:
     model = Model(
         "MITRE_ATLAS_CASE_STUDIES",
         lang_graph
-    )
-
-
-    # ========================================================
-    # AML.CS0062
-    # ========================================================
-
-    malicious_prompt = model.add_asset(
-        "LLMPrompt",
-        "MaliciousPrompt"
-    )
-
-    semantic_kernel_agent = model.add_asset(
-        "AIAgent",
-        "SemanticKernelAgent"
-    )
-
-    search_plugin = model.add_asset(
-        "AITool",
-        "SearchPlugin"
-    )
-
-    vector_store = model.add_asset(
-        "VectorStore",
-        "InMemoryVectorStore"
-    )
-
-    host_os = model.add_asset(
-        "OS",
-        "HostOS"
-    )
-
-    host_computer = model.add_asset(
-        "Computer",
-        "SemanticKernelHost"
-    )
-
-
-    # --------------------------------------------------------
-    # CS0062 associations
-    # --------------------------------------------------------
-
-    malicious_prompt.add_associated_assets(
-        "aiAgent",
-        {semantic_kernel_agent}
-    )
-
-    semantic_kernel_agent.add_associated_assets(
-        "tool",
-        {search_plugin}
-    )
-
-    search_plugin.add_associated_assets(
-        "vectorStore",
-        {vector_store}
-    )
-
-    vector_store.add_associated_assets(
-        "os",
-        {host_os}
-    )
-
-    host_computer.add_associated_assets(
-        "os",
-        {host_os}
     )
 
 
@@ -8492,6 +8972,840 @@ def create_model(lang_graph: LanguageGraph) -> Model:
         "executionHost",
         {cs0061_host}
     )
+    
+    # ========================================================
+    # AML.CS0062
+    # ========================================================
+
+    malicious_prompt = model.add_asset(
+        "LLMPrompt",
+        "MaliciousPrompt"
+    )
+
+    semantic_kernel_agent = model.add_asset(
+        "AIAgent",
+        "SemanticKernelAgent"
+    )
+
+    search_plugin = model.add_asset(
+        "AITool",
+        "SearchPlugin"
+    )
+
+    vector_store = model.add_asset(
+        "VectorStore",
+        "InMemoryVectorStore"
+    )
+
+    host_os = model.add_asset(
+        "OS",
+        "HostOS"
+    )
+
+    host_computer = model.add_asset(
+        "Computer",
+        "SemanticKernelHost"
+    )
+
+
+    # --------------------------------------------------------
+    # CS0062 associations
+    # --------------------------------------------------------
+
+    malicious_prompt.add_associated_assets(
+        "aiAgent",
+        {semantic_kernel_agent}
+    )
+
+    semantic_kernel_agent.add_associated_assets(
+        "tool",
+        {search_plugin}
+    )
+
+    search_plugin.add_associated_assets(
+        "vectorStore",
+        {vector_store}
+    )
+
+    vector_store.add_associated_assets(
+        "os",
+        {host_os}
+    )
+
+    host_computer.add_associated_assets(
+        "os",
+        {host_os}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0063
+    # Prompt-Based Attacks Against Gemini
+    # via Calendar Invitations
+    # ========================================================
+
+    cs0063_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0063GeminiResearch"
+    )
+
+    cs0063_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0063GeminiConfiguration"
+    )
+
+    cs0063_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0063CalendarInvitationPrompt"
+    )
+
+    cs0063_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0063GeminiApplication"
+    )
+
+    cs0063_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0063GeminiConversation"
+    )
+
+    cs0063_context = model.add_asset(
+        "AIAgentContext",
+        "CS0063PoisonedConversationContext"
+    )
+
+    cs0063_delayed_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0063DelayedConversation"
+    )
+
+    cs0063_triggered_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0063TriggeredConversation"
+    )
+
+    cs0063_calendar_tool = model.add_asset(
+        "AITool",
+        "CS0063CalendarTool"
+    )
+
+    cs0063_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0063ExfiltrationTool"
+    )
+
+    cs0063_harm = model.add_asset(
+        "ExternalHarm",
+        "CS0063UserImpact"
+    )
+
+    # --------------------------------------------------------
+    # CS0063 associations
+    # --------------------------------------------------------
+
+    cs0063_research.add_associated_assets(
+        "geminiConfiguration",
+        {cs0063_configuration}
+    )
+
+    cs0063_configuration.add_associated_assets(
+        "craftedPrompt",
+        {cs0063_prompt}
+    )
+
+    cs0063_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0063_application}
+    )
+
+    cs0063_application.add_associated_assets(
+        "indirectConversation",
+        {cs0063_conversation}
+    )
+
+    cs0063_conversation.add_associated_assets(
+        "agentContext",
+        {cs0063_context}
+    )
+
+    cs0063_context.add_associated_assets(
+        "delayedConversation",
+        {cs0063_delayed_conversation}
+    )
+
+    cs0063_delayed_conversation.add_associated_assets(
+        "tool",
+        {cs0063_calendar_tool}
+    )
+
+
+    # --------------------------------------------------------
+    # Branch B: Triggered injection and exfiltration
+    # AML.T0080.001 -> AML.T0051.002 -> AML.T0054
+    # -> AML.T0053 -> AML.T0085.001 -> AML.T0086
+    # --------------------------------------------------------
+
+    cs0063_context.add_associated_assets(
+        "triggeredConversation",
+        {cs0063_triggered_conversation}
+    )
+
+    cs0063_triggered_conversation.add_associated_assets(
+        "tool",
+        {cs0063_calendar_tool}
+    )
+
+    cs0063_calendar_tool.add_associated_assets(
+        "exfiltrationTool",
+        {cs0063_exfiltration_tool}
+    )
+
+    cs0063_exfiltration_tool.add_associated_assets(
+        "externalHarm",
+        {cs0063_harm}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0064
+    # Poisoned GGUF Templates:
+    # Inference-Time Supply Chain Attack
+    # ========================================================
+
+    cs0064_public_model = model.add_asset(
+        "PublicAIArtifacts",
+        "CS0064PublicGGUFModel"
+    )
+
+    cs0064_capability = model.add_asset(
+        "AdversarialCapability",
+        "CS0064TemplateAttackCapability"
+    )
+
+    cs0064_template = model.add_asset(
+        "GGUFChatTemplate",
+        "CS0064PoisonedGGUFTemplate"
+    )
+
+    cs0064_publisher = model.add_asset(
+        "PoisonedAIModelPublisher",
+        "CS0064ModelPublisher"
+    )
+
+    cs0064_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "CS0064ModelSupplyChain"
+    )
+
+    cs0064_victim_model = model.add_asset(
+        "PoisonableAIModel",
+        "CS0064VictimGGUFModel"
+    )
+
+    cs0064_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0064TriggeredConversation"
+    )
+
+    cs0064_rendered_response = model.add_asset(
+        "LLMRenderedResponse",
+        "CS0064ManipulatedResponse"
+    )
+
+    cs0064_agent_tool = model.add_asset(
+        "AITool",
+        "CS0064AgentTool"
+    )
+
+    cs0064_impact = model.add_asset(
+        "ExternalHarm",
+        "CS0064UserImpact"
+    )
+
+    # --------------------------------------------------------
+    # CS0064 Associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0002.001 -> AML.T0017.000
+    cs0064_public_model.add_associated_assets(
+        "ggufCapability",
+        {cs0064_capability}
+    )
+
+    # S01 -> S02
+    # AML.T0017.000 -> AML.T0018.003
+    cs0064_capability.add_associated_assets(
+        "ggufTemplate",
+        {cs0064_template}
+    )
+
+    # S02 -> S03
+    # AML.T0018.003 -> AML.T0074
+    # Both steps belong to the same GGUFChatTemplate asset.
+
+    # S03 -> S04
+    # AML.T0074 -> AML.T0115.001
+    cs0064_template.add_associated_assets(
+        "publisher",
+        {cs0064_publisher}
+    )
+
+    # S04 -> S05
+    # AML.T0115.001 -> AML.T0010.003
+    cs0064_publisher.add_associated_assets(
+        "modelSupplyChain",
+        {cs0064_supply_chain}
+    )
+
+    # S05 -> S06
+    # AML.T0010.003 -> AML.T0011.000
+    cs0064_supply_chain.add_associated_assets(
+        "integrityTarget",
+        {cs0064_victim_model}
+    )
+
+    # S06 -> S07
+    # AML.T0011.000 -> AML.T0051.002
+    cs0064_victim_model.add_associated_assets(
+        "ggufConversation",
+        {cs0064_conversation}
+    )
+
+    # S07 -> S08
+    # AML.T0051.002 -> AML.T0031
+    cs0064_conversation.add_associated_assets(
+        "ggufIntegrityModel",
+        {cs0064_victim_model}
+    )
+
+    # S08 -> S09
+    # AML.T0031 -> AML.T0067
+    cs0064_victim_model.add_associated_assets(
+        "ggufRenderedResponse",
+        {cs0064_rendered_response}
+    )
+
+    # S09 -> S10
+    # AML.T0067 -> AML.T0053
+    cs0064_rendered_response.add_associated_assets(
+        "ggufAgentTool",
+        {cs0064_agent_tool}
+    )
+
+    # S10 -> S11
+    # AML.T0053 -> AML.T0086
+    # Both steps belong to the same AITool asset.
+
+    # S11 -> S12
+    # AML.T0086 -> AML.T0048.003
+    cs0064_agent_tool.add_associated_assets(
+        "externalHarm",
+        {cs0064_impact}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0065
+    # Model Namespace Reuse Supply Chain Attack
+    # ========================================================
+
+    cs0065_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0065NamespaceResearch"
+    )
+
+    cs0065_account = model.add_asset(
+        "HFOrganizationAccount",
+        "CS0065ReclaimedNamespace"
+    )
+
+    cs0065_malicious_model = model.add_asset(
+        "PoisonableAIModel",
+        "CS0065MaliciousModel"
+    )
+
+    cs0065_publisher = model.add_asset(
+        "PoisonedAIModelPublisher",
+        "CS0065ModelPublisher"
+    )
+
+    cs0065_supply_chain = model.add_asset(
+        "AISupplyChainModel",
+        "CS0065ModelSupplyChain"
+    )
+
+    cs0065_victim_model = model.add_asset(
+        "PoisonableAIModel",
+        "CS0065DeployedModel"
+    )
+
+    cs0065_c2 = model.add_asset(
+        "AICyberCommunication",
+        "CS0065C2Channel"
+    )
+
+    # --------------------------------------------------------
+    # CS0065 Associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0095 -> AML.T0021
+
+    cs0065_research.add_associated_assets(
+        "namespaceAccount",
+        {cs0065_account}
+    )
+
+    # S01 -> S02
+    # AML.T0021 -> AML.T0074
+    #
+    # Both attack steps belong to HFOrganizationAccount.
+    # No association required.
+
+    # S02 -> S03
+    # AML.T0074 -> AML.T0018.002
+
+    cs0065_account.add_associated_assets(
+        "namespaceModel",
+        {cs0065_malicious_model}
+    )
+
+    # S03 -> S04
+    # AML.T0018.002 -> AML.T0115.001
+
+    cs0065_malicious_model.add_associated_assets(
+        "publisher",
+        {cs0065_publisher}
+    )
+
+    # S04 -> S05
+    # AML.T0115.001 -> AML.T0010.003
+
+    cs0065_publisher.add_associated_assets(
+        "modelSupplyChain",
+        {cs0065_supply_chain}
+    )
+
+    # S05 -> S06
+    # AML.T0010.003 -> AML.T0011.000
+
+    cs0065_supply_chain.add_associated_assets(
+        "integrityTarget",
+        {cs0065_victim_model}
+    )
+
+    # S06 -> S07
+    # AML.T0011.000 -> AML.T0072
+
+    cs0065_victim_model.add_associated_assets(
+        "c2",
+        {cs0065_c2}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0066
+    # ZombieAgent: Data Exfiltration Attack on ChatGPT
+    # ========================================================
+
+    cs0066_crafted_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0066MaliciousEmailPrompt"
+    )
+
+    cs0066_staged_capability = model.add_asset(
+        "LLMStagedCapability",
+        "CS0066StagedPayload"
+    )
+
+    cs0066_obfuscated_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0066ObfuscatedPrompt"
+    )
+
+    cs0066_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0066ChatGPTApplication"
+    )
+
+    cs0066_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0066InjectedConversation"
+    )
+
+    cs0066_memory = model.add_asset(
+        "AIAgentContext",
+        "CS0066PoisonedMemory"
+    )
+
+    cs0066_collection_tool = model.add_asset(
+        "AITool",
+        "CS0066ConnectorTool"
+    )
+
+    cs0066_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0066ExfiltrationTool"
+    )
+
+    # --------------------------------------------------------
+    # Shared initial attack path
+    # --------------------------------------------------------
+
+    # AML.T0065 -> AML.T0079
+    cs0066_crafted_prompt.add_associated_assets(
+        "stagedCapability",
+        {cs0066_staged_capability}
+    )
+
+    # AML.T0079 -> AML.T0068
+    cs0066_staged_capability.add_associated_assets(
+        "obfuscatedPrompt",
+        {cs0066_obfuscated_prompt}
+    )
+
+    # AML.T0068 -> AML.T0093
+    cs0066_obfuscated_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0066_application}
+    )
+
+    # AML.T0093 -> AML.T0051.001
+    cs0066_application.add_associated_assets(
+        "indirectConversation",
+        {cs0066_conversation}
+    )
+
+    # --------------------------------------------------------
+    # Branch A: Data exfiltration
+    # --------------------------------------------------------
+
+    # AML.T0051.001 -> AML.T0054
+    # These steps are on the same LLMConversation asset.
+
+    # AML.T0054 -> AML.T0053
+    cs0066_conversation.add_associated_assets(
+        "tool",
+        {cs0066_collection_tool}
+    )
+
+    # AML.T0053 -> AML.T0085.001
+    # These steps are on the same AITool asset.
+
+    # AML.T0085.001 -> AML.T0086
+    cs0066_collection_tool.add_associated_assets(
+        "exfiltrationTool",
+        {cs0066_exfiltration_tool}
+    )
+
+    # --------------------------------------------------------
+    # Branch B: Persistent memory poisoning
+    # --------------------------------------------------------
+
+    # AML.T0051.001 -> AML.T0080.000
+    cs0066_conversation.add_associated_assets(
+        "agentContext",
+        {cs0066_memory}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0067
+    # Claude Code GitHub Action Secret Exposure
+    # ========================================================
+
+    cs0067_research = model.add_asset(
+        "AIResearchMaterial",
+        "CS0067ClaudeRepositoryResearch"
+    )
+
+    cs0067_tool_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0067ClaudeToolConfiguration"
+    )
+
+    cs0067_trigger_configuration = model.add_asset(
+        "AIAgentConfiguration",
+        "CS0067ClaudeTriggerConfiguration"
+    )
+
+    cs0067_prompt = model.add_asset(
+        "LLMPrompt",
+        "CS0067MaliciousGitHubPrompt"
+    )
+
+    cs0067_application = model.add_asset(
+        "PublicFacingLLMApplication",
+        "CS0067ClaudeCodeAction"
+    )
+
+    cs0067_conversation = model.add_asset(
+        "LLMConversation",
+        "CS0067InjectedConversation"
+    )
+
+    cs0067_credential_tool = model.add_asset(
+        "AITool",
+        "CS0067ClaudeReadTool"
+    )
+
+    cs0067_data_leakage = model.add_asset(
+        "LLMDataLeakage",
+        "CS0067LeakedAPIKey"
+    )
+
+    cs0067_exfiltration_tool = model.add_asset(
+        "AITool",
+        "CS0067ExfiltrationTool"
+    )
+
+    # --------------------------------------------------------
+    # CS0067 Associations
+    # --------------------------------------------------------
+
+    # S00 -> S01
+    # AML.T0095.000 -> AML.T0084.001
+
+    cs0067_research.add_associated_assets(
+        "claudeConfiguration",
+        {cs0067_tool_configuration}
+    )
+
+    # S01 -> S02
+    # AML.T0084.001 -> AML.T0084.002
+
+    cs0067_tool_configuration.add_associated_assets(
+        "triggerConfiguration",
+        {cs0067_trigger_configuration}
+    )
+
+    # S02 -> S03
+    # AML.T0084.002 -> AML.T0065
+
+    cs0067_trigger_configuration.add_associated_assets(
+        "craftedPrompt",
+        {cs0067_prompt}
+    )
+
+    # S03 -> S04
+    # AML.T0065 -> AML.T0093
+
+    cs0067_prompt.add_associated_assets(
+        "targetApplication",
+        {cs0067_application}
+    )
+
+    # S04 -> S05
+    # AML.T0093 -> AML.T0051.001
+
+    cs0067_application.add_associated_assets(
+        "indirectConversation",
+        {cs0067_conversation}
+    )
+
+    # S05 -> S06
+    # AML.T0051.001 -> AML.T0054
+    #
+    # Both steps are on the same LLMConversation instance.
+
+    # S06 -> S07
+    # AML.T0054 -> AML.T0053
+
+    cs0067_conversation.add_associated_assets(
+        "tool",
+        {cs0067_credential_tool}
+    )
+
+    # S07 -> S08
+    # AML.T0053 -> AML.T0098
+    #
+    # Both steps are on the same AITool instance.
+
+    # S08 -> S09
+    # AML.T0098 -> AML.T0057
+
+    cs0067_credential_tool.add_associated_assets(
+        "leakedOutput",
+        {cs0067_data_leakage}
+    )
+
+    # S09 -> S10
+    # AML.T0057 -> AML.T0086
+
+    cs0067_data_leakage.add_associated_assets(
+        "exfiltrationTool",
+        {cs0067_exfiltration_tool}
+    )
+    
+    
+    # ========================================================
+    # AML.CS0068
+    # Autonomous Agent Attacks Against AI Infrastructure
+    # Generic asset implementation
+    # ========================================================
+
+    # ========================================================
+    # Branch A - Autonomous Exploitation and Communication
+    # ========================================================
+
+    cs0068_agent_a = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0068AutonomousAgentA"
+    )
+
+    cs0068_exploit_a = model.add_asset(
+        "AutonomousExploitCapability",
+        "CS0068ExploitCapabilityA"
+    )
+
+    cs0068_remote_service = model.add_asset(
+        "RemoteServiceTarget",
+        "CS0068RemoteService"
+    )
+
+    cs0068_shared_artifact = model.add_asset(
+        "SharedAgentArtifact",
+        "CS0068SharedArtifact"
+    )
+
+    cs0068_environment = model.add_asset(
+        "AIAgentExecutionEnvironment",
+        "CS0068ReconstructedEnvironment"
+    )
+
+    cs0068_repository_a = model.add_asset(
+        "AIArtifactRepository",
+        "CS0068ArtifactRepositoryA"
+    )
+
+    # T0116 -> T0017.001
+    cs0068_agent_a.add_associated_assets(
+        "exploitCapability",
+        {cs0068_exploit_a}
+    )
+
+    # T0017.001 -> T0122
+    cs0068_exploit_a.add_associated_assets(
+        "remoteService",
+        {cs0068_remote_service}
+    )
+
+    # T0122 -> T0117
+    cs0068_remote_service.add_associated_assets(
+        "autonomousAgent",
+        {cs0068_agent_a}
+    )
+
+    # T0117 -> T0118.000
+    cs0068_agent_a.add_associated_assets(
+        "sharedArtifact",
+        {cs0068_shared_artifact}
+    )
+
+    # T0118.000 -> T0121
+    cs0068_shared_artifact.add_associated_assets(
+        "environment",
+        {cs0068_environment}
+    )
+
+    # T0121 -> T0123
+    cs0068_environment.add_associated_assets(
+        "sharedArtifact",
+        {cs0068_shared_artifact}
+    )
+
+    # T0123 -> T0120
+    cs0068_shared_artifact.add_associated_assets(
+        "repository",
+        {cs0068_repository_a}
+    )
+
+    # ========================================================
+    # Branch B - Automated Artifact Processing Exploitation
+    # ========================================================
+
+    cs0068_agent_b = model.add_asset(
+        "AutonomousAIAgent",
+        "CS0068AutonomousAgentB"
+    )
+
+    cs0068_exploit_b = model.add_asset(
+        "AutonomousExploitCapability",
+        "CS0068ExploitCapabilityB"
+    )
+
+    cs0068_pipeline = model.add_asset(
+        "AutomatedArtifactProcessingPipeline",
+        "CS0068ArtifactProcessingPipeline"
+    )
+
+    cs0068_processing_host = model.add_asset(
+        "MalwareHostOS",
+        "CS0068ProcessingHost"
+    )
+
+    cs0068_exfiltration_b = model.add_asset(
+        "AIExfiltration",
+        "CS0068PipelineExfiltration"
+    )
+
+    # T0116 -> T0017.001
+    cs0068_agent_b.add_associated_assets(
+        "exploitCapability",
+        {cs0068_exploit_b}
+    )
+
+    # T0017.001 -> T0119
+    cs0068_exploit_b.add_associated_assets(
+        "pipeline",
+        {cs0068_pipeline}
+    )
+
+    # T0119 -> T0037
+    cs0068_pipeline.add_associated_assets(
+        "hostOS",
+        {cs0068_processing_host}
+    )
+
+    # T0037 -> T0025
+    # Existing MalwareHostOS association
+    cs0068_processing_host.add_associated_assets(
+        "exfiltration",
+        {cs0068_exfiltration_b}
+    )
+
+    # ========================================================
+    # Branch C - Repository Access and Data Exfiltration
+    # ========================================================
+
+    cs0068_repository_c = model.add_asset(
+        "AIArtifactRepository",
+        "CS0068ArtifactRepositoryC"
+    )
+
+    cs0068_repository_os = model.add_asset(
+        "AIRepositoryOS",
+        "CS0068RepositoryOS"
+    )
+
+    cs0068_exfiltration_c = model.add_asset(
+        "AIExfiltration",
+        "CS0068RepositoryExfiltration"
+    )
+
+    # T0120 -> T0036
+    cs0068_repository_c.add_associated_assets(
+        "repositoryOS",
+        {cs0068_repository_os}
+    )
+
+    # T0036 -> T0025
+    cs0068_repository_os.add_associated_assets(
+        "exfiltration",
+        {cs0068_exfiltration_c}
+    )
+
 
 
 

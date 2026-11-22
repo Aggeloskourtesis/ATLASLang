@@ -158,10 +158,16 @@ category AI {
     asset HFOrganizationAccount extends FraudulentAccount {
         
         | establishAccounts
-        +> impersonation
+        +> impersonation,
+        masquerading
         
         | impersonation
         +> repositoryModel.fullAIModelAccess
+        
+        | masquerading
+        user info: "AML.T0074 - Masquerading"
+        -> namespaceModel.embedMalware
+        
     }
     
     
@@ -362,7 +368,8 @@ category AI {
         
         | activeScanning
         user info: "AML.T0006 - Active Scanning"
-        -> targetCluster.exploitPublicFacingApplication
+        -> targetCluster.exploitPublicFacingApplication,
+        geminiConfiguration.activationTriggers
         
         | probeAIAgentTriggerChannels
         user info: "AML.T0006.003 - Probe AI Agent Trigger Channels"
@@ -375,11 +382,13 @@ category AI {
         | searchOpenWebsitesDomains
         user info: "AML.T0095 - Search Open Websites/Domains"
         -> craftedPrompt.llmPromptCrafting,
-        relayDomain.domains
+        relayDomain.domains,
+        namespaceAccount.establishAccounts
         
         | codeRepositories
         user info: "AML.T0095.000 - Search Open Websites/Domains: Code Repositories"
-        -> publicArtifacts.aiAgentConfiguration
+        -> publicArtifacts.aiAgentConfiguration,
+        claudeConfiguration.toolDefinitions
             
         # m0000LimitPublicReleaseOfInformation [Disabled]
         user info: "AML.M0000 - Limit Public Release of Information"
@@ -818,7 +827,8 @@ category AI {
             -> targetService.aiModelInferenceAPIAccess,
             developmentWorkspace.aiDevelopmentWorkspaces,
             fullAccessTarget.fullAIModelAccess,
-            poisonTarget.poisonAIModel
+            poisonTarget.poisonAIModel,
+            ggufCapability.adversarialAIAttacks
             
         | aiAgentConfiguration
             user info: "AML.T0002.002 - Acquire Public AI Artifacts: AI Agent Configuration"
@@ -866,7 +876,8 @@ category AI {
             manualSample.manualModification,
             attackPreparation.developMalware,
             modifiedModel.modifyAIModelArchitecture,
-            transferSample.blackBoxTransfer
+            transferSample.blackBoxTransfer,
+            ggufTemplate.modifyPromptConstructionLogic
     }
     
     
@@ -1300,12 +1311,26 @@ category AI {
         -> verifyAttack
     }
     
+    
+    asset GGUFChatTemplate {
+        
+        | modifyPromptConstructionLogic
+        user info: "AML.T0018.003 - Modify Prompt Construction Logic"
+        -> masquerading
+        
+        | masquerading
+        user info: "AML.T0074 - Masquerading"
+        -> publisher.publishPoisonedModels
+    }
+    
+    
     asset PoisonableAIModel extends PredictiveAIModel {
         
         | unsafeAIArtifacts
         user info: "AML.T0011.000 - User Execution: Unsafe AI Artifacts"
         -> executionHost.masquerading,
-        c2.cyberCommunicationChannel
+        c2.cyberCommunicationChannel,
+        ggufConversation.triggeredPromptInjection
         
         | poisonAIModel
         user info: "AML.T0018.000 - Manipulate AI Model: Poison AI Model"
@@ -1323,7 +1348,8 @@ category AI {
         
         | erodeAIModelIntegrity
         user info: "AML.T0031 - Erode AI Model Integrity"
-        -> impact.reputationalHarm
+        -> impact.reputationalHarm,
+        ggufRenderedResponse.trustedOutputComponentsManipulation
         
         | verifyAttack
         user info: "AML.T0042 - Verify Attack"
@@ -1739,11 +1765,13 @@ category AI {
         | toolDefinitions
         user info: "AML.T0084.001 - Discover AI Agent Configuration: Tool Definitions"
         -> targetApplication.aiEnabledProductOrService,
-        craftedPrompt.llmPromptCrafting
+        craftedPrompt.llmPromptCrafting,
+        triggerConfiguration.activationTriggers
         
         | activationTriggers
         user info: "AML.T0084.002 - Discover AI Agent Configuration: Activation Triggers"
-        -> toolDefinitions
+        -> toolDefinitions,
+        craftedPrompt.llmPromptCrafting
         
         | callChains
         user info: "AML.T0084.003 - Discover AI Agent Configuration: Call Chains"
@@ -1774,7 +1802,9 @@ category AI {
         user info: "AML.T0080.001 - AI Agent Context Poisoning: Thread"
         -> externalHarm.userHarm,
         contextPoisoningMemory,
-        contextAwareAgent.aiAgentCommandAndControl
+        contextAwareAgent.aiAgentCommandAndControl,
+        delayedConversation.delayExecutionOfLLMInstructions,
+        triggeredConversation.triggeredPromptInjection
         
         # m0031MemoryHardening [Disabled]
         user info: "AML.M0031 - Memory Hardening"
@@ -1945,6 +1975,7 @@ category AI {
         renderedResponse.llmResponseRendering,
         delayExecutionOfLLMInstructions,
         agentContext.contextPoisoningMemory,
+        agentContext.contextPoisoningThread,
         llmJailbreak,
         aiApplication.systemPrompt,
         masqueradingDomain.masquerading
@@ -1953,7 +1984,8 @@ category AI {
         user info: "AML.T0051.002 - LLM Prompt Injection: Triggered"
         -> llmJailbreak,
         agentConfig.activationTriggers,
-        ragData.ragDatabases
+        ragData.ragDatabases,
+        ggufIntegrityModel.erodeAIModelIntegrity
         
         | llmJailbreak
         user info: "AML.T0054 - LLM Jailbreak"
@@ -2053,7 +2085,8 @@ category AI {
         | trustedOutputComponentsManipulation
         user info: "AML.T0067 - LLM Trusted Output Components Manipulation"
         -> externalHarm.userHarm,
-        llmResponseRendering
+        llmResponseRendering,
+        ggufAgentTool.aiAgentToolInvocation
         
         | citations
         user info: "AML.T0067.000 - Citations"
@@ -2081,6 +2114,76 @@ category AI {
         user info: "AML.M0020 - Generative AI Guardrails"
         -> driveByCompromise
     }
+    
+    
+    asset LLMDataLeakage {
+        
+        | llmDataLeakage
+        user info: "AML.T0057 - LLM Data Leakage"
+        -> exfiltrationTool.exfiltrationViaAIAgentToolInvocation
+    }
+    
+    asset AutonomousAIAgent {
+        
+        | autonomousReconnaissance
+        user info: "AML.T0116 - Autonomous Reconnaissance"
+        -> exploitCapability.autonomousExploitDevelopment
+        
+        | autonomousAttackPathAdaptation
+        user info: "AML.T0117 - Autonomous Attack-Path Adaptation"
+        -> sharedArtifact.communicationViaSharedArtifacts
+    }
+    
+    
+    asset AutonomousExploitCapability {
+        
+        | autonomousExploitDevelopment
+        user info: "AML.T0017.001 - Autonomous Exploit Development"
+        -> remoteService.exploitationOfRemoteServices,
+        pipeline.exploitAutomatedArtifactProcessingPipeline
+    }
+    
+    
+    asset RemoteServiceTarget {
+        
+        | exploitationOfRemoteServices
+        user info: "AML.T0122 - Exploitation of Remote Services"
+        -> autonomousAgent.autonomousAttackPathAdaptation
+    }
+
+    asset SharedAgentArtifact {
+        
+        | communicationViaSharedArtifacts
+        user info: "AML.T0118.000 - Autonomous AI Agent Communication: Shared Artifacts"
+        -> environment.aiAgentEnvironmentReconstruction
+        
+        | obfuscatedFilesOrInformation
+        user info: "AML.T0123 - Obfuscated Files or Information"
+        -> repository.aiArtifactRepository
+    }
+
+    asset AIAgentExecutionEnvironment {
+        
+        | aiAgentEnvironmentReconstruction
+        user info: "AML.T0121 - AI Agent Environment Reconstruction"
+        -> sharedArtifact.obfuscatedFilesOrInformation
+    }
+    
+    asset AutomatedArtifactProcessingPipeline {
+        
+        | exploitAutomatedArtifactProcessingPipeline
+        user info: "AML.T0119 - Exploit Automated Artifact Processing Pipeline"
+        -> hostOS.dataFromLocalSystem
+    }
+    
+    asset AIArtifactRepository {
+        
+        | aiArtifactRepository
+        user info: "AML.T0120 - AI Artifact Repository"
+        -> repositoryOS.dataFromInformationRepositories
+    }
+    
+    
 
 
     asset AITool {
@@ -2100,7 +2203,9 @@ category AI {
             agentConfiguration.modifyAIAgentConfiguration,
             executionHostOS.escapeToHost,
             credentialHost.unsecuredCredentials,
-            machineCompromise.localAIAgent
+            machineCompromise.localAIAgent,
+            exfiltrationViaAIAgentToolInvocation,
+            aiAgentToolCredentialHarvesting
             
         | aiAgentTools
             user info: "AML.T0085.001 - Data from AI Services: AI Agent Tools"
@@ -2117,7 +2222,8 @@ category AI {
         | aiAgentToolCredentialHarvesting
             user info: "AML.T0098 - AI Agent Tool Credential Harvesting"
             -> aiAgentToolInvocation,
-            exfiltrationTool.exfiltrationViaAIAgentToolInvocation
+            exfiltrationTool.exfiltrationViaAIAgentToolInvocation,
+            leakedOutput.llmDataLeakage
         
         | dataDestructionViaAIAgentToolInvocation
             user info: "AML.T0101 - Data Destruction via AI Agent Tool Invocation"
@@ -2271,7 +2377,8 @@ category AI {
     asset AIRepositoryOS extends OS {
         
         | dataFromInformationRepositories
-        +> publicArtifacts.acquirePublicAIArtifacts
+        +> publicArtifacts.acquirePublicAIArtifacts,
+        exfiltration.exfiltrationViaCyberMeans
     }
     
     asset RayClusterOS extends OS {
@@ -2431,17 +2538,6 @@ associations {
     AdversarialCapability [capability] * <--Develops--> * [generatedSample] AdversarialSample
     
     AdversarialSample [adversarialSample] * <--TestedAgainst--> 1 [targetModel] AIMalwareDetector
-    
-    
-    // AML.CS0062
-
-    LLMPrompt [prompt] * <--Targets--> 1 [aiAgent] AIAgent
-
-    AIAgent [aiAgent] 1 <--Invokes--> * [tool] AITool
-
-    AITool [tool] * <--Uses--> 1 [vectorStore] VectorStore
-
-    VectorStore [vectorStore] * <--RunsOn--> 1 [os] OS
     
     
     // AML.CS0002 associations
@@ -3079,11 +3175,7 @@ associations {
     WebSessionCredential [reusedSession] * <--CausesExternalHarm--> * [impact] ExternalHarm
     
     
-    
-    // ========================================================
     // AML.CS0061
-    // AI in the Middle: Web-Based AI Services as C2 Relays
-    // ========================================================
     
     AIResearchMaterial [relayResearch] * <--IdentifiesRelayDomain--> * [relayDomain] AIDomainInfrastructure
     
@@ -3100,6 +3192,94 @@ associations {
     AIServiceWebInterface [relayWebInterface] * <--ExfiltratesThroughAITool--> * [exfiltrationTool] AITool
     
     AITool [relayExfiltrationTool] * <--ReturnsCommandsToHost--> * [executionHost] AIClientOS
+    
+    
+    // AML.CS0062
+    
+    LLMPrompt [prompt] * <--Targets--> 1 [aiAgent] AIAgent
+    
+    AIAgent [aiAgent] 1 <--Invokes--> * [tool] AITool
+    
+    AITool [tool] * <--Uses--> 1 [vectorStore] VectorStore
+    
+    VectorStore [vectorStore] * <--RunsOn--> 1 [os] OS
+    
+    
+    // AML.CS0063
+    
+    AIResearchMaterial [geminiResearch] * <--DiscoversGeminiAgentConfiguration--> * [geminiConfiguration] AIAgentConfiguration
+    
+    AIAgentContext [delayedContext] * <--DelaysInstructionExecution--> * [delayedConversation] LLMConversation
+    
+    AIAgentContext [triggeredContext] * <--TriggersLaterPromptInjection--> * [triggeredConversation] LLMConversation
+    
+    
+    // AML.CS0064
+    
+    PublicAIArtifacts [ggufSourceArtifacts] * <--SupportsGGUFAttackDevelopment--> * [ggufCapability] AdversarialCapability
+    
+    AdversarialCapability [ggufAttackCapability] * <--ModifiesGGUFChatTemplate--> * [ggufTemplate] GGUFChatTemplate
+    
+    GGUFChatTemplate [poisonedGGUFTemplate] * <--PublishesPoisonedGGUFModel--> * [publisher] PoisonedAIModelPublisher
+    
+    PoisonableAIModel [ggufUnsafeModel] * <--TriggersEmbeddedPromptInjection--> * [ggufConversation] LLMConversation
+    
+    LLMConversation [ggufTriggeredConversation] * <--ErodesGGUFModelIntegrity--> * [ggufIntegrityModel] PoisonableAIModel
+    
+    PoisonableAIModel [ggufCompromisedModel] * <--ManipulatesGGUFModelOutput--> * [ggufRenderedResponse] LLMRenderedResponse
+    
+    LLMRenderedResponse [ggufManipulatedResponse] * <--RedirectsGGUFAgentTool--> * [ggufAgentTool] AITool
+    
+    
+    // AML.CS0065
+    
+    AIResearchMaterial [namespaceResearch] * <--DiscoversReusableModelNamespace--> * [namespaceAccount] HFOrganizationAccount
+    
+    HFOrganizationAccount [reclaimedNamespace] * <--DistributesMasqueradedModel--> * [namespaceModel] PoisonableAIModel
+    
+    
+    // AML.CS0066
+    
+    
+    // AML.CS0067
+    
+    AIResearchMaterial [claudeRepositoryResearch] * <--DiscoversClaudeToolConfiguration--> * [claudeConfiguration] AIAgentConfiguration
+    
+    AIAgentConfiguration [claudeToolConfiguration] * <--IdentifiesClaudeActivationTriggers--> * [triggerConfiguration] AIAgentConfiguration
+    
+    AITool [claudeCredentialTool] * <--ProducesLeakedLLMOutput--> * [leakedOutput] LLMDataLeakage
+    
+    LLMDataLeakage [credentialLeakage] * <--ExfiltratesLeakedCredentialThrough--> * [exfiltrationTool] AITool
+    
+    
+    // AML.CS0068
+    
+    AutonomousAIAgent [agentCapabilities] * <--DevelopsAutonomousExploits--> * [exploitCapability] AutonomousExploitCapability
+    
+    AutonomousExploitCapability [exploitTarget] * <--ExploitsRemoteService--> * [remoteService] RemoteServiceTarget
+    
+    RemoteServiceTarget [remotePivot] * <--EnablesAttackPathAdaptation--> * [autonomousAgent] AutonomousAIAgent
+    
+    AutonomousAIAgent [agentCoordinator] * <--CommunicatesViaSharedArtifact--> * [sharedArtifact] SharedAgentArtifact
+    
+    SharedAgentArtifact [communications] * <--SupportsEnvironmentReconstruction--> * [environment] AIAgentExecutionEnvironment
+    
+    AIAgentExecutionEnvironment [recoveredEnvironment] * <--UsesRecoveredSharedArtifact--> * [sharedArtifact] SharedAgentArtifact
+    
+    SharedAgentArtifact [artifactCarrier] * <--AccessesArtifactRepository--> * [repository] AIArtifactRepository
+    
+    AutonomousExploitCapability [artifactExploit] * <--TargetsAutomatedPipeline--> * [pipeline] AutomatedArtifactProcessingPipeline
+    
+    AutomatedArtifactProcessingPipeline [processingHost] * <--ExposesProcessingHost--> * [hostOS] MalwareHostOS
+    
+    AIArtifactRepository [repositoryEndpoint] * <--ProvidesRepositoryAccess--> * [repositoryOS] AIRepositoryOS
+    
+    AIRepositoryOS [repositoryAccess] * <--ExfiltratesRepositoryData--> * [exfiltration] AIExfiltration
+    
+    
+    
+    
+    
     
     
     
