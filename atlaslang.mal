@@ -2492,7 +2492,7 @@ category AI {
     asset LLMDataLeakage {
         
         | llmDataLeakage
-        user info: "AML.T0057 - LLM Data Leakage"
+        user info: "AML.T0085.002 - Data from AI Services: Conversation Context and Memory"
         -> exfiltrationTool.exfiltrationViaAIAgentToolInvocation
     }
     
