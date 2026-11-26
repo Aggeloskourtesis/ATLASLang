@@ -2899,19 +2899,20 @@ category AI {
         impact.financialHarm
     }
     
-    asset CTAttackOS extends OS {
+    asset AIDataAccessOS extends OS {
         
         | dataFromLocalSystem
             +> ctImage.craftAdversarialData
     }
     
-    asset CTImageNetwork extends InternalNetwork {
+    asset ManipulableDataChannel extends InternalNetwork {
         
         & transmittedDataManipulation
-            +> targetModel.evadeAIModel
+            +> detector.evadeAIModel,
+            targetModel.evadeAIModel
     }
     
-    asset BGMSMobileOS extends OS {
+    asset AITrafficInterceptionOS extends OS {
         
         & manInTheMiddle
         +> artifact.aiArtifactCollection
@@ -2934,11 +2935,6 @@ category AI {
         -> phishing
     }
     
-    asset BGMSBluetoothChannel extends InternalNetwork {
-        
-        & transmittedDataManipulation
-        +> targetModel.evadeAIModel
-    }
 }
 
 associations {
@@ -3934,11 +3930,11 @@ associations {
     
     AdversarialCapability [ctganCapability] * <--EnablesPreparation--> * [attackPreparation] AttackPreparation
     
-    CTAttackOS [sourceOS] * <--CollectsCTData--> * [ctImage] AdversarialSample
+    AIDataAccessOS [sourceOS] * <--CollectsCTData--> * [ctImage] AdversarialSample
     
-    AdversarialSample [adversarialSample] * <--InjectedInto--> * [ctNetwork] CTImageNetwork
+    AdversarialSample [adversarialSample] * <--InjectedInto--> * [ctNetwork] ManipulableDataChannel
     
-    CTImageNetwork [ctNetwork] * <--FeedsModel--> * [targetModel] AIMalwareDetector
+    ManipulableDataChannel [ctNetwork] * <--FeedsModel--> * [detector] AIMalwareDetector
     
     AIMalwareDetector [malwareDetector] * <--Causes--> * [externalHarm] ExternalHarm
     
@@ -3947,13 +3943,13 @@ associations {
     
     AdversarialAttackImplementation [bgmsImplementation] * <--EnablesVulnerabilityResearch--> * [vulnerabilityPreparation] AttackPreparation
     
-    BGMSMobileOS [sourceOS] * <--CollectsAIArtifact--> * [artifact] AIArtifactCollection
+    AITrafficInterceptionOS [sourceOS] * <--CollectsAIArtifact--> * [artifact] AIArtifactCollection
     
     AIArtifactCollection [artifactCollection] * <--SupportsCrafting--> * [adversarialSample] AdversarialSample
     
-    AdversarialSample [bgmsSample] * <--InjectedThrough--> * [bgmsChannel] BGMSBluetoothChannel
+    AdversarialSample [bgmsSample] * <--InjectedThrough--> * [bgmsChannel] ManipulableDataChannel
     
-    BGMSBluetoothChannel [bgmsChannel] * <--FeedsModel--> * [targetModel] PredictiveAIModel
+    ManipulableDataChannel [bgmsChannel] * <--FeedsModel--> * [targetModel] PredictiveAIModel
     
     PredictiveAIModel [predictiveModel] * <--Causes--> * [externalHarm] ExternalHarm
     
